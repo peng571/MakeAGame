@@ -1,9 +1,9 @@
 package com.makeagame.first;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.makeagame.core.TopModel;
+import com.makeagame.core.model.ModelManager;
 
-public  abstract class GameRole extends TopModel {
+public  abstract class GameRole extends ModelManager {
 	Texture image;
 	float x, y;
 	float speedX, speedY;

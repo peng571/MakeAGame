@@ -7,11 +7,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.makeagame.core.TopControler;
-import com.makeagame.core.TopModel;
+import com.makeagame.core.Controler;
+import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
-import com.makeagame.core.view.TopView;
+import com.makeagame.core.view.ViewManager;
 
 public class MakeAGame extends ApplicationAdapter {
 
@@ -149,7 +149,7 @@ public class MakeAGame extends ApplicationAdapter {
 		// }
 		// }
 		
-		TopControler.get().loop();
+		Controler.get().loop();
 		
 		 batch.begin();
 		 ArrayList<RenderEvent> renderList= view.render();
@@ -315,11 +315,11 @@ public class MakeAGame extends ApplicationAdapter {
 	//
 	// }
 
-	class View extends TopView {
+	class View extends ViewManager {
 
 	}
 
-	class Model extends TopModel {
+	class Model extends ModelManager {
 
 	}
 }
