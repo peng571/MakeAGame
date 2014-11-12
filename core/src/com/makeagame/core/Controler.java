@@ -21,7 +21,7 @@ public  final  class Controler {
 
 	}
 
-	public void call(Object[] signs) {
+	public void call(String id, Object[] signs) {
 		model.process(signs);
 	}
 
@@ -30,9 +30,9 @@ public  final  class Controler {
 		return new ArrayList<RenderEvent>();
 	}
 
-	public void loop() {
-		call(new Object[]{});
-		build();
-	}
+//	public void loop() {
+//		call(new Object[]{});
+//		build();
+//	}
 
 }

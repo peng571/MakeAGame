@@ -7,9 +7,9 @@ import com.makeagame.core.Controler;
 // ´xºÞÅÞ¿è
 public class ModelManager {
 
-	public static ModelManager instance;
+	private static ModelManager instance;
 
-	ArrayList<Model> modelList;
+	private	ArrayList<TopModel> modelList;
 
 	public static ModelManager get() {
 		if (instance == null) {
@@ -19,24 +19,24 @@ public class ModelManager {
 
 	}
 
-	public ModelManager() {
-		modelList = new ArrayList<Model>();
+	private ModelManager() {
+		modelList = new ArrayList<TopModel>();
 	}
 
-	public void addModel(Model model) {
+	public void addModel(TopModel model) {
 		modelList.add(model);
 	}
 
 	// Override to allocation Call
 	public void process(Object[] signs) {
-		for (Model m : modelList) {
-			m.process();
+		for (TopModel m : modelList) {
+			m.process(signs);
 		}
 	}
 
 	public ArrayList<Object> hold() {
 		ArrayList<Object> holds = new ArrayList<Object>();
-		for (Model m : modelList) {
+		for (TopModel m : modelList) {
 			holds.add(m.hold());
 		}
 		return holds;

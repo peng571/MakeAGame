@@ -5,8 +5,9 @@ public class ResourceManager {
 
 	public static ResourceManager instance;
 
+	String url;
 	Resource res[];
-	
+
 	private ResourceManager() {
 	}
 
@@ -16,33 +17,24 @@ public class ResourceManager {
 		}
 		return instance;
 	}
-	
-	
-	// 切換resource
-	public Resource use(String s)
-	{
-		return new Resource();
 
+	// 切換resource
+	public ResourceManager use(String s) {
+		this.url = s;
+		return this;
 	}
-	
+
 	// 回傳一個元件
-	public Object fetch(String s)
-	{
+	public Resource fetch(String s) {
 		return null;
 	}
-	
-	
-	
-	class Resource
-	{
+
+	class Resource {
 		int TYPE_IMAGE = 0x001;
 		int TYPE_ATTRIBUTE = 0x002;
 		int TYPE_WORD = 0x003;
 		int TYPE_FILE = 0;
-		
-		
-		
-		
+
 	}
 
 }
