@@ -3,7 +3,6 @@ package com.makeagame.core;
 import java.util.ArrayList;
 
 import com.makeagame.core.model.ModelManager;
-import com.makeagame.core.view.RenderEvent;
 
 public  final  class Controler {
 
@@ -11,6 +10,7 @@ public  final  class Controler {
 	public ModelManager model;
 
 	private Controler() {
+		model = ModelManager.get();
 	}
 
 	public static Controler get() {
@@ -21,13 +21,12 @@ public  final  class Controler {
 
 	}
 
-	public void call(String id, Object[] signs) {
-		model.process(signs);
+	public void call(String id, String jsonString) {
+		model.process(id , jsonString);
 	}
 
-	public ArrayList<RenderEvent> build() {
-		model.hold();
-		return new ArrayList<RenderEvent>();
+	public ArrayList<String> build() {
+		return 	model.hold();
 	}
 
 //	public void loop() {

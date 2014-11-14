@@ -20,4 +20,22 @@ public class SignalEvent {
 		this.values = values;
 	}
 
+	public boolean equals(SignalEvent e) {
+		if (e.eventType != eventType) {
+			return false;
+		}
+		if (e.actionType != actionType) {
+			return false;
+		}
+		if (e.values.length != values.length) {
+			return false;
+		}
+		for (int i = 0; i < values.length; i++) {
+			if (e.values[i] != values[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

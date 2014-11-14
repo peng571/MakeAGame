@@ -14,6 +14,7 @@ public class ViewManager {
 
 	private ViewManager() {
 		viewMap = new HashMap<String, TopView>();
+		groupMap = new HashMap<String, Integer>();
 	}
 
 	public static ViewManager get() {
@@ -37,7 +38,7 @@ public class ViewManager {
 			key = id + String.valueOf(groupCount);
 			groupMap.put(id, groupCount);
 		}
-		viewMap.put(id, v);
+		viewMap.put(key, v);
 	}
 
 	// 接收外部指令
@@ -55,11 +56,11 @@ public class ViewManager {
 
 	// 送出繪圖指令
 	public ArrayList<RenderEvent> render() {
+		ArrayList<String> build = Controler.get().build();
 		ArrayList<RenderEvent> renderList = new ArrayList<RenderEvent>();
 		for (TopView v : getArray()) {
-			renderList.addAll(v.render());
+			renderList.addAll(v.render(build));
 		}
-		renderList.addAll(Controler.get().build());
 		return renderList;
 	}
 

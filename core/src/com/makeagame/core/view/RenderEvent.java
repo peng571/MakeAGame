@@ -2,14 +2,18 @@ package com.makeagame.core.view;
 
 public class RenderEvent {
 
-	String imgRes;
-	float x;
-	float y;
-	float w;
-	float h;
+	public int type;
+	public String s;
+	public float x;
+	public float y;
+	public float w;
+	public float h;
 
-	public RenderEvent(String imgRes, float x, float y) {
-		this.imgRes = imgRes;
+	public static final int IMAGE = 0x001;
+	public static final int LABEL = 0x002;
+
+	public RenderEvent(int type, String s, float x, float y) {
+		this.s = s;
 		this.x = x;
 		this.y = y;
 	}

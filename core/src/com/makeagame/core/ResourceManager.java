@@ -32,7 +32,7 @@ public class ResourceManager {
 	class Resource {
 		int TYPE_IMAGE = 0x001;
 		int TYPE_ATTRIBUTE = 0x002;
-		int TYPE_WORD = 0x003;
+		int TYPE_TEXT = 0x003;
 		int TYPE_FILE = 0;
 
 	}
