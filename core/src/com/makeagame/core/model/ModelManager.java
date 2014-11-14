@@ -32,17 +32,17 @@ public class ModelManager {
 				if (model != null) {
 					model.process(gsonString);
 				} else {
-					System.out.println("get error model at " + id);
+					System.out.println("get error model at [" + id + i + "]");
 				}
 			}
-		}
-
-		// process singo model
-		TopModel model = modelMap.get(id);
-		if (model != null) {
-			model.process(gsonString);
 		} else {
-			System.out.println("get error model at " + id);
+			// process singo model
+			TopModel model = modelMap.get(id);
+			if (model != null) {
+				model.process(gsonString);
+			} else {
+				System.out.println("get error model at " + id);
+			}
 		}
 	}
 
@@ -81,13 +81,35 @@ public class ModelManager {
 		return modelMap.get(id);
 	}
 
-	public ArrayList<TopModel> getGroup(String id, boolean group) {
+	public ArrayList<TopModel> getGroup(String id) {
 		int c = groupMap.get(id);
 		ArrayList<TopModel> list = new ArrayList<TopModel>();
 		for (int i = 0; i < c; i++) {
 			list.add(modelMap.get(id + i));
 		}
 		return list;
+	}
+
+	public int getGroupNum(String id) {
+		int num = groupMap.get(id) == null ? 0 : groupMap.get(id);
+		return num;
+	}
+
+	public void clear() {
+		modelMap.clear();
+		groupMap.clear();
+	}
+
+	public void remove(String id) {
+		if (groupMap.containsKey(id)) {
+			int groupNum = groupMap.get(id);
+			for (int i = 0; i < groupNum; i++) {
+				modelMap.remove(id + i);
+			}
+			groupMap.remove(id);
+		} else {
+			modelMap.remove(id);
+		}
 	}
 
 }

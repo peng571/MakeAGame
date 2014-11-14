@@ -13,6 +13,7 @@ public class RenderEvent {
 	public static final int LABEL = 0x002;
 
 	public RenderEvent(int type, String s, float x, float y) {
+		this.type = type;
 		this.s = s;
 		this.x = x;
 		this.y = y;
