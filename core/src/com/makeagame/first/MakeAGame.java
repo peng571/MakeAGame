@@ -1,10 +1,12 @@
 package com.makeagame.first;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,14 +14,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.google.gson.Gson;
 import com.makeagame.core.Controler;
-import com.makeagame.core.model.*;
-import com.makeagame.core.view.*;
+import com.makeagame.core.ResourceManager;
+import com.makeagame.core.model.ModelManager;
+import com.makeagame.core.model.TopModel;
+import com.makeagame.core.view.RenderEvent;
+import com.makeagame.core.view.SignalEvent;
+import com.makeagame.core.view.TopView;
+import com.makeagame.core.view.ViewManager;
 
 public class MakeAGame extends ApplicationAdapter {
 
 	SpriteBatch batch;
 	ViewManager vManager;
 	ModelManager mManager;
+	ResourceManager resource;
 	Controler controler;
 	BitmapFont gameLable, timmer;
 
@@ -32,9 +40,11 @@ public class MakeAGame extends ApplicationAdapter {
 		vManager = ViewManager.get();
 		mManager = ModelManager.get();
 		controler = Controler.get();
+		resource = ResourceManager.get();
 
+		resource.bind("cat", "image/pussy.png", "data/cat.txt");
+		resource.bind("human", "image/person91.png", "data/human.txt");
 		vManager.add("main", new GameView());
-		mManager.add("cat", new CatModel());
 		mManager.add("timmer", new TimmerModel());
 
 		timmer = new BitmapFont();
@@ -80,7 +90,7 @@ public class MakeAGame extends ApplicationAdapter {
 		for (RenderEvent e : renderList) {
 			switch (e.type) {
 			case RenderEvent.IMAGE:
-				batch.draw(new Texture(e.s), e.x, e.y);
+				batch.draw(resource.fetch(e.s), e.x, e.y);
 				break;
 			case RenderEvent.LABEL:
 				gameLable.draw(batch, e.s, Config.screamWidth() / 2f, Config.screamHeight() / 2f);
@@ -127,20 +137,15 @@ public class MakeAGame extends ApplicationAdapter {
 			for (String s : build) {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 				if (hold.type.equals("image")) {
-					String image = "";
-					if (hold.id.equals("cat")) {
-						image = "pussy.png";
-					} else if (hold.id.equals("human")) {
-						image = "group9.png";
-					}
-					list.add(new RenderEvent(RenderEvent.IMAGE, image, hold.x, hold.y));
+					// 畫圖片
+					list.add(new RenderEvent(RenderEvent.IMAGE, hold.id, hold.x, hold.y));
 				} else {
+					// 畫文字
 					if (hold.id.equals("timmer")) {
 						list.add(new RenderEvent(RenderEvent.LABEL, hold.text, hold.x, hold.y));
 					}
 				}
 			}
-
 			return list;
 		}
 
@@ -183,12 +188,12 @@ public class MakeAGame extends ApplicationAdapter {
 					}
 					controler.call("cat", gsonString);
 					controler.call("human", "");
-					
+
 					countTime = System.currentTimeMillis() - startTime;
 					if (countTime > 3000 * mManager.getGroup("human").size()) {
-						mManager.add("human", new HumanModel(), true);
+						mManager.add("human", new HumanModel().init(resource.reed("human")), true);
 					}
-					
+
 				}
 			} else {
 				Sign signs = new Gson().fromJson(gsonString, Sign.class);
@@ -202,10 +207,10 @@ public class MakeAGame extends ApplicationAdapter {
 			reseting = true;
 			running = true;
 			startTime = System.currentTimeMillis();
+			mManager.remove("cat");
+			mManager.add("cat", new CatModel().init(resource.reed("cat")));
 			mManager.remove("human");
-			mManager.add("human", new HumanModel(), true);
-
-			// cat.reset();
+			mManager.add("human", new HumanModel().init(resource.reed("human")), true);
 
 		}
 
@@ -236,7 +241,8 @@ public class MakeAGame extends ApplicationAdapter {
 		}
 
 		@Override
-		public void init(String gsonString) {
+		public TimmerModel init(String gsonString) {
+			return this;
 		}
 
 	}
@@ -250,7 +256,19 @@ public class MakeAGame extends ApplicationAdapter {
 		int w = 32, h = 32;
 
 		@Override
-		public void init(String gsonString) {
+		public HumanModel init(String gsonString) {
+			HumanModel model = new Gson().fromJson(gsonString, HumanModel.class);
+			speedX = 0;
+			speedY = 0;
+			this.x = model.x;
+			this.y = model.y;
+			Random rand = new Random();
+			this.maxSpeedX = model.maxSpeedX + ((rand.nextInt(20) - 10) * 0.1f);
+			this.maxSpeedY = model.maxSpeedY + ((rand.nextInt(20) - 10) * 0.1f);
+			this.a = model.a + ((rand.nextInt(10) - 5) * 0.02f);
+			this.w = model.w;
+			this.h = model.h;
+			return this;
 		}
 
 		@Override
@@ -314,14 +332,26 @@ public class MakeAGame extends ApplicationAdapter {
 
 	class CatModel implements TopModel {
 		boolean alive = true;
-		float x = 200, y = 200;
-		float speedX = 0, speedY = 0;
-		float maxSpeedX = 6f, maxSpeedY = 6f;
-		float a = 0.6f;
-		int w = 32, h = 32;
+		float x, y;
+		float speedX, speedY;
+		float maxSpeedX, maxSpeedY;
+		float a;
+		int w, h;
 
 		@Override
-		public void init(String gsonString) {
+		public CatModel init(String gsonString) {
+			CatModel model = new Gson().fromJson(gsonString, CatModel.class);
+			alive = true;
+			speedX = 0;
+			speedY = 0;
+			this.x = model.x;
+			this.y = model.y;
+			this.maxSpeedX = model.maxSpeedX;
+			this.maxSpeedY = model.maxSpeedY;
+			this.a = model.a;
+			this.w = model.w;
+			this.h = model.h;
+			return this;
 		}
 
 		@Override
