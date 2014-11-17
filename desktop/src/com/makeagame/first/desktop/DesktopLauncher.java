@@ -2,8 +2,8 @@ package com.makeagame.first.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.makeagame.first.Config;
-import com.makeagame.first.MakeAGame;
+import com.makeagame.firstgame.Config;
+import com.makeagame.firstgame.MakeAGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

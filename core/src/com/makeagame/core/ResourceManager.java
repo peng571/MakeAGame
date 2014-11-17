@@ -27,12 +27,6 @@ public class ResourceManager {
 		return instance;
 	}
 
-	// 切換resource
-	public ResourceManager use(String s) {
-		this.url = s;
-		return this;
-	}
-
 	// 回傳一個元件
 	public Texture fetch(String id) {
 		return textureMap.get(id);

@@ -2,7 +2,7 @@ package com.makeagame.core.view;
 
 import java.util.ArrayList;
 
-public interface TopView {
+public interface View {
 
 	// 接收外部指令
 	public abstract void signal(ArrayList<SignalEvent> s);

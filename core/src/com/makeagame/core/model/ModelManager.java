@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class ModelManager {
 
 	private static ModelManager instance;
-	private HashMap<String, TopModel> modelMap;
+	private HashMap<String, Model> modelMap;
 	private HashMap<String, Integer> groupMap;
 
 	public static ModelManager get() {
@@ -19,7 +19,7 @@ public class ModelManager {
 	}
 
 	private ModelManager() {
-		modelMap = new HashMap<String, TopModel>();
+		modelMap = new HashMap<String, Model>();
 		groupMap = new HashMap<String, Integer>();
 	}
 
@@ -28,7 +28,7 @@ public class ModelManager {
 		if (groupMap.containsKey(id)) {
 			int groupNum = groupMap.get(id);
 			for (int i = 0; i < groupNum; i++) {
-				TopModel model = modelMap.get(id + i);
+				Model model = modelMap.get(id + i);
 				if (model != null) {
 					model.process(gsonString);
 				} else {
@@ -37,7 +37,7 @@ public class ModelManager {
 			}
 		} else {
 			// process singo model
-			TopModel model = modelMap.get(id);
+			Model model = modelMap.get(id);
 			if (model != null) {
 				model.process(gsonString);
 			} else {
@@ -46,25 +46,25 @@ public class ModelManager {
 		}
 	}
 
-	public ArrayList<TopModel> getArray() {
-		ArrayList<TopModel> ms = new ArrayList<TopModel>();
+	public ArrayList<Model> getArray() {
+		ArrayList<Model> ms = new ArrayList<Model>();
 		ms.addAll(modelMap.values());
 		return ms;
 	}
 
 	public ArrayList<String> hold() {
 		ArrayList<String> holds = new ArrayList<String>();
-		for (TopModel m : getArray()) {
+		for (Model m : getArray()) {
 			holds.add(m.hold());
 		}
 		return holds;
 	}
 
-	public void add(String id, TopModel v) {
+	public void add(String id, Model v) {
 		add(id, v, false);
 	}
 
-	public void add(String id, TopModel topMpdel, boolean group) {
+	public void add(String id, Model topMpdel, boolean group) {
 		String key;
 		if (!group) {
 			key = id;
@@ -77,13 +77,13 @@ public class ModelManager {
 		modelMap.put(key, topMpdel);
 	}
 
-	public TopModel get(String id) {
+	public Model get(String id) {
 		return modelMap.get(id);
 	}
 
-	public ArrayList<TopModel> getGroup(String id) {
+	public ArrayList<Model> getGroup(String id) {
 		int c = groupMap.get(id);
-		ArrayList<TopModel> list = new ArrayList<TopModel>();
+		ArrayList<Model> list = new ArrayList<Model>();
 		for (int i = 0; i < c; i++) {
 			list.add(modelMap.get(id + i));
 		}

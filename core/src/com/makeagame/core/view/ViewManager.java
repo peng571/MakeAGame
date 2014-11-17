@@ -8,12 +8,12 @@ import com.makeagame.core.Controler;
 // 掌管顯示，frame 的進出點
 public class ViewManager {
 
-	private HashMap<String, TopView> viewMap;
+	private HashMap<String, View> viewMap;
 	private HashMap<String, Integer> groupMap;
 	private static ViewManager instance;
 
 	private ViewManager() {
-		viewMap = new HashMap<String, TopView>();
+		viewMap = new HashMap<String, View>();
 		groupMap = new HashMap<String, Integer>();
 	}
 
@@ -24,11 +24,11 @@ public class ViewManager {
 		return instance;
 	}
 
-	public void add(String id, TopView v) {
+	public void add(String id, View v) {
 		add(id, v, false);
 	}
 
-	public void add(String id, TopView v, boolean group) {
+	public void add(String id, View v, boolean group) {
 		String key;
 		if (!group) {
 			key = id;
@@ -43,13 +43,13 @@ public class ViewManager {
 
 	// 接收外部指令
 	public void signal(ArrayList<SignalEvent> s) {
-		for (TopView v : getArray()) {
+		for (View v : getArray()) {
 			v.signal(s);
 		}
 	}
 
-	public ArrayList<TopView> getArray() {
-		ArrayList<TopView> vs = new ArrayList<TopView>();
+	public ArrayList<View> getArray() {
+		ArrayList<View> vs = new ArrayList<View>();
 		vs.addAll(viewMap.values());
 		return vs;
 	}
@@ -58,7 +58,7 @@ public class ViewManager {
 	public ArrayList<RenderEvent> render() {
 		ArrayList<String> build = Controler.get().build();
 		ArrayList<RenderEvent> renderList = new ArrayList<RenderEvent>();
-		for (TopView v : getArray()) {
+		for (View v : getArray()) {
 			renderList.addAll(v.render(build));
 		}
 		return renderList;

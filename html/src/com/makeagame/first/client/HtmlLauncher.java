@@ -3,8 +3,8 @@ package com.makeagame.first.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.makeagame.first.Config;
-import com.makeagame.first.MakeAGame;
+import com.makeagame.firstgame.Config;
+import com.makeagame.firstgame.MakeAGame;
 
 public class HtmlLauncher extends GwtApplication {
 
