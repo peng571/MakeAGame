@@ -1,4 +1,4 @@
-package com.makeagame.core.util;
+package com.makeagame.core.component;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
 
-public abstract class Button implements Model, View {
+public abstract class BaseButton implements Model, View {
 
 	float x,y;
 	float w,h;
@@ -28,14 +28,13 @@ public abstract class Button implements Model, View {
 	}
 
 	@Override
-	public abstract Model init(String gsonString) ;
-
-	@Override
 	public void process(String gsonString) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public abstract boolean onButtonClick();
+	
 	@Override
 	public abstract String hold();
 

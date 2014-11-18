@@ -32,7 +32,7 @@ public class ResourceManager {
 		return textureMap.get(id);
 	}
 
-	public String reed(String id) {
+	public String read(String id) {
 		return initMap.get(id);
 	}
 

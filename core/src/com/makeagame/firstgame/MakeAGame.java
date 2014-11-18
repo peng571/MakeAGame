@@ -1,7 +1,6 @@
 package com.makeagame.firstgame;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -83,11 +82,23 @@ public class MakeAGame {
 			for (String s : build) {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 
-				list.add(new RenderEvent(ResourceManager.get().fetch("cat"), hold.cat.x, hold.cat.y));
+				list.add(new RenderEvent(ResourceManager.get().fetch("cat")).XY(hold.cat.x, hold.cat.y));
 				for (Poistion human : hold.humans) {
-					list.add(new RenderEvent(ResourceManager.get().fetch("human"), human.x, human.y));
+					list.add(new RenderEvent(ResourceManager.get().fetch("human")).XY(human.x, human.y));
 				}
-				list.add(new RenderEvent(hold.text, 200, 200));
+				String text = "";
+				if (hold.reseting) {
+					if (hold.countDown == -1) {
+						text = "";
+					} else if (hold.countDown == 0) {
+						text = "start!!!";
+					} else {
+						text = String.valueOf(hold.countDown);
+					}
+				} else if (!hold.running) {
+					text = "press Enter to start.";
+				}
+				list.add(new RenderEvent(text).XY(200, 200));
 			}
 			return list;
 		}
@@ -101,143 +112,100 @@ public class MakeAGame {
 
 	class GameModel implements Model {
 
+		boolean alive = true;
 		long startTime = 0;
 		long countTime = 0;
 		boolean reseting = false, running = false;
 		int countDown = 0;
 
-		CatModel cat;
-		ArrayList<HumanModel> humans;
+		RoleModel cat;
+		ArrayList<RoleModel> humans;
 
 		public GameModel() {
-			cat = new CatModel();
-			humans = new ArrayList<HumanModel>();
+			cat = new RoleModel();
+			humans = new ArrayList<RoleModel>();
 		}
 
 		class RoleModel {
+			String id;
 			float x, y;
 			float speedX = 0, speedY = 0;
 			float maxSpeedX, maxSpeedY;
 			float a;
 			int w, h;
-
-			public RoleModel init(String gsonString) {
-				RoleModel model = new Gson().fromJson(gsonString, RoleModel.class);
-				speedX = 0;
-				speedY = 0;
-				this.x = model.x;
-				this.y = model.y;
-				Random rand = new Random();
-				this.maxSpeedX = model.maxSpeedX + ((rand.nextInt(20) - 10) * 0.1f);
-				this.maxSpeedY = model.maxSpeedY + ((rand.nextInt(20) - 10) * 0.1f);
-				this.a = model.a + ((rand.nextInt(10) - 5) * 0.02f);
-				this.w = model.w;
-				this.h = model.h;
-				return this;
-			}
 		}
 
-		class HumanModel extends RoleModel {
-
-			public HumanModel init(String gsonString) {
-				super.init(gsonString);
-				return this;
-			}
-
-			public void move(CatModel cat) {
-				if (x > cat.x) {
-					speedX -= a;
-				} else if (x < cat.x) {
-					speedX += a;
-				}
-				if (y > cat.y) {
-					speedY -= a;
-				} else if (y < cat.y) {
-					speedY += a;
-				}
-
-				if (speedX > maxSpeedX) {
-					speedX = maxSpeedX;
-				} else if (speedX < -maxSpeedX) {
-					speedX = -maxSpeedX;
-				}
-				if (speedY > maxSpeedY) {
-					speedY = maxSpeedY;
-				} else if (speedY < -maxSpeedY) {
-					speedY = -maxSpeedY;
-				}
-
-				x += speedX;
-				y += speedY;
-				if (x < 0) {
-					x = 0f;
-				} else if (x + w > Bootstrap.screamWidth()) {
-					x = Bootstrap.screamWidth() - w;
-				}
-				if (y < 0) {
-					y = 0f;
-				} else if (y + h > Bootstrap.screamHeight()) {
-					y = Bootstrap.screamHeight() - h;
-				}
-			}
+		public RoleModel create(String gsonString) {
+			RoleModel model = new Gson().fromJson(gsonString, RoleModel.class);
+			model.speedX = 0;
+			model.speedY = 0;
+			Random rand = new Random();
+			model.maxSpeedX += ((rand.nextInt(20) - 10) * 0.1f);
+			model.maxSpeedY += ((rand.nextInt(20) - 10) * 0.1f);
+			model.a += ((rand.nextInt(10) - 5) * 0.02f);
+			return model;
 		}
 
-		class CatModel extends RoleModel {
-			boolean alive;
-
-			@Override
-			public CatModel init(String gsonString) {
-				super.init(gsonString);
-				alive = true;
-				return this;
-			}
-
-			public void move(Sign signs) {
+		public void move(RoleModel m, Sign signs) {
+			if (m.id.equals("cat")) {
 				if (signs.left) {
-					speedX -= a;
-				} else if (speedX < 0) {
-					speedX += a;
+					m.speedX -= m.a;
+				} else if (m.speedX < 0) {
+					m.speedX += m.a;
 				}
 				if (signs.right) {
-					speedX += a;
-				} else if (speedX > 0) {
-					speedX -= a;
+					m.speedX += m.a;
+				} else if (m.speedX > 0) {
+					m.speedX -= m.a;
 				}
 				if (signs.up) {
-					speedY += a;
-				} else if (speedY > 0) {
-					speedY -= a;
+					m.speedY += m.a;
+				} else if (m.speedY > 0) {
+					m.speedY -= m.a;
 				}
 				if (signs.down) {
-					speedY -= a;
-				} else if (speedY < 0) {
-					speedY += a;
+					m.speedY -= m.a;
+				} else if (m.speedY < 0) {
+					m.speedY += m.a;
 				}
 
-				if (speedX > maxSpeedX) {
-					speedX = maxSpeedX;
-				} else if (speedX < -maxSpeedX) {
-					speedX = -maxSpeedX;
+			} else if (m.id.equals("human")) {
+				if (m.x > cat.x) {
+					m.speedX -= m.a;
+				} else if (m.x < cat.x) {
+					m.speedX += m.a;
 				}
-				if (speedY > maxSpeedY) {
-					speedY = maxSpeedY;
-				} else if (speedY < -maxSpeedY) {
-					speedY = -maxSpeedY;
-				}
-
-				x += speedX;
-				y += speedY;
-				if (x < 0) {
-					x = 0f;
-				} else if (x + w > Bootstrap.screamWidth()) {
-					x = Bootstrap.screamWidth() - w;
-				}
-				if (y < 0) {
-					y = 0f;
-				} else if (y + h > Bootstrap.screamHeight()) {
-					y = Bootstrap.screamHeight() - h;
+				if (m.y > cat.y) {
+					m.speedY -= m.a;
+				} else if (m.y < cat.y) {
+					m.speedY += m.a;
 				}
 			}
+
+			if (m.speedX > m.maxSpeedX) {
+				m.speedX = m.maxSpeedX;
+			} else if (m.speedX < -m.maxSpeedX) {
+				m.speedX = -m.maxSpeedX;
+			}
+			if (m.speedY > m.maxSpeedY) {
+				m.speedY = m.maxSpeedY;
+			} else if (m.speedY < -m.maxSpeedY) {
+				m.speedY = -m.maxSpeedY;
+			}
+
+			m.x += m.speedX;
+			m.y += m.speedY;
+			if (m.x < 0) {
+				m.x = 0f;
+			} else if (m.x + m.w > Bootstrap.screamWidth()) {
+				m.x = Bootstrap.screamWidth() - m.w;
+			}
+			if (m.y < 0) {
+				m.y = 0f;
+			} else if (m.y + m.h > Bootstrap.screamHeight()) {
+				m.y = Bootstrap.screamHeight() - m.h;
+			}
+
 		}
 
 		@Override
@@ -259,24 +227,21 @@ public class MakeAGame {
 						reseting = false;
 					}
 				} else {
-					if (!cat.alive) {
+					if (!alive) {
 						running = false;
 					}
-
-					cat.move(signs);
-					for (HumanModel human : humans) {
-						human.move(cat);
+					move(cat, signs);
+					for (RoleModel human : humans) {
+						move(human, null);
 						if ((cat.x > human.x - human.w / 2 && cat.x < human.x + human.w / 2) && (cat.y > human.y - human.h / 2 && cat.y < human.y + human.h / 2)) {
 							System.out.println("game over");
-							cat.alive = false;
+							alive = false;
 						}
 					}
-
 					countTime = System.currentTimeMillis() - startTime;
 					if (countTime > 3000 * humans.size()) {
-						humans.add(new HumanModel().init(ResourceManager.get().reed("human")));
+						humans.add(create(ResourceManager.get().read("human")));
 					}
-
 				}
 			} else {
 				if (signs.enter) {
@@ -289,26 +254,14 @@ public class MakeAGame {
 			reseting = true;
 			running = true;
 			startTime = System.currentTimeMillis();
-			cat.init(ResourceManager.get().reed("cat"));
+			cat = create(ResourceManager.get().read("cat"));
 			humans.clear();
-			humans.add(new HumanModel().init(ResourceManager.get().reed("human")));
+			humans.add(create(ResourceManager.get().read("human")));
 		}
 
 		@Override
 		public String hold() {
 			Hold hold = new Hold();
-			String text = "";
-			if (reseting) {
-				if (countDown == -1) {
-					text = "";
-				} else if (countDown == 0) {
-					text = "start!!!";
-				} else {
-					text = String.valueOf(countDown);
-				}
-			} else if (!running) {
-				text = "press Enter to start.";
-			}
 			hold.cat.x = cat.x;
 			hold.cat.y = cat.y;
 			for (int i = 0; i < humans.size(); i++) {
@@ -317,18 +270,15 @@ public class MakeAGame {
 				p.y = humans.get(i).y;
 				hold.humans.add(p);
 			}
-			hold.text = text;
+			hold.countDown = countDown;
+			hold.reseting = reseting;
+			hold.running = running;
 			return new Gson().toJson(hold);
 		}
 
 		@Override
 		public String info() {
 			return "main model";
-		}
-
-		@Override
-		public GameModel init(String gsonString) {
-			return this;
 		}
 
 	}
@@ -339,13 +289,13 @@ public class MakeAGame {
 		boolean left;
 		boolean right;
 		boolean enter;
-
 	}
 
 	class Hold {
-		String text;
 		Poistion cat = new Poistion();
 		ArrayList<Poistion> humans = new ArrayList<Poistion>();
+		boolean reseting, running;
+		int countDown;
 	}
 
 	class Poistion {

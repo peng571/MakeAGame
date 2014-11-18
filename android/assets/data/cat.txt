@@ -1,1 +1,1 @@
-{"x":200, "y":200, "maxSpeedX":6, "maxSpeedY":6, "a":0.6, "w":32, "h":32}
+{"id":"cat","x":200, "y":200, "maxSpeedX":6, "maxSpeedY":6, "a":0.6, "w":32, "h":32}

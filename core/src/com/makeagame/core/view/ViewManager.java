@@ -9,12 +9,10 @@ import com.makeagame.core.Controler;
 public class ViewManager {
 
 	private HashMap<String, View> viewMap;
-	private HashMap<String, Integer> groupMap;
 	private static ViewManager instance;
 
 	private ViewManager() {
 		viewMap = new HashMap<String, View>();
-		groupMap = new HashMap<String, Integer>();
 	}
 
 	public static ViewManager get() {
@@ -25,21 +23,9 @@ public class ViewManager {
 	}
 
 	public void add(String id, View v) {
-		add(id, v, false);
+		viewMap.put(id, v);
 	}
 
-	public void add(String id, View v, boolean group) {
-		String key;
-		if (!group) {
-			key = id;
-		} else {
-			int groupCount = groupMap.get(id) == null ? 0 : groupMap.get(id);
-			groupCount++;
-			key = id + String.valueOf(groupCount);
-			groupMap.put(id, groupCount);
-		}
-		viewMap.put(key, v);
-	}
 
 	// 接收外部指令
 	public void signal(ArrayList<SignalEvent> s) {
