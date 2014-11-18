@@ -1,34 +1,33 @@
 package com.makeagame.core;
 
 import com.badlogic.gdx.graphics.Color;
+import com.makeagame.core.model.ModelManager;
+import com.makeagame.core.view.ViewManager;
 
 public abstract class Bootstrap {
 
 	public static boolean LOG = true;
 	public static boolean DEBUG = true;
 
-	public static int WIDTH = 480;
-	public static int HEIGHT = 480;
 	public static float ratio = 1f;
 	public static Color BACKGROUND_COLOR = new Color(1, 1, 1, 1);
 
-	public abstract void setResource();
+	public abstract int getScreenWidth();
 
-	public void setDevice(int w, int h) {
-		WIDTH = w;
-		HEIGHT = h;
+	public abstract int getScreenHeight();
+
+	public abstract void viewFactory(ViewManager manager);
+
+	public abstract void modelFactory(ModelManager manager);
+
+	public abstract void resourceFactory(ResourceManager resource);
+
+	public int screamWidth() {
+		return (int) (getScreenWidth() * ratio);
 	}
 
-	public abstract void createView();
-
-	public abstract void createModel();
-
-	public static int screamWidth() {
-		return (int) (WIDTH * ratio);
-	}
-
-	public static int screamHeight() {
-		return (int) (HEIGHT * ratio);
+	public int screamHeight() {
+		return (int) (getScreenHeight() * ratio);
 	}
 
 	public static void logI(String s) {

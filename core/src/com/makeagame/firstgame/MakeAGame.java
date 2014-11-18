@@ -3,100 +3,52 @@ package com.makeagame.firstgame;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
+import com.makeagame.core.Engine;
 import com.makeagame.core.ResourceManager;
-import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.model.Model;
+import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
 import com.makeagame.core.view.ViewManager;
 
-public class MakeAGame extends ApplicationAdapter {
+public class MakeAGame {
 
-	SpriteBatch batch;
-	ViewManager vManager;
-	ModelManager mManager;
-	ResourceManager resource;
-	Controler controler;
-	BitmapFont gameLable, timmer;
+	Engine engine;
 
-	@Override
-	public void create() {
+	public MakeAGame() {
 
-		System.out.println("game start");
+		engine = new Engine(new Bootstrap() {
 
-		batch = new SpriteBatch();
-		vManager = ViewManager.get();
-		mManager = ModelManager.get();
-		controler = Controler.get();
-		resource = ResourceManager.get();
-
-		resource.bind("cat", "image/pussy.png", "data/cat.txt");
-		resource.bind("human", "image/person91.png", "data/human.txt");
-		vManager.add("main", new GameView());
-		mManager.add("main", new GameModel());
-
-		timmer = new BitmapFont();
-		gameLable = new BitmapFont();
-		gameLable.setColor(new Color(1, 0, 0, 1));
-
-	}
-
-	@Override
-	public void render() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		// keybroad
-		ArrayList<SignalEvent> signalList = new ArrayList<SignalEvent>();
-		if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "enter" }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "left" }));
-		} else {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new Object[] { "left" }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "right" }));
-		} else {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new Object[] { "right" }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "up" }));
-		} else {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new Object[] { "up" }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "down" }));
-		} else {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new Object[] { "down" }));
-		}
-		vManager.signal(signalList);
-
-		batch.begin();
-		ArrayList<RenderEvent> renderList = vManager.render();
-		for (RenderEvent e : renderList) {
-			switch (e.type) {
-			case RenderEvent.IMAGE:
-				batch.draw(e.texture, e.x, e.y);
-				break;
-			case RenderEvent.LABEL:
-				gameLable.draw(batch, e.s, Bootstrap.screamWidth() / 2f, Bootstrap.screamHeight() / 2f);
-				break;
+			@Override
+			public void viewFactory(ViewManager manager) {
+				manager.add("main", new GameView());
 			}
-		}
-		batch.end();
+
+			@Override
+			public void modelFactory(ModelManager manager) {
+				manager.add("main", new GameModel());
+			}
+
+			@Override
+			public void resourceFactory(ResourceManager resource) {
+				resource.bind("cat", "image/pussy.png", "data/cat.txt");
+				resource.bind("human", "image/person91.png", "data/human.txt");
+			}
+
+			@Override
+			public int getScreenWidth() {
+				return 480;
+			}
+
+			@Override
+			public int getScreenHeight() {
+				return 480;
+			}
+		});
 	}
 
 	class GameView implements View {
@@ -126,7 +78,7 @@ public class MakeAGame extends ApplicationAdapter {
 					sign.right = true;
 				}
 			}
-			controler.call("timmer", new Gson().toJson(sign));
+			Controler.get().call("timmer", new Gson().toJson(sign));
 		}
 
 		@Override
@@ -135,9 +87,9 @@ public class MakeAGame extends ApplicationAdapter {
 			for (String s : build) {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 
-				list.add(new RenderEvent(resource.fetch("cat"), hold.cat.x, hold.cat.y));
+				list.add(new RenderEvent(ResourceManager.get().fetch("cat"), hold.cat.x, hold.cat.y));
 				for (Hold.Human human : hold.humans) {
-					list.add(new RenderEvent(resource.fetch("human"), human.x, human.y));
+					list.add(new RenderEvent(ResourceManager.get().fetch("human"), human.x, human.y));
 				}
 				list.add(new RenderEvent(hold.text, 200, 200));
 			}
@@ -223,13 +175,13 @@ public class MakeAGame extends ApplicationAdapter {
 				y += speedY;
 				if (x < 0) {
 					x = 0f;
-				} else if (x + w > Bootstrap.screamWidth()) {
-					x = Bootstrap.screamWidth() - w;
+				} else if (x + w > engine.getWidth()) {
+					x = engine.getWidth() - w;
 				}
 				if (y < 0) {
 					y = 0f;
-				} else if (y + h > Bootstrap.screamWidth()) {
-					y = Bootstrap.screamWidth() - h;
+				} else if (y + h > engine.getHeight()) {
+					y = engine.getHeight() - h;
 				}
 			}
 		}
@@ -281,13 +233,13 @@ public class MakeAGame extends ApplicationAdapter {
 				y += speedY;
 				if (x < 0) {
 					x = 0f;
-				} else if (x + w > Bootstrap.screamWidth()) {
-					x = Bootstrap.screamWidth() - w;
+				} else if (x + w > engine.getWidth()) {
+					x = engine.getWidth() - w;
 				}
 				if (y < 0) {
 					y = 0f;
-				} else if (y + h > Bootstrap.screamHeight()) {
-					y = Bootstrap.screamWidth() - h;
+				} else if (y + h > engine.getHeight()) {
+					y = engine.getHeight() - h;
 				}
 			}
 		}
@@ -326,7 +278,7 @@ public class MakeAGame extends ApplicationAdapter {
 
 					countTime = System.currentTimeMillis() - startTime;
 					if (countTime > 3000 * humans.size()) {
-						humans.add(new HumanModel().init(resource.reed("human")));
+						humans.add(new HumanModel().init(ResourceManager.get().reed("human")));
 					}
 
 				}
@@ -341,9 +293,9 @@ public class MakeAGame extends ApplicationAdapter {
 			reseting = true;
 			running = true;
 			startTime = System.currentTimeMillis();
-			cat.init(resource.reed("cat"));
+			cat.init(ResourceManager.get().reed("cat"));
 			humans.clear();
-			humans.add(new HumanModel().init(resource.reed("human")));
+			humans.add(new HumanModel().init(ResourceManager.get().reed("human")));
 		}
 
 		@Override
