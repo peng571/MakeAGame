@@ -6,15 +6,10 @@ import com.makeagame.core.view.ViewManager;
 
 public abstract class Bootstrap {
 
-	public static boolean LOG = true;
-	public static boolean DEBUG = true;
-
+	private static int WIDTH = 480;
+	private static int HEIGHT = 480;
 	public static float ratio = 1f;
 	public static Color BACKGROUND_COLOR = new Color(1, 1, 1, 1);
-
-	public abstract int getScreenWidth();
-
-	public abstract int getScreenHeight();
 
 	public abstract void viewFactory(ViewManager manager);
 
@@ -22,32 +17,12 @@ public abstract class Bootstrap {
 
 	public abstract void resourceFactory(ResourceManager resource);
 
-	public int screamWidth() {
-		return (int) (getScreenWidth() * ratio);
+	public static int screamWidth() {
+		return (int) (WIDTH * ratio);
 	}
 
-	public int screamHeight() {
-		return (int) (getScreenHeight() * ratio);
-	}
-
-	public static void logI(String s) {
-		if (LOG) {
-			System.out.println(s);
-		}
-	}
-
-	public static void logD(String d) {
-		if (LOG) {
-			System.out.println(d);
-		}
-	}
-
-	public static void logE(String e) {
-		System.out.println(e);
-	}
-
-	public static void logE(Exception e) {
-		System.out.println(e);
+	public static int screamHeight() {
+		return (int) (HEIGHT * ratio);
 	}
 
 }

@@ -38,7 +38,7 @@ public class ResourceManager {
 
 	public void bind(String id, String texture, String file) {
 		FileHandle handle = Gdx.files.internal(file);
-		if (handle.exists()) {
+		if (handle != null && handle.exists()) {
 			initMap.put(id, handle.readString());
 		}
 		Texture t = new Texture(texture);

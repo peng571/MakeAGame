@@ -16,30 +16,26 @@ import com.makeagame.core.view.ViewManager;
 
 public class Engine extends ApplicationAdapter {
 
+	public static boolean LOG = true;
+	public static boolean DEBUG = true;
+
 	SpriteBatch batch;
 	BitmapFont gameLable;
 	Bootstrap bootstrap;
-
-	public Engine(Bootstrap bootstrap) {
+	
+	public  Engine(Bootstrap bootstrap) {
 		this.bootstrap = bootstrap;
-		bootstrap.resourceFactory(ResourceManager.get());
-		bootstrap.viewFactory(ViewManager.get());
-		bootstrap.modelFactory(ModelManager.get());
-
-	}
-
-	public int getWidth() {
-		return bootstrap.screamWidth();
-	}
-
-	public int getHeight() {
-		return bootstrap.screamHeight();
 	}
 
 	@Override
 	public void create() {
 		System.out.println("game start");
-
+		batch = new SpriteBatch();
+		
+		bootstrap.resourceFactory(ResourceManager.get());
+		bootstrap.viewFactory(ViewManager.get());
+		bootstrap.modelFactory(ModelManager.get());
+		
 		gameLable = new BitmapFont();
 		gameLable.setColor(new Color(1, 0, 0, 1));
 
@@ -85,11 +81,31 @@ public class Engine extends ApplicationAdapter {
 				batch.draw(e.texture, e.x, e.y);
 				break;
 			case RenderEvent.LABEL:
-				gameLable.draw(batch, e.s, getWidth() / 2f, getHeight() / 2f);
+				gameLable.draw(batch, e.s, Bootstrap.screamWidth() / 2f, Bootstrap.screamHeight() / 2f);
 				break;
 			}
 		}
 		batch.end();
+	}
+
+	public static void logI(String s) {
+		if (LOG) {
+			System.out.println(s);
+		}
+	}
+
+	public static void logD(String d) {
+		if (LOG) {
+			System.out.println(d);
+		}
+	}
+
+	public static void logE(String e) {
+		System.out.println(e);
+	}
+
+	public static void logE(Exception e) {
+		System.out.println(e);
 	}
 
 }

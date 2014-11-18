@@ -1,6 +1,7 @@
 package com.makeagame.firstgame;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -17,7 +18,7 @@ import com.makeagame.core.view.ViewManager;
 
 public class MakeAGame {
 
-	Engine engine;
+	private Engine engine;
 
 	public MakeAGame() {
 
@@ -39,16 +40,11 @@ public class MakeAGame {
 				resource.bind("human", "image/person91.png", "data/human.txt");
 			}
 
-			@Override
-			public int getScreenWidth() {
-				return 480;
-			}
-
-			@Override
-			public int getScreenHeight() {
-				return 480;
-			}
 		});
+	}
+
+	public Engine getEngine() {
+		return engine;
 	}
 
 	class GameView implements View {
@@ -78,7 +74,7 @@ public class MakeAGame {
 					sign.right = true;
 				}
 			}
-			Controler.get().call("timmer", new Gson().toJson(sign));
+			Controler.get().call("main", new Gson().toJson(sign));
 		}
 
 		@Override
@@ -88,7 +84,7 @@ public class MakeAGame {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 
 				list.add(new RenderEvent(ResourceManager.get().fetch("cat"), hold.cat.x, hold.cat.y));
-				for (Hold.Human human : hold.humans) {
+				for (Poistion human : hold.humans) {
 					list.add(new RenderEvent(ResourceManager.get().fetch("human"), human.x, human.y));
 				}
 				list.add(new RenderEvent(hold.text, 200, 200));
@@ -175,13 +171,13 @@ public class MakeAGame {
 				y += speedY;
 				if (x < 0) {
 					x = 0f;
-				} else if (x + w > engine.getWidth()) {
-					x = engine.getWidth() - w;
+				} else if (x + w > Bootstrap.screamWidth()) {
+					x = Bootstrap.screamWidth() - w;
 				}
 				if (y < 0) {
 					y = 0f;
-				} else if (y + h > engine.getHeight()) {
-					y = engine.getHeight() - h;
+				} else if (y + h > Bootstrap.screamHeight()) {
+					y = Bootstrap.screamHeight() - h;
 				}
 			}
 		}
@@ -233,13 +229,13 @@ public class MakeAGame {
 				y += speedY;
 				if (x < 0) {
 					x = 0f;
-				} else if (x + w > engine.getWidth()) {
-					x = engine.getWidth() - w;
+				} else if (x + w > Bootstrap.screamWidth()) {
+					x = Bootstrap.screamWidth() - w;
 				}
 				if (y < 0) {
 					y = 0f;
-				} else if (y + h > engine.getHeight()) {
-					y = engine.getHeight() - h;
+				} else if (y + h > Bootstrap.screamHeight()) {
+					y = Bootstrap.screamHeight() - h;
 				}
 			}
 		}
@@ -315,10 +311,11 @@ public class MakeAGame {
 			}
 			hold.cat.x = cat.x;
 			hold.cat.y = cat.y;
-			hold.humans = new Hold.Human[humans.size()];
 			for (int i = 0; i < humans.size(); i++) {
-				hold.humans[i].x = humans.get(i).x;
-				hold.humans[i].y = humans.get(i).y;
+				Poistion p = new Poistion();
+				p.x = humans.get(i).x;
+				p.y = humans.get(i).y;
+				hold.humans.add(p);
 			}
 			hold.text = text;
 			return new Gson().toJson(hold);
@@ -326,7 +323,7 @@ public class MakeAGame {
 
 		@Override
 		public String info() {
-			return "timmer model";
+			return "main model";
 		}
 
 		@Override
@@ -347,20 +344,13 @@ public class MakeAGame {
 
 	class Hold {
 		String text;
+		Poistion cat = new Poistion();
+		ArrayList<Poistion> humans = new ArrayList<Poistion>();
+	}
 
-		class Cat {
-			float x;
-			float y;
-		}
-
-		Cat cat = new Cat();
-
-		public class Human {
-			float x;
-			float y;
-		}
-
-		Human[] humans;
+	class Poistion {
+		float x;
+		float y;
 	}
 
 }

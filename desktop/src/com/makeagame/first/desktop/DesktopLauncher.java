@@ -3,6 +3,7 @@ package com.makeagame.first.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.makeagame.core.Bootstrap;
+import com.makeagame.core.Engine;
 import com.makeagame.firstgame.MakeAGame;
 
 public class DesktopLauncher {
@@ -14,6 +15,6 @@ public class DesktopLauncher {
 //	        TexturePacker.process(settings, "../images", "../game-android/assets", "game");
 //
 //	        new LwjglApplication(new MakeAGame(), "Game", 320, 480, false);
-	  		new LwjglApplication(new MakeAGame(), config);
+	  		new LwjglApplication(new MakeAGame().getEngine(), config);
 	}
 }
