@@ -7,13 +7,15 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
-import com.makeagame.core.ResourceManager;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
+import com.makeagame.core.resource.Resource;
+import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
 import com.makeagame.core.view.ViewManager;
+import com.makeagame.core.view.SignalEvent.KeyEvent;
 
 public class MakeAGame {
 
@@ -35,10 +37,16 @@ public class MakeAGame {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("cat", "image/pussy.png", "data/cat.txt");
-				resource.bind("human", "image/person91.png", "data/human.txt");
+				resource.bind("cat", new Resource().image("image/pussy.png").attribute("data/cat.txt"));
+				resource.bind("human", new Resource().image("image/person91.png").attribute("data/human.txt"));
+				resource.bind("ball1", new Resource().image("image/black.png"));
+				resource.bind("ball2", new Resource().image("image/blue.png"));
+				resource.bind("ball3", new Resource().image("image/grey.png"));
+				resource.bind("ball4", new Resource().image("image/green.png"));
+				resource.bind("ball5", new Resource().image("image/orange.png"));
+				resource.bind("ball6", new Resource().image("image/pink.png"));
+				resource.bind("ball7", new Resource().image("image/red.png"));
 			}
-
 		});
 	}
 
@@ -57,20 +65,22 @@ public class MakeAGame {
 			sign.right = false;
 			sign.enter = false;
 			for (SignalEvent s : signalList) {
-				if (s.equals(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "enter" }))) {
-					sign.enter = true;
-				}
-				if (s.equals(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "left" }))) {
-					sign.left = true;
-				}
-				if (s.equals(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "up" }))) {
-					sign.up = true;
-				}
-				if (s.equals(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "down" }))) {
-					sign.down = true;
-				}
-				if (s.equals(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new Object[] { "right" }))) {
-					sign.right = true;
+				if (s.isKeyEvent()) {
+					if (s.signal().press(KeyEvent.ENTER)) {
+						sign.enter = true;
+					}
+					if (s.signal().press(KeyEvent.LEFT)) {
+						sign.left = true;
+					}
+					if (s.signal().press(KeyEvent.UP)) {
+						sign.up = true;
+					}
+					if (s.signal().press(KeyEvent.DOWN)) {
+						sign.down = true;
+					}
+					if (s.signal().press(KeyEvent.RIGHT)) {
+						sign.right = true;
+					}
 				}
 			}
 			Controler.get().call("main", new Gson().toJson(sign));
