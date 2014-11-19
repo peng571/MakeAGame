@@ -29,9 +29,4 @@ public  final  class Controler {
 		return 	model.hold();
 	}
 
-//	public void loop() {
-//		call(new Object[]{});
-//		build();
-//	}
-
 }
