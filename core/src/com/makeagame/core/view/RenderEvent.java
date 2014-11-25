@@ -1,6 +1,6 @@
 package com.makeagame.core.view;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class RenderEvent {
 
@@ -8,10 +8,15 @@ public class RenderEvent {
 	public String s;
 	public float x;
 	public float y;
-	public float w;
-	public float h;
+	public int srcW;
+	public int srcH;
+	public int dstW;
+	public int dstH;
+	public float ratioX;
+	public float ratioY;
+	public float angle;
 	public int gravity;
-	public Texture texture;
+	public TextureRegion texture;
 	public static final int IMAGE = 0x001;
 	public static final int LABEL = 0x002;
 
@@ -22,8 +27,9 @@ public class RenderEvent {
 	public static final int DOWN = 0x000;
 
 	private RenderEvent() {
-		x = 0;
-		y = 0;
+		angle = 0;
+		XY(0,0);
+		srcWH(36,36);
 		gravity = 0;
 	}
 
@@ -33,7 +39,7 @@ public class RenderEvent {
 		this.s = s;
 	}
 
-	public RenderEvent(Texture texture) {
+	public RenderEvent(TextureRegion texture) {
 		this();
 		this.type = IMAGE;
 		this.texture = texture;
@@ -45,8 +51,44 @@ public class RenderEvent {
 		return this;
 	}
 
+	public RenderEvent srcWH(int w, int h) {
+		this.srcW = w;
+		this.srcH = h;
+		this.dstH = h;
+		this.dstW = w;
+		this.ratioX = 1f;
+		this.ratioY = 1f;
+		return this;
+	}
+
+	public RenderEvent dstWH(int w, int h) {
+		this.dstH = h;
+		this.dstW = w;
+		this.ratioX = dstW / srcW;
+		this.ratioY = dstH / srcH;
+		return this;
+	}
+
+	public RenderEvent Ratio(float r) {
+		this.ratioX = r;
+		this.ratioY = r;
+		this.dstH = (int) (srcH * r);
+		this.dstW = (int) (srcW * r);
+		return this;
+	}
+
+	public RenderEvent Rotation(float angle) {
+		this.angle = angle;
+		return this;
+	}
+
 	public RenderEvent Gravity(int gravity) {
 		this.gravity = gravity;
+		return this;
+	}
+
+	public RenderEvent filp(boolean x, boolean y) {
+		texture.flip(x, y);
 		return this;
 	}
 

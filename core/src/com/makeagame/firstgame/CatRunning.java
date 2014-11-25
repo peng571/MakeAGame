@@ -14,10 +14,15 @@ import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
-import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.core.view.View;
 import com.makeagame.core.view.ViewManager;
 
+/**
+ * a simple game example
+ * 
+ * @author Peng
+ * 
+ */
 public class CatRunning {
 
 	private Engine engine;
@@ -41,7 +46,6 @@ public class CatRunning {
 				resource.bind("cat", new Resource().image("image/pussy.png").attribute("data/cat.txt"));
 				resource.bind("human", new Resource().image("image/person91.png").attribute("data/human.txt"));
 			}
-
 		});
 	}
 
@@ -60,20 +64,20 @@ public class CatRunning {
 			sign.right = false;
 			sign.enter = false;
 			for (SignalEvent s : signalList) {
-				if (s.isKeyEvent()) {
-					if (((KeyEvent) s.signal()).press(KeyEvent.ENTER)) {
+				if (s.type == SignalEvent.KEY_EVENT) {
+					if (s.signal.press(KeyEvent.ENTER)) {
 						sign.enter = true;
 					}
-					if (((KeyEvent) s.signal()).press(KeyEvent.LEFT)) {
+					if (s.signal.press(KeyEvent.LEFT)) {
 						sign.left = true;
 					}
-					if (((KeyEvent) s.signal()).press(KeyEvent.UP)) {
+					if (s.signal.press(KeyEvent.UP)) {
 						sign.up = true;
 					}
-					if (((KeyEvent) s.signal()).press(KeyEvent.DOWN)) {
+					if (s.signal.press(KeyEvent.DOWN)) {
 						sign.down = true;
 					}
-					if (((KeyEvent) s.signal()).press(KeyEvent.RIGHT)) {
+					if (s.signal.press(KeyEvent.RIGHT)) {
 						sign.right = true;
 					}
 				}

@@ -6,12 +6,19 @@ public class SignalEvent {
 	public final static int KEY_EVENT = 0x02;
 	public final static int TOUCH_EVENT = 0x03;
 
-	Signal signal;
-	int eventType;
+	public final static int ACTION_UP = 0x01;
+	public final static int ACTION_DOWN = 0x02;
+	public final static int ACTION_DRAG = 0x03;
+	public final static int ACTION_MOVE = 0x04;
 
-	public SignalEvent(int type, int[] values) {
-		this.eventType = type;
-		switch (eventType) {
+	public Signal signal;
+	public int type;
+	public int action;
+
+	public SignalEvent(int type, int action, int[] values) {
+		this.type = type;
+		this.action = action;
+		switch (type) {
 		case MOUSE_EVENT:
 			this.signal = new MouseEvent();
 			signal.key = values[0];
@@ -29,26 +36,10 @@ public class SignalEvent {
 		}
 	}
 
-	public boolean isKeyEvent() {
-		return eventType == KEY_EVENT;
-	}
-
-	public boolean isMouseEvent() {
-		return eventType == MOUSE_EVENT;
-	}
-
-	public boolean isTouchEvent() {
-		return eventType == TOUCH_EVENT;
-	}
-
-	public Signal signal() {
-		return signal;
-	}
-
 	public class Signal {
-		int key;
-		int x;
-		int y;
+		public int key;
+		public int x;
+		public int y;
 
 		public boolean press(int key) {
 			if (key > 0) {
@@ -60,15 +51,14 @@ public class SignalEvent {
 
 	public class MouseEvent extends Signal {
 		public static final int ANY_KEY = -1;
-		public static final int LEFT = 1;
-		public static final int RIGHT = 2;
-		public static final int SCROLL_UP = 3;
-		public static final int SCROLL_DOWN = 4;
-		public static final int CENTER = 5;
+		public static final int LEFT = 0;
+		public static final int RIGHT = 1;
+		public static final int MIDDLE = 2;
+		public static final int BACK = 3;
+		public static final int FORWARD = 4;
 	}
 
 	public class KeyEvent extends Signal {
-		int key;
 		public static final int ANY_KEY = -1;
 		public static final int LEFT = 21;
 		public static final int DOWN = 20;

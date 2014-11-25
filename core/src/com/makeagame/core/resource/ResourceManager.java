@@ -2,7 +2,8 @@ package com.makeagame.core.resource;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.makeagame.core.Engine;
 
 public class ResourceManager {
 
@@ -26,12 +27,19 @@ public class ResourceManager {
 		return resourceMap.get(id);
 	}
 
-	// 回傳一個元件
-	public Texture fetch(String id) {
+	public TextureRegion fetch(String id) {
+		if (resourceMap.get(id) == null) {
+			Engine.logE("can't find resource at '" + id + "'");
+			return null;
+		}
 		return resourceMap.get(id).texture;
 	}
 
 	public String read(String id) {
+		if (resourceMap.get(id) == null) {
+			Engine.logE("can't find resource at '" + id + "'");
+			return "";
+		}
 		return resourceMap.get(id).file;
 	}
 

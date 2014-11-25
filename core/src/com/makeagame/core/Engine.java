@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,6 +13,7 @@ import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
+import com.makeagame.core.view.SignalEvent.MouseEvent;
 import com.makeagame.core.view.ViewManager;
 
 public class Engine extends ApplicationAdapter {
@@ -26,7 +25,7 @@ public class Engine extends ApplicationAdapter {
 	BitmapFont gameLable;
 	Bootstrap bootstrap;
 
-	ArrayList<SignalEvent> signalList;
+	ArrayList<SignalEvent> signalList = new ArrayList<SignalEvent>();
 	ArrayList<RenderEvent> renderList;
 
 	public Engine(Bootstrap bootstrap) {
@@ -44,54 +43,63 @@ public class Engine extends ApplicationAdapter {
 
 		gameLable = new BitmapFont();
 		gameLable.setColor(new Color(1, 0, 0, 1));
-
 	}
 
 	@Override
 	public void render() {
 		Gdx.gl.glClearColor(Bootstrap.BACKGROUND_COLOR.r, Bootstrap.BACKGROUND_COLOR.g, Bootstrap.BACKGROUND_COLOR.b, Bootstrap.BACKGROUND_COLOR.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.input.setInputProcessor(new InputAdapter() {
 
-		// keybroad
-		signalList = new ArrayList<SignalEvent>();
-		if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, new int[] { SignalEvent.KeyEvent.ENTER }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, new int[] { SignalEvent.KeyEvent.LEFT }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, new int[] { SignalEvent.KeyEvent.RIGHT }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, new int[] { SignalEvent.KeyEvent.UP }));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, new int[] { SignalEvent.KeyEvent.DOWN }));
-		}
+			@Override
+			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+				signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_UP, new int[] { button, screenX, screenY }));
+				return super.touchUp(screenX, screenY, pointer, button);
+			}
 
-//		Gdx.input.setInputProcessor(new InputAdapter() {
-//			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//				switch (button) {
-//				case Buttons.LEFT:
-//					signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, new int[] { SignalEvent.MouseEvent.LEFT, screenX, screenY }));
-//					break;
-//				case Buttons.RIGHT:
-//					signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, new int[] { SignalEvent.MouseEvent.RIGHT, screenX, screenY }));
-//					break;
-//				}
-//				return true;
-//			}
-//		});
+			@Override
+			public boolean touchDragged(int screenX, int screenY, int pointer) {
+				signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DRAG, new int[] { SignalEvent.MouseEvent.ANY_KEY, screenX, screenY }));
+				return super.touchDragged(screenX, screenY, pointer);
+			}
 
-		ViewManager.get().signal(signalList);
+			@Override
+			public boolean mouseMoved(int screenX, int screenY) {
+				signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_MOVE, new int[] { MouseEvent.ANY_KEY, screenX, screenY }));
+				return super.mouseMoved(screenX, screenY);
+			}
+
+			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DOWN, new int[] { button, screenX, screenY }));
+				return super.touchDown(screenX, screenY, pointer, button);
+			}
+
+			@Override
+			public boolean keyDown(int keycode) {
+				signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new int[] { keycode }));
+				return super.keyDown(keycode);
+			}
+
+			@Override
+			public boolean keyUp(int keycode) {
+				signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new int[] { keycode }));
+				return super.keyUp(keycode);
+			}
+		});
+
+		if (signalList != null) {
+			ViewManager.get().signal(signalList);
+			signalList.clear();
+		} else {
+			signalList = new ArrayList<SignalEvent>();
+		}
 
 		batch.begin();
 		renderList = ViewManager.get().render();
 		for (RenderEvent e : renderList) {
 			switch (e.type) {
 			case RenderEvent.IMAGE:
-				batch.draw(e.texture, e.x, e.y);
+				batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
 				break;
 			case RenderEvent.LABEL:
 				gameLable.draw(batch, e.s, Bootstrap.screamWidth() / 2f, Bootstrap.screamHeight() / 2f);
@@ -99,6 +107,11 @@ public class Engine extends ApplicationAdapter {
 			}
 		}
 		batch.end();
+		try {
+			Thread.sleep((long) (1000 / Bootstrap.FPS - Gdx.graphics.getDeltaTime()));
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	public static void logI(String s) {

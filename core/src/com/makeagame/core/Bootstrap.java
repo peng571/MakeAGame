@@ -7,8 +7,9 @@ import com.makeagame.core.view.ViewManager;
 
 public abstract class Bootstrap {
 
-	private static int WIDTH = 600;
-	private static int HEIGHT = 600;
+	public static final int FPS = 60;
+	private static final int WIDTH = 960;
+	private static final int HEIGHT = 640;
 	public static float ratio = 1f;
 	public static Color BACKGROUND_COLOR = new Color(1, 1, 1, 1);
 
