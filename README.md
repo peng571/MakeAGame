@@ -3,10 +3,12 @@ MakeAGame
 
 MakeAGame-Core
 
-a MVC Framework for games
-base on libgdx
+a MVC Framework for games 
+base on libgdx 
+connect with gson 
 
 
 
-log
-2014/11/10 create
+
+
+
