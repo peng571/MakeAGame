@@ -7,8 +7,7 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
-import com.makeagame.core.model.Action;
-import com.makeagame.core.model.AutoMoveModel;
+import com.makeagame.core.model.AutoMoveObject;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.resource.Resource;
@@ -29,6 +28,11 @@ public class PuzzleFrog {
 
 	// private int gameState = -1; // 1 user move, 2 ball remove, 3 new ball drop
 	private Engine engine;
+
+	final static int BALL_W = 60;
+	final static int BALL_H = 60;
+	final static int ROW = 7;
+	final static int COL = 7;
 
 	public PuzzleFrog() {
 
@@ -70,66 +74,54 @@ public class PuzzleFrog {
 		int ballH = 48;
 		Sign sign;
 
+		Random rand = new Random();
+		final static int BALL_W = 60;
+		final static int BALL_H = 60;
+
+		Ball[][] balls = new Ball[ROW][COL];
+		int downX, downY;
+		int upX, upY;
+		int move;
+
+		public GameView()
+		{
+			String ballInitJson = ResourceManager.get().read("ball");
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					balls[i][j] = new Ball(ballInitJson, i, j);
+				}
+			}
+		}
+
 		@Override
 		public void signal(ArrayList<SignalEvent> signalList) {
 			for (SignalEvent s : signalList) {
 				if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
 					if (s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_DOWN) {
 						sign = new Sign();
-						sign.downX = s.signal.x - startX;
-						sign.downY = s.signal.y - startY;
+						downX = s.signal.x - startX;
+						downY = s.signal.y - startY;
 					}
 					if (s.action == SignalEvent.ACTION_UP) {
-						sign.upX = s.signal.x - startX;
-						sign.upY = s.signal.y - startY;
+						upX = s.signal.x - startX;
+						upY = s.signal.y - startY;
+						sign.row = downX / BALL_W;
+						sign.col = downY / BALL_H;
+						move = -1;
+						if (Math.abs(downX - upX) > BALL_W / 2) {
+							move = downX > upX ? 0 : 2;
+						}
+						if (Math.abs(downY - upY) > BALL_H / 2) {
+							move = downY > upY ? 1 : 3;
+						}
+						sign.move = move;
 						Controler.get().call("main", new Gson().toJson(sign));
-						break;
 					}
 				}
 			}
-			Controler.get().call("main", "");
 		}
 
-		@Override
-		public ArrayList<RenderEvent> render(ArrayList<String> build) {
-
-			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-			for (String s : build) {
-				Hold hold = new Gson().fromJson(s, Hold.class);
-				for (Position p : hold.ballMap) {
-					list.add(new RenderEvent(ResourceManager.get().fetch("ball" + p.type)).XY(startX + p.x, startY + p.y).srcWH(ballW, ballH));
-				}
-
-				if (!hold.remove.isEmpty()) {
-					for (Position p : hold.remove) {
-						list.add(new RenderEvent(ResourceManager.get().fetch("boom")).XY(startX + p.x, startY + p.y).srcWH(ballW, ballH));
-					}
-				}
-			}
-
-			return list;
-		}
-
-		@Override
-		public String info() {
-			return "main view";
-		}
-
-	}
-
-	class GameModel implements Model {
-
-		final static int BALL_W = 60;
-		final static int BALL_H = 60;
-		final static int RAW = 7;
-		final static int CAL = 7;
-		Ball[][] ballMap = new Ball[RAW][CAL];
-		ArrayList<Position> remove;
-		Random rand = new Random();
-		boolean moved;
-		int move;// 0 left, 1 up , 2 right, 3 down
-
-		class Ball extends AutoMoveModel {
+		class Ball extends AutoMoveObject {
 
 			public int type;
 
@@ -144,18 +136,64 @@ public class PuzzleFrog {
 			}
 		}
 
+		@Override
+		public ArrayList<RenderEvent> render(ArrayList<String> build) {
+
+			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+			for (String s : build) {
+				Hold hold = new Gson().fromJson(s, Hold.class);
+				if (hold.moved) {
+					balls[hold.srcR][hold.srcC].moveTo(balls[hold.dstR][hold.dstC].model.x, balls[hold.dstR][hold.dstC].model.y, null);
+					balls[hold.dstR][hold.dstC].moveTo(balls[hold.srcR][hold.srcC].model.x, balls[hold.srcR][hold.srcC].model.y, null);
+				}
+				for (int i = 0; i < ROW; i++) {
+					for (int j = 0; j < COL; j++) {
+						balls[i][j].run();
+						if (hold.ballMap[i][j] > 0) {
+							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(hold.ballMap[i][j])))
+									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH));
+						}
+					}
+				}
+
+				// if (!hold.remove.isEmpty()) {
+				// for (Position p : hold.remove) {
+				// list.add(new RenderEvent(ResourceManager.get().fetch("boom")).XY(startX + p.r, startY + p.c).srcWH(ballW, ballH));
+				// }
+				// }
+			}
+
+			return list;
+		}
+
+		@Override
+		public String info() {
+			return "main view";
+		}
+
+	}
+
+	class GameModel implements Model {
+
+		Random rand = new Random();
+
+		Ball[][] ballMap = new Ball[ROW][COL];
+		ArrayList<Ball> remove;
+		boolean moved;
+		int move;// 0 left, 1 up , 2 right, 3 down
+
 		public GameModel() {
-			String ballInitJson = ResourceManager.get().read("ball");
-			for (int i = 0; i < RAW; i++) {
-				for (int j = 0; j < CAL; j++) {
-					ballMap[i][j] = new Ball(ballInitJson, i, j);
+			//
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					ballMap[i][j] = new Ball(i, j, rand.nextInt(7) + 1);
 				}
 			}
 			remove = countBall();
 			do {
 				if (!remove.isEmpty()) {
-					for (Position p : remove) {
-						ballMap[p.x / BALL_W][p.y / BALL_H].type = rand.nextInt(7) + 1;
+					for (Ball p : remove) {
+						ballMap[p.r][p.c] = new Ball(p.r, p.c, rand.nextInt(7) + 1);
 					}
 					remove.clear();
 				}
@@ -164,13 +202,29 @@ public class PuzzleFrog {
 			} while (!remove.isEmpty());
 		}
 
-		private ArrayList<Position> countBall() {
+		class Ball {
+			int type;
+			int r;
+			int c;
+
+			public Ball(int r, int c, int type) {
+				this.type = type;
+				this.r = r;
+				this.c = c;
+			}
+
+			public Ball(int r, int c) {
+				this(r, c, -1);
+			}
+		}
+
+		private ArrayList<Ball> countBall() {
 			int countColor = -1;
-			ArrayList<Position> temp = new ArrayList<Position>();
-			ArrayList<Position> remove = new ArrayList<Position>();
-			for (int i = 0; i < RAW; i++) {
-				for (int j = 0; j < CAL; j++) {
-					Position p = new Position(ballMap[i][j].model.x, ballMap[i][j].model.y);
+			ArrayList<Ball> temp = new ArrayList<Ball>();
+			ArrayList<Ball> remove = new ArrayList<Ball>();
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					Ball p = new Ball(i, j);
 					if (ballMap[i][j].type == countColor) {
 						temp.add(p);
 					} else {
@@ -185,9 +239,9 @@ public class PuzzleFrog {
 			}
 			countColor = -1;
 			temp.clear();
-			for (int j = 0; j < CAL; j++) {
-				for (int i = 0; i < RAW; i++) {
-					Position p = new Position(ballMap[i][j].model.x, ballMap[i][j].model.y);
+			for (int j = 0; j < COL; j++) {
+				for (int i = 0; i < ROW; i++) {
+					Ball p = new Ball(i, j);
 					if (ballMap[i][j].type == countColor) {
 						temp.add(p);
 					} else {
@@ -200,77 +254,73 @@ public class PuzzleFrog {
 					}
 				}
 			}
-			for (Position p : remove) {
-				System.out.println("remove " + p.x + ", " + p.y);
+			for (Ball p : remove) {
+				System.out.println("remove " + p.r + ", " + p.c);
 			}
 			return remove;
 		}
 
-		int raw, cal;
+		int row, col;
 		int nextRaw, nextCal;
 
 		@Override
 		public void process(String gsonString) {
 			Sign signs = new Gson().fromJson(gsonString, Sign.class);
-
-			if (signs != null) {
-				raw = signs.downX / BALL_W;
-				cal = signs.downY / BALL_H;
-				move = -1;
-				if (Math.abs(signs.downX - signs.upX) > BALL_W / 2) {
-					move = signs.downX > signs.upX ? 0 : 2;
-				}
-				if (Math.abs(signs.downY - signs.upY) > BALL_H / 2) {
-					move = signs.downY > signs.upY ? 1 : 3;
-				}
-				if (move != -1) {
-					moved = false;
-					System.out.println("raw " + raw + " , cal " + cal);
-					if (raw >= 0 && raw < RAW && cal >= 0 && cal < CAL) {
-						nextRaw = raw;
-						nextCal = cal;
-						switch (move) {
-						case 0: // up
-							if (raw > 0) {
-								nextRaw--;
-							}
-							break;
-						case 1: // left
-							if (cal > 0) {
-								nextCal--;
-							}
-							break;
-						case 2: // down
-							if (raw < RAW - 1) {
-								nextRaw++;
-							}
-							break;
-						case 3: // right
-							if (cal < CAL - 1) {
-								nextCal++;
-							}
-							break;
+			if (signs.move != -1) {
+				row = signs.row;
+				col = signs.col;
+				moved = false;
+				System.out.println("raw " + row + " , cal " + col);
+				if (row >= 0 && row < ROW && col >= 0 && col < COL) {
+					nextRaw = row;
+					nextCal = col;
+					switch (move) {
+					case 0: // up
+						if (row > 0) {
+							nextRaw--;
 						}
-
-						moved = true;
-						final Ball temp = ballMap[nextRaw][nextCal];
-						final Ball temp2 = ballMap[raw][cal];
-						temp.moveTo(temp2.model.x, temp2.model.y, null);
-						temp2.moveTo(temp.model.x, temp.model.y, new Action() {
-							@Override
-							public void execute() {
-								ballMap[raw][cal] = temp;
-								ballMap[nextRaw][nextCal] = temp2;
-								remove = countBall();
-							}
-						});
-
+						break;
+					case 1: // left
+						if (col > 0) {
+							nextCal--;
+						}
+						break;
+					case 2: // down
+						if (row < ROW - 1) {
+							nextRaw++;
+						}
+						break;
+					case 3: // right
+						if (col < COL - 1) {
+							nextCal++;
+						}
+						break;
 					}
-				}
-			}
-			for (int i = 0; i < RAW; i++) {
-				for (int j = 0; j < CAL; j++) {
-					ballMap[i][j].process("");
+					moved = true;
+					final Ball temp = ballMap[nextRaw][nextCal];
+					ballMap[nextRaw][nextCal] = ballMap[row][col];
+					ballMap[row][col] = temp;
+
+					remove = countBall();
+					for (Ball ball : remove) {
+						ballMap[ball.r][ball.c].type = -1;
+					}
+					for (int i = ROW - 1; i >= 0; i--) {
+						for (int j = 0; j < COL; j++) {
+							if (ballMap[i][j].type == -1) {
+								for (int k = i; k >= 0; k--) {
+									if (ballMap[k][j].type != -1) {
+										ballMap[i][j].type = ballMap[k][j].type;
+										ballMap[k][j].type = -1;
+										break;
+									}
+								}
+								if (ballMap[i][j].type == -1) {
+									ballMap[i][j].type = rand.nextInt(7) + 1;
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -278,11 +328,17 @@ public class PuzzleFrog {
 		@Override
 		public String hold() {
 			Hold hold = new Hold();
-			for (int i = 0; i < RAW; i++) {
-				for (int j = 0; j < CAL; j++) {
-					hold.ballMap.add(new Position(ballMap[i][j].model.x, ballMap[i][j].model.y, ballMap[i][j].type));
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					hold.ballMap[i][j] = ballMap[i][j].type;
 				}
 			}
+			hold.srcR = row;
+			hold.srcC = col;
+			hold.dstR = nextRaw;
+			hold.dstC = nextCal;
+			hold.moved = moved;
+			moved = false;
 			hold.remove = remove;
 			remove.clear();
 			return new Gson().toJson(hold);
@@ -296,31 +352,17 @@ public class PuzzleFrog {
 	}
 
 	class Sign {
-		int downX;
-		int downY;
-		int upX;
-		int upY;
+		int row;
+		int col;
+		int move;
 	}
 
 	class Hold {
-		ArrayList<Position> ballMap = new ArrayList<Position>();
-		ArrayList<Position> remove;
-	}
-
-	class Position {
-		int type;
-		int x;
-		int y;
-
-		public Position(int x, int y, int type) {
-			this.x = x;
-			this.y = y;
-			this.type = type;
-		}
-
-		public Position(int x, int y) {
-			this(x, y, -1);
-		}
+		boolean moved;
+		int srcR, srcC;
+		int dstR, dstC;
+		int[][] ballMap = new int[7][7];
+		ArrayList<GameModel.Ball> remove;
 	}
 
 }

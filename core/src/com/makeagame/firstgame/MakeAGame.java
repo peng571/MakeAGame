@@ -1,7 +1,7 @@
 package com.makeagame.firstgame;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -10,7 +10,7 @@ import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
-import com.makeagame.core.model.MovableModel;
+import com.makeagame.core.model.MovableObject;
 import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
@@ -75,15 +75,12 @@ public class MakeAGame {
 
 		@Override
 		public ArrayList<RenderEvent> render(ArrayList<String> build) {
-
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 			for (String s : build) {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 				list.add(new RenderEvent(ResourceManager.get().fetch("bird")).XY(hold.x, hold.y).srcWH(128, 128).Ratio(0.6f).Rotation(hold.angle));
 				for (Fruit f : hold.fruits) {
-					if (f.flying) {
-						list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128).Ratio(0.8f));
-					}
+					list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128).Ratio(0.8f));
 				}
 			}
 			return list;
@@ -99,66 +96,71 @@ public class MakeAGame {
 	class GameModel implements Model {
 
 		BirdModel bird;
-		HashMap<String, FruitModel> fruits;
+		ArrayList<FruitModel> fruits;
 		long restTime = 500;
+		long shootTime;
 		long gameTime;
 
 		public GameModel() {
 			// bird = create(ResourceManager.get().read("bird"));
 			bird = new BirdModel(ResourceManager.get().read("bird"));
-			fruits = new HashMap<String, FruitModel>();
-			fruits.put("pear", new FruitModel(ResourceManager.get().read("fruit")));
-			fruits.put("banana", new FruitModel(ResourceManager.get().read("fruit")));
+			fruits = new ArrayList<FruitModel>();
+			fruits.add(new FruitModel("pear", ResourceManager.get().read("fruit")));
+			fruits.add(new FruitModel("banana", ResourceManager.get().read("fruit")));
 		}
 
-		class FruitModel extends MovableModel {
+		class FruitModel extends MovableObject {
+			String type;
 			int level;
 			int score;
-			long shootTime;
 			Random rand = new Random();
-			boolean shooting = false;
+			boolean failed;
 
-			public FruitModel(String gson) {
+			public FruitModel(String type, String gson) {
 				super(gson);
+				this.type = type;
 				model.sX += rand.nextInt(10) * 0.1f - 0.5f;
+				model.sY = model.initSY;
 				level = 1;
 				score = 5 * level;
+				failed = false;
 			}
 
-			@Override
-			public void process(String gsonString) {
-				if (shooting) {
-					model.sY += model.aY;
-					if (model.sY > model.maxSY) {
-						model.sY = model.maxSY;
-					} else if (model.sY < -model.maxSY) {
-						model.sY = -model.maxSY;
-					}
+			public void run() {
+				model.sY += model.aY;
+				if (model.sY > model.maxSY) {
+					model.sY = model.maxSY;
+				} else if (model.sY < -model.maxSY) {
+					model.sY = -model.maxSY;
+				}
 
-					model.x += model.sX;
-					model.y += model.sY;
-					// System.out.println(new Gson().toJson(model));
+				model.x += model.sX;
+				model.y += model.sY;
+				// System.out.println(new Gson().toJson(model));
 
-					if (model.y < 0) {
-						model.y = 0;
-					} else if (model.y - model.h > Bootstrap.screamHeight()) {
-						model.y = Bootstrap.screamHeight() - model.h;
-					}
+				if (model.y < 0) {
+					model.y = 0;
+				} else if (model.y - model.h > Bootstrap.screamHeight()) {
+					model.y = Bootstrap.screamHeight() - model.h;
+				}
 
-					if (model.y > Bootstrap.screamHeight()) {
-						shooting = false;
-						model.x = model.initX;
-						model.y = model.initY;
-						model.sX = rand.nextInt(10) - 5;
-						model.sY = model.initSY;
-						shootTime = System.currentTimeMillis();
-						System.out.println("fruit failed");
-					}
+				if (model.x > bird.model.x && model.x + model.w < bird.model.x
+						&& model.y > bird.model.y && model.y + model.h < bird.model.y) {
+					level++;
+					fruits.add(new FruitModel("type" + "2", ResourceManager.get().read("fruit")));
+				}
+
+				if (model.y > Bootstrap.screamHeight()) {
+					model.x = model.initX;
+					model.y = model.initY;
+					model.sX = rand.nextInt(10) - 5;
+					model.sY = model.initSY;
+					failed = true;
 				}
 			}
 		}
 
-		class BirdModel extends MovableModel {
+		class BirdModel extends MovableObject {
 			boolean flying = false;
 			boolean LtoR = true;
 			long flyTime;
@@ -169,8 +171,7 @@ public class MakeAGame {
 				angle = 0;
 			}
 
-			@Override
-			public void process(String gsonString) {
+			public void run(String gsonString) {
 				Sign signs = new Gson().fromJson(gsonString, Sign.class);
 				if (!flying) {
 					if (System.currentTimeMillis() - flyTime > restTime) {
@@ -214,7 +215,7 @@ public class MakeAGame {
 					model.x += model.sX;
 					model.y += model.sY;
 					angle = (float) (-1 * Math.toDegrees(Math.sin(model.sY / model.sX)));
-//					System.out.println("sin " + (model.sY / model.sX) + " = " + angle);
+					// System.out.println("sin " + (model.sY / model.sX) + " = " + angle);
 					// System.out.println(new Gson().toJson(m));
 
 					if (model.y < 0) {
@@ -239,13 +240,20 @@ public class MakeAGame {
 		@Override
 		public void process(String gsonString) {
 			// Sign signs = new Gson().fromJson(gsonString, Sign.class);
-			bird.process(gsonString);
-			for (FruitModel f : fruits.values()) {
-				if (System.currentTimeMillis() - f.shootTime > restTime) {
-					f.shooting = true;
-					System.out.println("shoot again");
+			if (System.currentTimeMillis() - shootTime > restTime * 3) {
+				System.out.println("shoot again");
+				fruits.add(new FruitModel("pear", ResourceManager.get().read("fruit")));
+				fruits.add(new FruitModel("banana", ResourceManager.get().read("fruit")));
+				shootTime = System.currentTimeMillis();
+			}
+			bird.run(gsonString);
+
+			for (Iterator it = fruits.iterator(); it.hasNext();) {
+				FruitModel f = (FruitModel) it.next();
+				f.run();
+				if (f.failed) {
+					it.remove();
 				}
-				f.process(null);
 			}
 		}
 
@@ -256,9 +264,8 @@ public class MakeAGame {
 			hold.x = bird.model.x;
 			hold.y = bird.model.y;
 			hold.fruits = new ArrayList<Fruit>();
-			for (String type : fruits.keySet()) {
-				FruitModel f = fruits.get(type);
-				hold.fruits.add(new Fruit(type, f.model.x, f.model.y, f.shooting));
+			for (FruitModel f : fruits) {
+				hold.fruits.add(new Fruit(f.type, f.model.x, f.model.y, f.level));
 			}
 			return new Gson().toJson(hold);
 		}
@@ -284,16 +291,16 @@ public class MakeAGame {
 	}
 
 	class Fruit {
-		boolean flying;
 		String type;
+		int level;
 		int x;
 		int y;
 
-		public Fruit(String type, int x, int y, boolean f) {
+		public Fruit(String type, int x, int y, int level) {
 			this.type = type;
 			this.x = x;
 			this.y = y;
-			this.flying = f;
+			this.level = level;
 		}
 	}
 }

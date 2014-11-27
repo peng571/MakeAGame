@@ -1,9 +1,8 @@
 package com.makeagame.core.model;
 
 import com.google.gson.Gson;
-import com.makeagame.core.Bootstrap;
 
-public abstract class MovableModel implements Model {
+public abstract class MovableObject {
 
 	public Attribute model;
 	public boolean controllable;
@@ -29,27 +28,13 @@ public abstract class MovableModel implements Model {
 		public int h;
 	}
 
-	public MovableModel(String gson) {
+	public MovableObject(String gson) {
 		model = init(gson);
 	}
 
 	public Attribute init(String gson) {
 		Attribute model = new Gson().fromJson(gson, Attribute.class);
 		return model;
-	}
-
-	@Override
-	public abstract void process(String gsonString);
-
-
-	@Override
-	public String hold() {
-		return new Gson().toJson(model);
-	}
-
-	@Override
-	public String info() {
-		return "MovableModel :" + new Gson().toJson(model);
 	}
 
 }

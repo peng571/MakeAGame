@@ -4,20 +4,19 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
-public class AutoMoveModel extends MovableModel {
+public class AutoMoveObject extends MovableObject {
 
 	ArrayList<Mession> messionList;
 	Mession currentMession;
 
 	int deviation = 5;
 
-	public AutoMoveModel(String gson) {
+	public AutoMoveObject(String gson) {
 		super(gson);
-		messionList = new ArrayList<AutoMoveModel.Mession>();
+		messionList = new ArrayList<AutoMoveObject.Mession>();
 	}
 
-	@Override
-	public void process(String gsonString) {
+	public void run() {
 		if (!messionList.isEmpty()) {
 			if (currentMession == null) {
 				currentMession = messionList.get(0);
@@ -86,14 +85,9 @@ public class AutoMoveModel extends MovableModel {
 		}
 	}
 
-	@Override
-	public String hold() {
+	public String info() {
 		return new Gson().toJson(this);
 	}
 
-	@Override
-	public String info() {
-		return "auto move model " + new Gson().toJson(this);
-	}
 
 }
