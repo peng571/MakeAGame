@@ -29,7 +29,7 @@ import com.makeagame.core.view.ViewManager;
  * @author Peng
  *
  */
-public class CutFruit {
+public class FunnyForest {
 
 	private Engine engine;
 
@@ -37,7 +37,7 @@ public class CutFruit {
 		return engine;
 	}
 
-	public CutFruit() {
+	public FunnyForest() {
 
 		engine = new Engine(new Bootstrap() {
 
