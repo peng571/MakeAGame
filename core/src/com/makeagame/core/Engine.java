@@ -99,10 +99,13 @@ public class Engine extends ApplicationAdapter {
 		for (RenderEvent e : renderList) {
 			switch (e.type) {
 			case RenderEvent.IMAGE:
-				batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
+				if (e.texture != null) {
+					batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
+				}
 				break;
 			case RenderEvent.LABEL:
-				gameLable.draw(batch, e.s, Bootstrap.screamWidth() / 2f, Bootstrap.screamHeight() / 2f);
+				gameLable.setColor(e.color);
+				gameLable.draw(batch, e.s, e.x, e.y);
 				break;
 			}
 		}

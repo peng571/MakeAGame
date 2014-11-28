@@ -1,0 +1,5 @@
+{
+"id":"main",
+"reflyTime":3000,
+"reshootTime":6000
+}

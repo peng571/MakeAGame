@@ -1,6 +1,7 @@
 package com.makeagame.core.model;
 
 import com.google.gson.Gson;
+import com.makeagame.core.Engine;
 
 public abstract class MovableObject {
 
@@ -33,6 +34,7 @@ public abstract class MovableObject {
 	}
 
 	public Attribute init(String gson) {
+		Engine.logD("init with gson " + gson);
 		Attribute model = new Gson().fromJson(gson, Attribute.class);
 		return model;
 	}

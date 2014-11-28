@@ -1,7 +1,7 @@
 package com.makeagame.firstgame;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -42,13 +42,18 @@ public class MakeAGame {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("pear", new Resource().image("image/pear4.png"));
+				resource.bind("pear1", new Resource().image("image/pear4.png"));
 				resource.bind("pear2", new Resource().image("image/avocado.png"));
-				resource.bind("banana", new Resource().image("image/banana4.png"));
+				resource.bind("banana1", new Resource().image("image/banana4.png"));
 				resource.bind("banana2", new Resource().image("image/banana7.png"));
+				for(int i=1;i<=5;i++)
+				{
+				resource.bind("mengo" + i, new Resource().image("image/mengo.png").src(128*i,0,128,128));
+				}
 				resource.bind("boom", new Resource().image("image/boom3.png"));
 				resource.bind("bird", new Resource().image("image/bird.png").attribute("data/bird.txt"));
 				resource.bind("fruit", new Resource().attribute("data/fruit.txt"));
+				resource.bind("timmer", new Resource().attribute("data/game.txt"));
 			}
 		});
 	}
@@ -63,10 +68,14 @@ public class MakeAGame {
 			Sign sign = new Sign();
 			for (SignalEvent s : signalList) {
 				if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
-					if (s.action == SignalEvent.ACTION_DRAG) {
+					if (s.action == SignalEvent.ACTION_DOWN) {
+						sign.type = 1;
 						sign.x = s.signal.x;
 						sign.y = s.signal.y;
-						// System.out.println("touch x " + sign.x + ", y" + sign.y);
+					} else if (s.action == SignalEvent.ACTION_DRAG) {
+						sign.type = 2;
+						sign.x = s.signal.x;
+						sign.y = s.signal.y;
 					}
 				}
 			}
@@ -80,8 +89,10 @@ public class MakeAGame {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 				list.add(new RenderEvent(ResourceManager.get().fetch("bird")).XY(hold.x, hold.y).srcWH(128, 128).Ratio(0.6f).Rotation(hold.angle));
 				for (Fruit f : hold.fruits) {
-					list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128).Ratio(0.8f));
+					list.add(new RenderEvent(ResourceManager.get().fetch(f.type + f.level)).XY(f.x, f.y).srcWH(128, 128));
+//					list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128));
 				}
+				list.add(new RenderEvent(String.valueOf(hold.score)).XY(50, 50));
 			}
 			return list;
 		}
@@ -90,23 +101,27 @@ public class MakeAGame {
 		public String info() {
 			return "main view";
 		}
-
 	}
 
 	class GameModel implements Model {
 
+		int totalScore;
 		BirdModel bird;
 		ArrayList<FruitModel> fruits;
-		long restTime = 500;
-		long shootTime;
-		long gameTime;
+		Timmer timmer;
 
 		public GameModel() {
 			// bird = create(ResourceManager.get().read("bird"));
+			timmer = new Gson().fromJson(ResourceManager.get().read("timmer"), Timmer.class);
 			bird = new BirdModel(ResourceManager.get().read("bird"));
 			fruits = new ArrayList<FruitModel>();
-			fruits.add(new FruitModel("pear", ResourceManager.get().read("fruit")));
-			fruits.add(new FruitModel("banana", ResourceManager.get().read("fruit")));
+		}
+
+		class Timmer {
+			long reflyTime;
+			long reshootTime;
+			long shootTime;
+			long gameTime;
 		}
 
 		class FruitModel extends MovableObject {
@@ -115,15 +130,18 @@ public class MakeAGame {
 			int score;
 			Random rand = new Random();
 			boolean failed;
+			boolean bomb;
 
-			public FruitModel(String type, String gson) {
+			public FruitModel(String type, int level, String gson) {
 				super(gson);
 				this.type = type;
-				model.sX += rand.nextInt(10) * 0.1f - 0.5f;
+				this.level = level;
+				model.sX += rand.nextInt(10) - 5f;
 				model.sY = model.initSY;
 				level = 1;
 				score = 5 * level;
 				failed = false;
+				bomb = false;
 			}
 
 			public void run() {
@@ -144,10 +162,12 @@ public class MakeAGame {
 					model.y = Bootstrap.screamHeight() - model.h;
 				}
 
-				if (model.x > bird.model.x && model.x + model.w < bird.model.x
-						&& model.y > bird.model.y && model.y + model.h < bird.model.y) {
+				if (model.x < bird.pointX && model.x + model.w > bird.pointX
+						&& model.y < bird.pointY && model.y + model.h > bird.pointY) {
+					System.out.println("boom bird!!");
+					totalScore += this.score;
 					level++;
-					fruits.add(new FruitModel("type" + "2", ResourceManager.get().read("fruit")));
+					bomb = true;
 				}
 
 				if (model.y > Bootstrap.screamHeight()) {
@@ -165,17 +185,25 @@ public class MakeAGame {
 			boolean LtoR = true;
 			long flyTime;
 			float angle;
+			int pointX, pointY;
+			int displacementX, displacementY;
 
 			public BirdModel(String gson) {
 				super(gson);
 				angle = 0;
+				displacementX = model.x + model.w;
+				displacementY = model.y + model.h / 2;
 			}
 
 			public void run(String gsonString) {
 				Sign signs = new Gson().fromJson(gsonString, Sign.class);
+				pointX = model.x + displacementX;
+				pointY = model.y + displacementY;
+
 				if (!flying) {
-					if (System.currentTimeMillis() - flyTime > restTime) {
-						if (signs.x != 0 && signs.y != 0) {
+					if (System.currentTimeMillis() - flyTime > timmer.reflyTime) {
+						if (signs.x != 0 && signs.y != 0 && signs.type == 1) {
+							model.y = signs.y;
 							flying = true;
 							System.out.println("start flying");
 						}
@@ -191,6 +219,12 @@ public class MakeAGame {
 							model.sY -= model.aY;
 						} else if (signs.y > model.y) {
 							model.sY += model.aY;
+						}
+					} else {
+						if (model.sY < model.aY && model.sY > -model.aY) {
+							model.sY = 0;
+						} else {
+							model.sY += model.sY > 0 ? -model.aY : model.aY;
 						}
 					}
 					if (LtoR) {
@@ -228,7 +262,7 @@ public class MakeAGame {
 						flying = false;
 						model.sX = ((LtoR) ? 1 : -1) * model.initSX;
 						LtoR = !LtoR;
-						model.y = model.initY;
+						displacementX += LtoR ? 1 : -1 * model.w;
 						flyTime = System.currentTimeMillis();
 						System.out.println("stop flying");
 						ResourceManager.get().fetch("bird").flip(true, false);
@@ -240,17 +274,21 @@ public class MakeAGame {
 		@Override
 		public void process(String gsonString) {
 			// Sign signs = new Gson().fromJson(gsonString, Sign.class);
-			if (System.currentTimeMillis() - shootTime > restTime * 3) {
-				System.out.println("shoot again");
-				fruits.add(new FruitModel("pear", ResourceManager.get().read("fruit")));
-				fruits.add(new FruitModel("banana", ResourceManager.get().read("fruit")));
-				shootTime = System.currentTimeMillis();
+			if (System.currentTimeMillis() - timmer.shootTime > timmer.reshootTime) {
+				// System.out.println("shoot again");
+				fruits.add(new FruitModel("mengo", 1, ResourceManager.get().read("fruit")));
+//				fruits.add(new FruitModel("banana", 1, ResourceManager.get().read("fruit")));
+				timmer.shootTime = System.currentTimeMillis();
 			}
 			bird.run(gsonString);
-
-			for (Iterator it = fruits.iterator(); it.hasNext();) {
-				FruitModel f = (FruitModel) it.next();
+			for (ListIterator<FruitModel> it = fruits.listIterator(); it.hasNext();) {
+				FruitModel f = it.next();
 				f.run();
+				if (f.bomb) {
+					it.remove();
+					it.add(new FruitModel(f.type, 2, ResourceManager.get().read("fruit")));
+					it.add(new FruitModel(f.type, 2, ResourceManager.get().read("fruit")));
+				}
 				if (f.failed) {
 					it.remove();
 				}
@@ -260,6 +298,7 @@ public class MakeAGame {
 		@Override
 		public String hold() {
 			Hold hold = new Hold();
+			hold.score = totalScore;
 			hold.angle = bird.angle;
 			hold.x = bird.model.x;
 			hold.y = bird.model.y;
@@ -278,6 +317,7 @@ public class MakeAGame {
 	}
 
 	class Sign {
+		int type;// 1 down, 2 drag
 		int x;
 		int y;
 	}

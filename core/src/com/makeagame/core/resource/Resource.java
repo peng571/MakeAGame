@@ -21,4 +21,14 @@ public class Resource {
 		}
 		return this;
 	}
+
+	public Resource src(int x, int y, int w, int h)	{
+		texture.setRegion(x, y, w, h);
+		return this;
+	}
+
+//	public TextureRegion texture()
+//	{
+//		return new TextureRegion(texture).setR;
+//	}
 }
