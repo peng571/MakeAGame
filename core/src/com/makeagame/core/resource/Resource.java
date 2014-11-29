@@ -26,9 +26,4 @@ public class Resource {
 		texture.setRegion(x, y, w, h);
 		return this;
 	}
-
-//	public TextureRegion texture()
-//	{
-//		return new TextureRegion(texture).setR;
-//	}
 }

@@ -34,7 +34,7 @@ public abstract class MovableObject {
 	}
 
 	public Attribute init(String gson) {
-		Engine.logD("init with gson " + gson);
+//		Engine.logI("init with gson " + gson);
 		Attribute model = new Gson().fromJson(gson, Attribute.class);
 		return model;
 	}
