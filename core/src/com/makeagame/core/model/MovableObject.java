@@ -1,7 +1,6 @@
 package com.makeagame.core.model;
 
 import com.google.gson.Gson;
-import com.makeagame.core.Engine;
 
 public abstract class MovableObject {
 

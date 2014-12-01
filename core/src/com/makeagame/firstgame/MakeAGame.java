@@ -1,20 +1,21 @@
 package com.makeagame.firstgame;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Random;
 
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
+import com.makeagame.core.model.Action;
+import com.makeagame.core.model.AnimationObject;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
-import com.makeagame.core.model.MovableObject;
 import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
+import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
 import com.makeagame.core.view.ViewManager;
 
@@ -22,9 +23,10 @@ public class MakeAGame {
 
 	private Engine engine;
 
-	public Engine getEngine() {
-		return engine;
-	}
+	final static int BALL_W = 60;
+	final static int BALL_H = 60;
+	final static int ROW = 7;
+	final static int COL = 7;
 
 	public MakeAGame() {
 
@@ -42,57 +44,161 @@ public class MakeAGame {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("pear1", new Resource().image("image/pear4.png"));
-				resource.bind("pear2", new Resource().image("image/avocado.png"));
-				resource.bind("banana1", new Resource().image("image/banana4.png"));
-				resource.bind("banana2", new Resource().image("image/banana7.png"));
-				for (int i = 1; i <= 5; i++) {
-					resource.bind("mengo" + i, new Resource().image("image/mengo.png").src(128 * i, 0, 128, 128));
-				}
+				resource.bind("ball", new Resource().attribute("data/automove.txt"));
+				resource.bind("ball1", new Resource().image("image/black.png"));
+				resource.bind("ball2", new Resource().image("image/blue.png"));
+				resource.bind("ball3", new Resource().image("image/grey.png"));
+				resource.bind("ball4", new Resource().image("image/green.png"));
+				resource.bind("ball5", new Resource().image("image/orange.png"));
+				resource.bind("ball6", new Resource().image("image/pink.png"));
+				resource.bind("ball7", new Resource().image("image/red.png"));
 				resource.bind("boom", new Resource().image("image/boom3.png"));
-				resource.bind("bird", new Resource().image("image/bird.png").attribute("data/bird.txt"));
-				resource.bind("fruit", new Resource().attribute("data/fruit.txt"));
-				resource.bind("timmer", new Resource().attribute("data/game.txt"));
 			}
 		});
 	}
 
+	public Engine getEngine() {
+		return engine;
+	}
+
 	class GameView implements View {
 
-		int mouseX, mouseY;
-		int touchStartX, touchStartY;
+		private int gameState = -1; // 1 user move, 2 ball remove, 3 new ball drop
 
-		@Override
-		public void signal(ArrayList<SignalEvent> signalList) {
-			Sign sign = new Sign();
-			for (SignalEvent s : signalList) {
-				if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
-					if (s.action == SignalEvent.ACTION_DOWN) {
-						sign.type = 1;
-						sign.x = s.signal.x;
-						sign.y = s.signal.y;
-					} else if (s.action == SignalEvent.ACTION_DRAG) {
-						sign.type = 2;
-						sign.x = s.signal.x;
-						sign.y = s.signal.y;
-					}
+		int startX = 100, startY = 100;
+		int ballW = 48;
+		int ballH = 48;
+		Sign sign;
+
+		Random rand = new Random();
+		final static int BALL_W = 60;
+		final static int BALL_H = 60;
+
+		Ball[][] balls = new Ball[ROW][COL];
+		int downX, downY;
+		int upX, upY;
+		int move;
+
+		public GameView()
+		{
+			String ballInitJson = ResourceManager.get().read("ball");
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					balls[i][j] = new Ball(ballInitJson, i, j);
 				}
 			}
-			Controler.get().call("main", new Gson().toJson(sign));
 		}
 
 		@Override
+		public void signal(ArrayList<SignalEvent> signalList) {
+			for (SignalEvent s : signalList) {
+				if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
+					if (s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_DOWN) {
+						sign = new Sign();
+						downX = s.signal.x - startX;
+						downY = s.signal.y - startY;
+					}
+					if (s.action == SignalEvent.ACTION_UP) {
+						upX = s.signal.x - startX;
+						upY = s.signal.y - startY;
+						sign.row = downX / BALL_W;
+						sign.col = downY / BALL_H;
+						move = -1;
+						if (Math.abs(downX - upX) > BALL_W / 2) {
+							move = downX > upX ? 0 : 2;
+						}
+						if (Math.abs(downY - upY) > BALL_H / 2) {
+							move = downY > upY ? 1 : 3;
+						}
+						System.out.println("get move " + move);
+						sign.move = move;
+						Controler.get().call("main", new Gson().toJson(sign));
+					}
+				}
+			}
+		}
+
+		class Ball extends AnimationObject {
+
+			boolean trans;
+
+			public Ball(String gson, int raw, int col) {
+				super(gson);
+				model.x = BALL_W * raw;
+				model.y = BALL_H * col;
+				System.out.println("add new ball " + model.x + ", " + model.y);
+				model.h = BALL_H;
+				model.w = BALL_W;
+			}
+
+//			public void transformation(int dstW, int dstH, long time) {
+//				trans = true;
+//
+//			}
+
+			@Override
+			public void run() {
+				super.run();
+			}
+		}
+
+		int[][] temp;
+		ArrayList<GameModel.Ball> tempRemove;
+
+		@Override
 		public ArrayList<RenderEvent> render(ArrayList<String> build) {
+
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 			for (String s : build) {
-				Hold hold = new Gson().fromJson(s, Hold.class);
-				list.add(new RenderEvent(ResourceManager.get().fetch("bird")).XY(hold.x, hold.y).srcWH(128, 128).Ratio(0.6f).Rotation(hold.angle));
-				for (Fruit f : hold.fruits) {
-					list.add(new RenderEvent(ResourceManager.get().fetch(f.type + f.level)).XY(f.x, f.y).srcWH(128, 128));
-					// list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128));
+				final Hold hold = new Gson().fromJson(s, Hold.class);
+
+				if (temp == null) {
+					temp = hold.ballMap;
 				}
-				list.add(new RenderEvent(String.valueOf(hold.score)).XY(50, 50));
+				for (int i = 0; i < ROW; i++) {
+					for (int j = 0; j < COL; j++) {
+						balls[i][j].run();
+						if (hold.ballMap[i][j] > 0) {
+							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(temp[i][j])))
+									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH).dstWH(balls[i][j].model.w, balls[i][j].model.h));
+						}
+					}
+				}
+
+				if (hold.moved) {
+					gameState = 1;
+					balls[hold.srcR][hold.srcC].moveTo(balls[hold.dstR][hold.dstC].model.x, balls[hold.dstR][hold.dstC].model.y, null);
+					balls[hold.dstR][hold.dstC].moveTo(balls[hold.srcR][hold.srcC].model.x, balls[hold.srcR][hold.srcC].model.y, new Action() {
+						@Override
+						public void execute() {
+							Ball tempBall = balls[hold.srcR][hold.srcC];
+							balls[hold.srcR][hold.srcC] = balls[hold.dstR][hold.dstC];
+							balls[hold.dstR][hold.dstC] = tempBall;
+							temp = hold.ballMap;
+//							gameState = 2;
+							for (GameModel.Ball ball : hold.remove) {
+								balls[ball.r][ball.c].shapeTo(0, 0, 30, null);
+							}
+						}
+					});
+//					if (gameState == 2) {
+//						System.out.println("3 hold null? " + (hold == null));
+//						System.out.println("3 hold remove null? " + (hold.remove == null));
+//						System.out.println("gson " + new Gson().toJson(hold));
+//						for (GameModel.Ball ball : hold.remove) {
+//							balls[ball.r][ball.c].shapeTo(0, 0, 10, null);
+//						}
+//						gameState = 3;
+//					}
+				}
+
+				// if (!hold.remove.isEmpty()) {
+				// for (Position p : hold.remove) {
+				// list.add(new RenderEvent(ResourceManager.get().fetch("boom")).XY(startX + p.r, startY + p.c).srcWH(ballW, ballH));
+				// }
+				// }
 			}
+
 			return list;
 		}
 
@@ -100,223 +206,183 @@ public class MakeAGame {
 		public String info() {
 			return "main view";
 		}
+
 	}
 
 	class GameModel implements Model {
 
 		Random rand = new Random();
-		int totalScore;
-		BirdModel bird;
-		ArrayList<FruitModel> fruits;
-		Timmer timmer;
-		String[] fruitTypes = { "mengo", "pear", "banana" };
+
+		Ball[][] ballMap = new Ball[ROW][COL];
+		ArrayList<Ball> remove;
+		boolean moved;
 
 		public GameModel() {
-			// bird = create(ResourceManager.get().read("bird"));
-			timmer = new Gson().fromJson(ResourceManager.get().read("timmer"), Timmer.class);
-			bird = new BirdModel(ResourceManager.get().read("bird"));
-			fruits = new ArrayList<FruitModel>();
+			//
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					ballMap[i][j] = new Ball(i, j, rand.nextInt(7) + 1);
+				}
+			}
+			remove = countBall();
+			do {
+				if (!remove.isEmpty()) {
+					for (Ball p : remove) {
+						ballMap[p.r][p.c] = new Ball(p.r, p.c, rand.nextInt(7) + 1);
+					}
+					remove.clear();
+				}
+				remove = countBall();
+
+			} while (!remove.isEmpty());
 		}
 
-		class Timmer {
-			long reflyTime;
-			long reshootTime;
-			long shootTime;
-			long gameTime;
-			long protectTime;
-		}
+		class Ball {
+			int type;
+			int r;
+			int c;
 
-		class FruitModel extends MovableObject {
-			String type;
-			int level;
-			int score;
-			boolean failed;
-			boolean bomb;
-			boolean protect;
-			long createTime;
-
-			public FruitModel(String type, int level, String gson) {
-				super(gson);
+			public Ball(int r, int c, int type) {
 				this.type = type;
-				this.level = level;
-				model.sX += rand.nextInt(10) - 5f;
-				model.sY = model.initSY - rand.nextInt(5);
-				level = 1;
-				score = 5 * level;
-				failed = false;
-				bomb = false;
-				protect = true;
-				createTime = System.currentTimeMillis();
+				this.r = r;
+				this.c = c;
 			}
 
-			public void run() {
-				model.sY += model.aY;
-				if (model.sY > model.maxSY) {
-					model.sY = model.maxSY;
-				} else if (model.sY < -model.maxSY) {
-					model.sY = -model.maxSY;
-				}
-
-				model.x += model.sX;
-				model.y += model.sY;
-				// System.out.println(new Gson().toJson(model));
-
-				if (model.y < 0) {
-					model.y = 0;
-				} else if (model.y - model.h > Bootstrap.screamHeight()) {
-					model.y = Bootstrap.screamHeight() - model.h;
-				}
-
-				if (!protect) {
-					if (model.x < bird.pointX && model.x + model.w > bird.pointX
-							&& model.y < bird.pointY && model.y + model.h > bird.pointY) {
-						System.out.println("boom bird!!");
-						totalScore += this.score;
-						level++;
-						bomb = true;
-					}
-				} else {
-					if (System.currentTimeMillis() - createTime > timmer.protectTime) {
-						System.out.println("close protected");
-						protect = false;
-					}
-				}
-
-				if (model.y > Bootstrap.screamHeight()) {
-					model.x = model.initX;
-					model.y = model.initY;
-					model.sX = rand.nextInt(10) - 5;
-					model.sY = model.initSY;
-					failed = true;
-				}
+			public Ball(int r, int c) {
+				this(r, c, -1);
 			}
 		}
 
-		class BirdModel extends MovableObject {
-			boolean flying = false;
-			boolean LtoR = true;
-			long flyTime;
-			float angle;
-			int pointX, pointY;
-			int displacementX, displacementY;
-
-			public BirdModel(String gson) {
-				super(gson);
-				angle = 0;
-				displacementX = model.x + model.w;
-				displacementY = model.y + model.h / 2;
-			}
-
-			public void run(String gsonString) {
-				Sign signs = new Gson().fromJson(gsonString, Sign.class);
-				pointX = model.x + displacementX;
-				pointY = model.y + displacementY;
-
-				if (!flying) {
-					if (System.currentTimeMillis() - flyTime > timmer.reflyTime) {
-						if (signs.x != 0 && signs.y != 0 && signs.type == 1) {
-							model.y = signs.y;
-							flying = true;
-							System.out.println("start flying");
-						}
-					}
-				} else {
-					if (signs.x != 0 && signs.y != 0) {
-						if (signs.x < model.x) {
-							model.sX -= model.aX;
-						} else if (signs.x > model.x) {
-							model.sX += model.aX;
-						}
-						if (signs.y < model.y) {
-							model.sY -= model.aY;
-						} else if (signs.y > model.y) {
-							model.sY += model.aY;
-						}
+		private ArrayList<Ball> countBall() {
+			int countColor = -1;
+			ArrayList<Ball> temp = new ArrayList<Ball>();
+			ArrayList<Ball> remove = new ArrayList<Ball>();
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					Ball p = new Ball(i, j);
+					if (ballMap[i][j].type == countColor) {
+						temp.add(p);
 					} else {
-						if (model.sY < model.aY && model.sY > -model.aY) {
-							model.sY = 0;
-						} else {
-							model.sY += model.sY > 0 ? -model.aY : model.aY;
+						if (temp.size() >= 3) {
+							remove.addAll(temp);
 						}
-					}
-					if (LtoR) {
-						if (model.sX > model.maxSX) {
-							model.sX = model.maxSX;
-						} else if (model.sX < model.minSX) {
-							model.sX = model.minSX;
-						}
-					} else {
-						if (model.sX < -model.maxSX) {
-							model.sX = -model.maxSX;
-						} else if (model.sX > -model.minSX) {
-							model.sX = -model.minSX;
-						}
-					}
-					if (model.sY > model.maxSY) {
-						model.sY = model.maxSY;
-					} else if (model.sY < -model.maxSY) {
-						model.sY = -model.maxSY;
-					}
-
-					model.x += model.sX;
-					model.y += model.sY;
-					angle = (float) (-1 * Math.toDegrees(Math.sin(model.sY / model.sX)));
-					// System.out.println("sin " + (model.sY / model.sX) + " = " + angle);
-					// System.out.println(new Gson().toJson(m));
-
-					if (model.y < 0) {
-						model.y = 0;
-					} else if (model.y > Bootstrap.screamHeight()) {
-						model.y = Bootstrap.screamHeight() - model.h;
-					}
-
-					if (LtoR && model.x > Bootstrap.screamWidth() || (!LtoR && model.x < -model.w)) {
-						flying = false;
-						model.sX = ((LtoR) ? 1 : -1) * model.initSX;
-						LtoR = !LtoR;
-						displacementX += LtoR ? 1 : -1 * model.w;
-						flyTime = System.currentTimeMillis();
-						System.out.println("stop flying");
-						ResourceManager.get().fetch("bird").flip(true, false);
+						temp.clear();
+						temp.add(p);
+						countColor = ballMap[i][j].type;
 					}
 				}
 			}
+			countColor = -1;
+			temp.clear();
+			for (int j = 0; j < COL; j++) {
+				for (int i = 0; i < ROW; i++) {
+					Ball p = new Ball(i, j);
+					if (ballMap[i][j].type == countColor) {
+						temp.add(p);
+					} else {
+						if (temp.size() >= 3) {
+							remove.addAll(temp);
+						}
+						temp.clear();
+						temp.add(p);
+						countColor = ballMap[i][j].type;
+					}
+				}
+			}
+			for (Ball p : remove) {
+				System.out.println("remove " + p.r + ", " + p.c);
+			}
+			return remove;
 		}
+
+		int row, col;
+		int nextRow, nextCol;
 
 		@Override
 		public void process(String gsonString) {
-			// Sign signs = new Gson().fromJson(gsonString, Sign.class);
-			if (System.currentTimeMillis() - timmer.shootTime > timmer.reshootTime) {
-				// System.out.println("shoot again");
-				int num = rand.nextInt(fruitTypes.length);
-				fruits.add(new FruitModel(fruitTypes[num], 1, ResourceManager.get().read("fruit")));
-				timmer.shootTime = System.currentTimeMillis();
-			}
-			bird.run(gsonString);
-			for (ListIterator<FruitModel> it = fruits.listIterator(); it.hasNext();) {
-				FruitModel f = it.next();
-				f.run();
-				if (f.bomb) {
-					it.remove();
-					it.add(new FruitModel(f.type, 2, ResourceManager.get().read("fruit")));
-					it.add(new FruitModel(f.type, 2, ResourceManager.get().read("fruit")));
-				}
-				if (f.failed) {
-					it.remove();
+			Sign signs = new Gson().fromJson(gsonString, Sign.class);
+			if (signs.move != -1) {
+
+				System.out.println(signs.row + ", " + signs.col);
+				row = signs.row;
+				col = signs.col;
+				moved = false;
+				System.out.println("raw " + row + " , cal " + col);
+				if (row >= 0 && row < ROW && col >= 0 && col < COL) {
+					nextRow = row;
+					nextCol = col;
+					switch (signs.move) {
+					case 0: // up
+						if (row > 0) {
+							nextRow--;
+						}
+						break;
+					case 1: // left
+						if (col > 0) {
+							nextCol--;
+						}
+						break;
+					case 2: // down
+						if (row < ROW - 1) {
+							nextRow++;
+						}
+						break;
+					case 3: // right
+						if (col < COL - 1) {
+							nextCol++;
+						}
+						break;
+					}
+					moved = true;
+					final int temp = ballMap[nextRow][nextCol].type;
+					ballMap[nextRow][nextCol].type = ballMap[row][col].type;
+					ballMap[row][col].type = temp;
+
+					// System.out.println(row + " " + col + " move to " + nextRow + " " + nextCol);
+
+					remove = countBall();
+					 for (Ball ball : remove) {
+					 ballMap[ball.r][ball.c].type = -1;
+					 }
+					 for (int i = ROW - 1; i >= 0; i--) {
+					 for (int j = 0; j < COL; j++) {
+					 if (ballMap[i][j].type == -1) {
+					 for (int k = i; k >= 0; k--) {
+					 if (ballMap[k][j].type != -1) {
+					 ballMap[i][j].type = ballMap[k][j].type;
+					 ballMap[k][j].type = -1;
+					 break;
+					 }
+					 }
+					 if (ballMap[i][j].type == -1) {
+					 ballMap[i][j].type = rand.nextInt(7) + 1;
+					 }
+					 }
+					 }
+					 }
 				}
 			}
 		}
+
+		boolean change = true;
 
 		@Override
 		public String hold() {
 			Hold hold = new Hold();
-			hold.score = totalScore;
-			hold.angle = bird.angle;
-			hold.x = bird.model.x;
-			hold.y = bird.model.y;
-			hold.fruits = new ArrayList<Fruit>();
-			for (FruitModel f : fruits) {
-				hold.fruits.add(new Fruit(f.type, f.model.x, f.model.y, f.level));
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					hold.ballMap[i][j] = ballMap[i][j].type;
+				}
+			}
+			if (moved) {
+				hold.srcR = row;
+				hold.srcC = col;
+				hold.dstR = nextRow;
+				hold.dstC = nextCol;
+				hold.moved = moved;
+				moved = false;
+				hold.remove = (ArrayList<GameModel.Ball>) remove.clone();
+				remove.clear();
 			}
 			return new Gson().toJson(hold);
 		}
@@ -329,30 +395,18 @@ public class MakeAGame {
 	}
 
 	class Sign {
-		int type;// 1 down, 2 drag
-		int x;
-		int y;
+		int row;
+		int col;
+		int move;
+		int[][] balls = new int[ROW][COL];
 	}
 
 	class Hold {
-		int score;
-		float angle;
-		int x;
-		int y;
-		ArrayList<Fruit> fruits;
+		boolean moved;
+		int srcR, srcC;
+		int dstR, dstC;
+		int[][] ballMap = new int[7][7];
+		ArrayList<GameModel.Ball> remove;
 	}
 
-	class Fruit {
-		String type;
-		int level;
-		int x;
-		int y;
-
-		public Fruit(String type, int x, int y, int level) {
-			this.type = type;
-			this.x = x;
-			this.y = y;
-			this.level = level;
-		}
-	}
 }

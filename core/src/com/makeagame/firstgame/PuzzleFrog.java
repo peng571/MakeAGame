@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
-import com.makeagame.core.model.AutoMoveObject;
+import com.makeagame.core.model.AnimationObject;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.resource.Resource;
@@ -121,7 +121,7 @@ public class PuzzleFrog {
 			}
 		}
 
-		class Ball extends AutoMoveObject {
+		class Ball extends AnimationObject {
 
 			public int type;
 
