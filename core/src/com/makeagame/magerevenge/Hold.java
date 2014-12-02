@@ -13,7 +13,7 @@ class RoleHold {
 	String id;
 	int hp;
 	int x;
-	int state; // 1 walk, 2 attack, 3 been attacked, 4 die
+	int state; // 1 Moving, 2 Preparing, 3 Attacking, 4 Backing, 5 Death
 	int group;
 
 	public RoleHold(String id, int x, int hp, int group, int state) {

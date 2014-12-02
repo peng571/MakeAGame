@@ -79,7 +79,7 @@ public class GameModel implements Model {
 			// run role
 			for (ListIterator<Role> it = roles.listIterator(); it.hasNext();) {
 				Role r = it.next();
-				if (r.m.state < Role.STATE_DIE) {
+				if (r.m.state < Role.STATE_DEATH) {
 					r.run();
 				}
 				else {
@@ -108,9 +108,12 @@ public class GameModel implements Model {
 
 	class Role {
 
-		final static int STATE_WALK = 1;
-		final static int STATE_ATTACK = 2;
-		final static int STATE_DIE = 3;
+		// 1 Moving, 2 Preparing, 3 Attacking, 4 Backing, 5 Death
+		public final static int STATE_MOVING = 1;
+		public final static int STATE_PERPARING = 2;
+		public final static int STATE_ATTACKING = 3;
+		public final static int STATE_BACKING = 4;
+		public final static int STATE_DEATH = 5;
 
 		Role meet;
 
@@ -137,6 +140,7 @@ public class GameModel implements Model {
 			float sX;
 			int money;
 			long atkTime;
+			int range;
 		}
 
 		public Attribute init(String gson) {
@@ -149,9 +153,9 @@ public class GameModel implements Model {
 			// stop while meet other groups role
 			meet = null;
 			for (Role r : roles) {
-				if (m.group == 0 && r.m.group == 1 && m.x >= r.m.x
-						|| (m.group == 1 && r.m.group == 0 && m.x <= r.m.x)) {
-					m.x = r.m.x;
+				if (m.group == 0 && r.m.group == 1 && m.x + m.range >= r.m.x
+						|| (m.group == 1 && r.m.group == 0 && m.x - m.range <= r.m.x )) {
+//					m.x = r.m.x;
 					meet = r;
 					break;
 				}
@@ -159,13 +163,16 @@ public class GameModel implements Model {
 
 			// move if not meet others
 			if (meet == null) {
-				m.state = Role.STATE_WALK;
+				m.state = Role.STATE_MOVING;
 				m.x += (m.group == 0 ? 1 : -1) * m.sX;
 			} else {
 				// attack while stop
-				m.state = Role.STATE_ATTACK;
+				m.state = Role.STATE_PERPARING;
 				if (System.currentTimeMillis() - lastAttackTime > m.atkTime) {
+					m.state = Role.STATE_ATTACKING;
 					meet.m.hp -= m.atk;
+					meet.m.state = Role.STATE_BACKING;
+					meet.m.x += (meet.m.group == 0 ? -1 : 1) * meet.m.sX;
 					lastAttackTime = System.currentTimeMillis();
 				}
 			}
@@ -178,7 +185,7 @@ public class GameModel implements Model {
 				if (m.id.equals("castle")) {
 					start = false;
 				}
-				m.state = Role.STATE_DIE;
+				m.state = Role.STATE_DEATH;
 			}
 		}
 	}
