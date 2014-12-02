@@ -105,7 +105,7 @@ public class Engine extends ApplicationAdapter {
 				break;
 			case RenderEvent.LABEL:
 				gameLable.setColor(e.color);
-				gameLable.draw(batch, e.s, e.x, e.y);
+				gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
 				break;
 			}
 		}

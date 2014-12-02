@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public 	class Hold {
 	int money;
 	boolean gameStart;
+	int[] cost = new int[4];
 	ArrayList<RoleHold> roles = new ArrayList<RoleHold>();
 }
 

@@ -5,6 +5,6 @@
 "w":64,
 "h":64,
 "atk":5,
-"money":12
+"money":12,
 "atkTime":600
 }

@@ -15,13 +15,15 @@ public class GameModel implements Model {
 	Random rand = new Random();
 	ArrayList<Role> roles;
 
-	int enemyCreateTime = 8000;
+	int enemyCreateTime = 16000;
 	long lastEnemyCreateTime;
 	int moneyGetTime = 1000;
 	long lastMoneyGetTime;
 	int moneyGet = 10;
 	int totalMoney;
 	int castleLevel;
+
+	static int[] COST = { 150, 100, 250, 300 };
 
 	public GameModel() {
 		roles = new ArrayList<Role>();
@@ -40,16 +42,25 @@ public class GameModel implements Model {
 			// button click
 			if (signs.clickBtn != null) {
 				int cost = 0;
-				if (signs.clickBtn.equals(MakeAGame.ROLE_1)) {
-					cost = 100;
-				} else if (signs.clickBtn.equals(MakeAGame.ROLE_2)) {
-					cost = 250;
-				} else if (signs.clickBtn.equals(MakeAGame.ROLE_3)) {
-					cost = 300;
-				}
-				if (cost != 0 && totalMoney >= cost) {
-					roles.add(new Role(ResourceManager.get().read(signs.clickBtn), 0));
-					totalMoney -= cost;
+				if (signs.clickBtn.equals(MakeAGame.CASTLE)) {
+					cost = COST[0];
+					if (totalMoney >= cost) {
+						totalMoney -= cost;
+						COST[0] *= 2;
+						castleLevel++;
+					}
+				} else {
+					if (signs.clickBtn.equals(MakeAGame.ROLE_1)) {
+						cost = COST[1];
+					} else if (signs.clickBtn.equals(MakeAGame.ROLE_2)) {
+						cost = COST[2];
+					} else if (signs.clickBtn.equals(MakeAGame.ROLE_3)) {
+						cost = COST[3];
+					}
+					if (cost != 0 && totalMoney >= cost) {
+						roles.add(new Role(ResourceManager.get().read(signs.clickBtn), 0));
+						totalMoney -= cost;
+					}
 				}
 			}
 
@@ -84,6 +95,7 @@ public class GameModel implements Model {
 		for (Role r : roles) {
 			hold.roles.add(new RoleHold(r.m.id, r.m.x, r.m.hp, r.m.group, 1));
 		}
+		hold.cost = COST;
 		hold.money = totalMoney;
 		hold.gameStart = start;
 		return new Gson().toJson(hold);
@@ -124,7 +136,7 @@ public class GameModel implements Model {
 			int x;
 			float sX;
 			int money;
-			long attackTime;
+			long atkTime;
 		}
 
 		public Attribute init(String gson) {
@@ -133,8 +145,7 @@ public class GameModel implements Model {
 			return model;
 		}
 
-		public void run()
-		{
+		public void run() {
 			// stop while meet other groups role
 			meet = null;
 			for (Role r : roles) {
@@ -153,7 +164,7 @@ public class GameModel implements Model {
 			} else {
 				// attack while stop
 				m.state = Role.STATE_ATTACK;
-				if (System.currentTimeMillis() - lastAttackTime > m.attackTime) {
+				if (System.currentTimeMillis() - lastAttackTime > m.atkTime) {
 					meet.m.hp -= m.atk;
 					lastAttackTime = System.currentTimeMillis();
 				}
