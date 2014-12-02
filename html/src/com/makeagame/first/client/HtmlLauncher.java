@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.makeagame.core.Bootstrap;
-import com.makeagame.firstgame.MakeAGame;
+import com.makeagame.magerevenge.MakeAGame;
 
 public class HtmlLauncher extends GwtApplication {
 
