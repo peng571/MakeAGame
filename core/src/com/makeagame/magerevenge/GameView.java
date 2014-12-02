@@ -11,7 +11,7 @@ import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
 
 public class GameView implements View {
-	int testint = 1;
+	int testint = 2;
 	
 	Button[] btnCallHeros;
 
