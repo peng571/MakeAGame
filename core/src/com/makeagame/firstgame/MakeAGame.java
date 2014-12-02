@@ -1,14 +1,13 @@
 package com.makeagame.firstgame;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Random;
 
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
-import com.makeagame.core.model.Action;
-import com.makeagame.core.model.AnimationObject;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.resource.Resource;
@@ -23,10 +22,9 @@ public class MakeAGame {
 
 	private Engine engine;
 
-	final static int BALL_W = 60;
-	final static int BALL_H = 60;
-	final static int ROW = 7;
-	final static int COL = 7;
+	private static String ROLE_1 = "ball1";
+	private static String ROLE_2 = "ball2";
+	private static String ROLE_3 = "ball3";
 
 	public MakeAGame() {
 
@@ -44,15 +42,13 @@ public class MakeAGame {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("ball", new Resource().attribute("data/automove.txt"));
-				resource.bind("ball1", new Resource().image("image/black.png"));
-				resource.bind("ball2", new Resource().image("image/blue.png"));
-				resource.bind("ball3", new Resource().image("image/grey.png"));
-				resource.bind("ball4", new Resource().image("image/green.png"));
-				resource.bind("ball5", new Resource().image("image/orange.png"));
-				resource.bind("ball6", new Resource().image("image/pink.png"));
-				resource.bind("ball7", new Resource().image("image/red.png"));
-				resource.bind("boom", new Resource().image("image/boom3.png"));
+				resource.bind(ROLE_1, new Resource().image("image/pussy.png").attribute("data/role1.txt"));
+				resource.bind(ROLE_2, new Resource().image("image/person91.png").attribute("data/role2.txt"));
+				resource.bind(ROLE_3, new Resource().image("image/group9.png").attribute("data/role3.txt"));
+				resource.bind("castle", new Resource().image("image/pear4.png").attribute("data/castle.txt"));
+				resource.bind(ROLE_1 + "btn", new Resource().image("image/black.png"));
+				resource.bind(ROLE_2 + "btn", new Resource().image("image/blue.png"));
+				resource.bind(ROLE_3 + "btn", new Resource().image("image/grey.png"));
 			}
 		});
 	}
@@ -63,87 +59,34 @@ public class MakeAGame {
 
 	class GameView implements View {
 
-		private int gameState = -1; // 1 user move, 2 ball remove, 3 new ball drop
+		Button[] btnCallHeros;
 
-		int startX = 100, startY = 100;
-		int ballW = 48;
-		int ballH = 48;
-		Sign sign;
-
-		Random rand = new Random();
-		final static int BALL_W = 60;
-		final static int BALL_H = 60;
-
-		Ball[][] balls = new Ball[ROW][COL];
-		int downX, downY;
-		int upX, upY;
-		int move;
-
-		public GameView()
-		{
-			String ballInitJson = ResourceManager.get().read("ball");
-			for (int i = 0; i < ROW; i++) {
-				for (int j = 0; j < COL; j++) {
-					balls[i][j] = new Ball(ballInitJson, i, j);
-				}
-			}
+		public GameView() {
+			btnCallHeros = new Button[3];
+			btnCallHeros[0] = new Button(ROLE_1, 80, 450, 64, 64);
+			btnCallHeros[1] = new Button(ROLE_2, 180, 450, 64, 64);
+			btnCallHeros[2] = new Button(ROLE_3, 280, 450, 64, 64);
 		}
 
 		@Override
 		public void signal(ArrayList<SignalEvent> signalList) {
+			Sign sign = new Sign();
 			for (SignalEvent s : signalList) {
 				if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
 					if (s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_DOWN) {
-						sign = new Sign();
-						downX = s.signal.x - startX;
-						downY = s.signal.y - startY;
 					}
 					if (s.action == SignalEvent.ACTION_UP) {
-						upX = s.signal.x - startX;
-						upY = s.signal.y - startY;
-						sign.row = downX / BALL_W;
-						sign.col = downY / BALL_H;
-						move = -1;
-						if (Math.abs(downX - upX) > BALL_W / 2) {
-							move = downX > upX ? 0 : 2;
+					}
+
+					for (Button b : btnCallHeros) {
+						if (b.isClick(s)) {
+							sign.clickBtn = b.id;
 						}
-						if (Math.abs(downY - upY) > BALL_H / 2) {
-							move = downY > upY ? 1 : 3;
-						}
-						System.out.println("get move " + move);
-						sign.move = move;
-						Controler.get().call("main", new Gson().toJson(sign));
 					}
 				}
 			}
+			Controler.get().call("main", new Gson().toJson(sign));
 		}
-
-		class Ball extends AnimationObject {
-
-			boolean trans;
-
-			public Ball(String gson, int raw, int col) {
-				super(gson);
-				model.x = BALL_W * raw;
-				model.y = BALL_H * col;
-				System.out.println("add new ball " + model.x + ", " + model.y);
-				model.h = BALL_H;
-				model.w = BALL_W;
-			}
-
-//			public void transformation(int dstW, int dstH, long time) {
-//				trans = true;
-//
-//			}
-
-			@Override
-			public void run() {
-				super.run();
-			}
-		}
-
-		int[][] temp;
-		ArrayList<GameModel.Ball> tempRemove;
 
 		@Override
 		public ArrayList<RenderEvent> render(ArrayList<String> build) {
@@ -151,54 +94,15 @@ public class MakeAGame {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 			for (String s : build) {
 				final Hold hold = new Gson().fromJson(s, Hold.class);
-
-				if (temp == null) {
-					temp = hold.ballMap;
+				// Engine.logI("get hold " + s);
+				for (RoleHold r : hold.roles) {
+					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
+					list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260).srcWH(32, 32));
 				}
-				for (int i = 0; i < ROW; i++) {
-					for (int j = 0; j < COL; j++) {
-						balls[i][j].run();
-						if (hold.ballMap[i][j] > 0) {
-							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(temp[i][j])))
-									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH).dstWH(balls[i][j].model.w, balls[i][j].model.h));
-						}
-					}
-				}
-
-				if (hold.moved) {
-					gameState = 1;
-					balls[hold.srcR][hold.srcC].moveTo(balls[hold.dstR][hold.dstC].model.x, balls[hold.dstR][hold.dstC].model.y, null);
-					balls[hold.dstR][hold.dstC].moveTo(balls[hold.srcR][hold.srcC].model.x, balls[hold.srcR][hold.srcC].model.y, new Action() {
-						@Override
-						public void execute() {
-							Ball tempBall = balls[hold.srcR][hold.srcC];
-							balls[hold.srcR][hold.srcC] = balls[hold.dstR][hold.dstC];
-							balls[hold.dstR][hold.dstC] = tempBall;
-							temp = hold.ballMap;
-//							gameState = 2;
-							for (GameModel.Ball ball : hold.remove) {
-								balls[ball.r][ball.c].shapeTo(0, 0, 30, null);
-							}
-						}
-					});
-//					if (gameState == 2) {
-//						System.out.println("3 hold null? " + (hold == null));
-//						System.out.println("3 hold remove null? " + (hold.remove == null));
-//						System.out.println("gson " + new Gson().toJson(hold));
-//						for (GameModel.Ball ball : hold.remove) {
-//							balls[ball.r][ball.c].shapeTo(0, 0, 10, null);
-//						}
-//						gameState = 3;
-//					}
-				}
-
-				// if (!hold.remove.isEmpty()) {
-				// for (Position p : hold.remove) {
-				// list.add(new RenderEvent(ResourceManager.get().fetch("boom")).XY(startX + p.r, startY + p.c).srcWH(ballW, ballH));
-				// }
-				// }
 			}
-
+			for (Button b : btnCallHeros) {
+				list.add(b.draw());
+			}
 			return list;
 		}
 
@@ -207,182 +111,120 @@ public class MakeAGame {
 			return "main view";
 		}
 
+		class Bar {
+			String id;
+			float percent; // 0~1
+			int x, y, w, h;
+
+			public Bar(int x, int y, int w, int h) {
+				this.x = x;
+				this.y = y;
+				this.h = h;
+				this.w = w;
+			}
+
+			public RenderEvent[] draw() {
+				return new RenderEvent[] {
+						new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h),
+						new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h).dstWH((int) (w * percent), h) };
+			}
+		}
+
+		class Button {
+			String id;
+			int x, y, w, h;
+			int key = -1;
+
+			public Button(String id, int x, int y, int w, int h) {
+				this.id = id;
+				listenTo(-1);
+				listenTo(x, y, w, h);
+			}
+
+			public void listenTo(int x, int y, int w, int h) {
+				this.x = x;
+				this.y = y;
+				this.h = h;
+				this.w = w;
+			}
+
+			public void listenTo(int key) {
+				this.key = key;
+			}
+
+			public boolean isClick(SignalEvent s) {
+				if (key != -1) {
+					if (s.type == SignalEvent.KEY_EVENT && s.signal.press(key)) {
+						return true;
+					}
+				}
+				if (h != -1 || w != -1) {
+					if ((s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) &&
+							s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_UP) {
+						if (s.signal.x > x && s.signal.x < x + w && s.signal.y > y && s.signal.y < y + h) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+
+			public RenderEvent draw() {
+				return new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h);
+			}
+
+		}
+
+		// class Role {
+		// String id;
+		// int x, y, w, h;
+		//
+		// public RenderEvent draw() {
+		// return new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h);
+		// }
+		//
+		// }
+
 	}
 
 	class GameModel implements Model {
 
 		Random rand = new Random();
-
-		Ball[][] ballMap = new Ball[ROW][COL];
-		ArrayList<Ball> remove;
-		boolean moved;
+		ArrayList<Role> roles;
 
 		public GameModel() {
-			//
-			for (int i = 0; i < ROW; i++) {
-				for (int j = 0; j < COL; j++) {
-					ballMap[i][j] = new Ball(i, j, rand.nextInt(7) + 1);
-				}
-			}
-			remove = countBall();
-			do {
-				if (!remove.isEmpty()) {
-					for (Ball p : remove) {
-						ballMap[p.r][p.c] = new Ball(p.r, p.c, rand.nextInt(7) + 1);
-					}
-					remove.clear();
-				}
-				remove = countBall();
+			roles = new ArrayList<MakeAGame.GameModel.Role>();
+			roles.add(new Role(ResourceManager.get().read("castle"), 0));
+			roles.add(new Role(ResourceManager.get().read("castle"), 1));
 
-			} while (!remove.isEmpty());
 		}
-
-		class Ball {
-			int type;
-			int r;
-			int c;
-
-			public Ball(int r, int c, int type) {
-				this.type = type;
-				this.r = r;
-				this.c = c;
-			}
-
-			public Ball(int r, int c) {
-				this(r, c, -1);
-			}
-		}
-
-		private ArrayList<Ball> countBall() {
-			int countColor = -1;
-			ArrayList<Ball> temp = new ArrayList<Ball>();
-			ArrayList<Ball> remove = new ArrayList<Ball>();
-			for (int i = 0; i < ROW; i++) {
-				for (int j = 0; j < COL; j++) {
-					Ball p = new Ball(i, j);
-					if (ballMap[i][j].type == countColor) {
-						temp.add(p);
-					} else {
-						if (temp.size() >= 3) {
-							remove.addAll(temp);
-						}
-						temp.clear();
-						temp.add(p);
-						countColor = ballMap[i][j].type;
-					}
-				}
-			}
-			countColor = -1;
-			temp.clear();
-			for (int j = 0; j < COL; j++) {
-				for (int i = 0; i < ROW; i++) {
-					Ball p = new Ball(i, j);
-					if (ballMap[i][j].type == countColor) {
-						temp.add(p);
-					} else {
-						if (temp.size() >= 3) {
-							remove.addAll(temp);
-						}
-						temp.clear();
-						temp.add(p);
-						countColor = ballMap[i][j].type;
-					}
-				}
-			}
-			for (Ball p : remove) {
-				System.out.println("remove " + p.r + ", " + p.c);
-			}
-			return remove;
-		}
-
-		int row, col;
-		int nextRow, nextCol;
 
 		@Override
 		public void process(String gsonString) {
 			Sign signs = new Gson().fromJson(gsonString, Sign.class);
-			if (signs.move != -1) {
+			if (signs.clickBtn != null) {
+				roles.add(new Role(ResourceManager.get().read(signs.clickBtn), 0));
 
-				System.out.println(signs.row + ", " + signs.col);
-				row = signs.row;
-				col = signs.col;
-				moved = false;
-				System.out.println("raw " + row + " , cal " + col);
-				if (row >= 0 && row < ROW && col >= 0 && col < COL) {
-					nextRow = row;
-					nextCol = col;
-					switch (signs.move) {
-					case 0: // up
-						if (row > 0) {
-							nextRow--;
-						}
-						break;
-					case 1: // left
-						if (col > 0) {
-							nextCol--;
-						}
-						break;
-					case 2: // down
-						if (row < ROW - 1) {
-							nextRow++;
-						}
-						break;
-					case 3: // right
-						if (col < COL - 1) {
-							nextCol++;
-						}
-						break;
-					}
-					moved = true;
-					final int temp = ballMap[nextRow][nextCol].type;
-					ballMap[nextRow][nextCol].type = ballMap[row][col].type;
-					ballMap[row][col].type = temp;
+				// test enemy
+				// roles.add(new Role(ResourceManager.get().read(signs.clickBtn), 1));
+			}
 
-					// System.out.println(row + " " + col + " move to " + nextRow + " " + nextCol);
-
-					remove = countBall();
-					 for (Ball ball : remove) {
-					 ballMap[ball.r][ball.c].type = -1;
-					 }
-					 for (int i = ROW - 1; i >= 0; i--) {
-					 for (int j = 0; j < COL; j++) {
-					 if (ballMap[i][j].type == -1) {
-					 for (int k = i; k >= 0; k--) {
-					 if (ballMap[k][j].type != -1) {
-					 ballMap[i][j].type = ballMap[k][j].type;
-					 ballMap[k][j].type = -1;
-					 break;
-					 }
-					 }
-					 if (ballMap[i][j].type == -1) {
-					 ballMap[i][j].type = rand.nextInt(7) + 1;
-					 }
-					 }
-					 }
-					 }
+			for (ListIterator<Role> it = roles.listIterator(); it.hasNext();) {
+				Role r = it.next();
+				if (r.m.state < Role.STATE_DIE) {
+					r.run();
+				}
+				else {
+					it.remove();
 				}
 			}
 		}
 
-		boolean change = true;
-
 		@Override
 		public String hold() {
 			Hold hold = new Hold();
-			for (int i = 0; i < ROW; i++) {
-				for (int j = 0; j < COL; j++) {
-					hold.ballMap[i][j] = ballMap[i][j].type;
-				}
-			}
-			if (moved) {
-				hold.srcR = row;
-				hold.srcC = col;
-				hold.dstR = nextRow;
-				hold.dstC = nextCol;
-				hold.moved = moved;
-				moved = false;
-				hold.remove = (ArrayList<GameModel.Ball>) remove.clone();
-				remove.clear();
+			for (Role r : roles) {
+				hold.roles.add(new RoleHold(r.m.id, r.m.x, r.m.hp, r.m.group, 1));
 			}
 			return new Gson().toJson(hold);
 		}
@@ -392,21 +234,101 @@ public class MakeAGame {
 			return "main model";
 		}
 
+		class Role {
+
+			final static int STATE_WALK = 1;
+			final static int STATE_ATTACK = 2;
+			final static int STATE_DIE = 3;
+
+			Role meet;
+
+			Attribute m;
+
+			public Role(String gson, int group) {
+				m = init(gson);
+				m.group = group;
+				m.x = group == 0 ? 32 : (Bootstrap.screamWidth() - 32);
+				m.maxHp = m.hp;
+				m.state = 0;
+			}
+
+			public class Attribute {
+				public String id;
+				int group; // 0 mine, 1 others
+				int hp;
+				int maxHp;
+				int atk;
+				int state;
+				public int x;
+				public float sX;
+			}
+
+			public Attribute init(String gson) {
+				// Engine.logI("init with gson " + gson);
+				Attribute model = new Gson().fromJson(gson, Attribute.class);
+				return model;
+			}
+
+			public void run()
+			{
+				// stop while meet other groups role
+				meet = null;
+				for (Role r : roles) {
+					if (m.group == 0 && r.m.group == 1) {
+						if (m.x > r.m.x) {
+							m.x = r.m.x;
+							meet = r;
+							break;
+						}
+					} else if (m.group == 1 && r.m.group == 0) {
+						if (m.x < r.m.x) {
+							m.x = r.m.x;
+							meet = r;
+							break;
+						}
+					}
+				}
+
+				// move if not meet others
+				if (meet == null) {
+					m.state = Role.STATE_WALK;
+					m.x += (m.group == 0 ? 1 : -1) * m.sX;
+				} else {
+					// attack while stop
+					m.state = Role.STATE_ATTACK;
+					meet.m.hp -= m.atk;
+				}
+
+				// die
+				if (m.hp <= 0) {
+					m.state = Role.STATE_DIE;
+				}
+			}
+		}
 	}
 
 	class Sign {
-		int row;
-		int col;
-		int move;
-		int[][] balls = new int[ROW][COL];
+		String clickBtn;
 	}
 
 	class Hold {
-		boolean moved;
-		int srcR, srcC;
-		int dstR, dstC;
-		int[][] ballMap = new int[7][7];
-		ArrayList<GameModel.Ball> remove;
+		ArrayList<RoleHold> roles = new ArrayList<MakeAGame.RoleHold>();
+	}
+
+	class RoleHold {
+		String id;
+		int hp;
+		int x;
+		int state; // 1 walk, 2 attack, 3 been attacked, 4 die
+		int group;
+
+		public RoleHold(String id, int x, int hp, int group, int state) {
+			this.id = id;
+			this.x = x;
+			this.hp = hp;
+			this.group = group;
+			this.state = state;
+		}
 	}
 
 }

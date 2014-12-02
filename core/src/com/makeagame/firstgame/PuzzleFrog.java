@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
+import com.makeagame.core.model.Action;
 import com.makeagame.core.model.AnimationObject;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
@@ -26,7 +27,6 @@ import com.makeagame.core.view.ViewManager;
  */
 public class PuzzleFrog {
 
-	// private int gameState = -1; // 1 user move, 2 ball remove, 3 new ball drop
 	private Engine engine;
 
 	final static int BALL_W = 60;
@@ -68,6 +68,8 @@ public class PuzzleFrog {
 	}
 
 	class GameView implements View {
+
+		private int gameState = -1; // 1 user move, 2 ball remove, 3 new ball drop
 
 		int startX = 100, startY = 100;
 		int ballW = 48;
@@ -114,6 +116,7 @@ public class PuzzleFrog {
 						if (Math.abs(downY - upY) > BALL_H / 2) {
 							move = downY > upY ? 1 : 3;
 						}
+						System.out.println("get move " + move);
 						sign.move = move;
 						Controler.get().call("main", new Gson().toJson(sign));
 					}
@@ -123,7 +126,7 @@ public class PuzzleFrog {
 
 		class Ball extends AnimationObject {
 
-			public int type;
+			boolean trans;
 
 			public Ball(String gson, int raw, int col) {
 				super(gson);
@@ -132,28 +135,67 @@ public class PuzzleFrog {
 				System.out.println("add new ball " + model.x + ", " + model.y);
 				model.h = BALL_H;
 				model.w = BALL_W;
-				type = rand.nextInt(7) + 1;
+			}
+
+			// public void transformation(int dstW, int dstH, long time) {
+			// trans = true;
+			//
+			// }
+
+			@Override
+			public void run() {
+				super.run();
 			}
 		}
+
+		int[][] temp;
+		ArrayList<GameModel.Ball> tempRemove;
 
 		@Override
 		public ArrayList<RenderEvent> render(ArrayList<String> build) {
 
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 			for (String s : build) {
-				Hold hold = new Gson().fromJson(s, Hold.class);
-				if (hold.moved) {
-					balls[hold.srcR][hold.srcC].moveTo(balls[hold.dstR][hold.dstC].model.x, balls[hold.dstR][hold.dstC].model.y, null);
-					balls[hold.dstR][hold.dstC].moveTo(balls[hold.srcR][hold.srcC].model.x, balls[hold.srcR][hold.srcC].model.y, null);
+				final Hold hold = new Gson().fromJson(s, Hold.class);
+
+				if (temp == null) {
+					temp = hold.ballMap;
 				}
 				for (int i = 0; i < ROW; i++) {
 					for (int j = 0; j < COL; j++) {
 						balls[i][j].run();
 						if (hold.ballMap[i][j] > 0) {
-							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(hold.ballMap[i][j])))
-									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH));
+							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(temp[i][j])))
+									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH).dstWH(balls[i][j].model.w, balls[i][j].model.h));
 						}
 					}
+				}
+
+				if (hold.moved) {
+					gameState = 1;
+					balls[hold.srcR][hold.srcC].moveTo(balls[hold.dstR][hold.dstC].model.x, balls[hold.dstR][hold.dstC].model.y, null);
+					balls[hold.dstR][hold.dstC].moveTo(balls[hold.srcR][hold.srcC].model.x, balls[hold.srcR][hold.srcC].model.y, new Action() {
+						@Override
+						public void execute() {
+							Ball tempBall = balls[hold.srcR][hold.srcC];
+							balls[hold.srcR][hold.srcC] = balls[hold.dstR][hold.dstC];
+							balls[hold.dstR][hold.dstC] = tempBall;
+							temp = hold.ballMap;
+							// gameState = 2;
+							for (GameModel.Ball ball : hold.remove) {
+								balls[ball.r][ball.c].shapeTo(0, 0, 30, null);
+							}
+						}
+					});
+					// if (gameState == 2) {
+					// System.out.println("3 hold null? " + (hold == null));
+					// System.out.println("3 hold remove null? " + (hold.remove == null));
+					// System.out.println("gson " + new Gson().toJson(hold));
+					// for (GameModel.Ball ball : hold.remove) {
+					// balls[ball.r][ball.c].shapeTo(0, 0, 10, null);
+					// }
+					// gameState = 3;
+					// }
 				}
 
 				// if (!hold.remove.isEmpty()) {
@@ -180,7 +222,6 @@ public class PuzzleFrog {
 		Ball[][] ballMap = new Ball[ROW][COL];
 		ArrayList<Ball> remove;
 		boolean moved;
-		int move;// 0 left, 1 up , 2 right, 3 down
 
 		public GameModel() {
 			//
@@ -261,45 +302,49 @@ public class PuzzleFrog {
 		}
 
 		int row, col;
-		int nextRaw, nextCal;
+		int nextRow, nextCol;
 
 		@Override
 		public void process(String gsonString) {
 			Sign signs = new Gson().fromJson(gsonString, Sign.class);
 			if (signs.move != -1) {
+
+				System.out.println(signs.row + ", " + signs.col);
 				row = signs.row;
 				col = signs.col;
 				moved = false;
 				System.out.println("raw " + row + " , cal " + col);
 				if (row >= 0 && row < ROW && col >= 0 && col < COL) {
-					nextRaw = row;
-					nextCal = col;
-					switch (move) {
+					nextRow = row;
+					nextCol = col;
+					switch (signs.move) {
 					case 0: // up
 						if (row > 0) {
-							nextRaw--;
+							nextRow--;
 						}
 						break;
 					case 1: // left
 						if (col > 0) {
-							nextCal--;
+							nextCol--;
 						}
 						break;
 					case 2: // down
 						if (row < ROW - 1) {
-							nextRaw++;
+							nextRow++;
 						}
 						break;
 					case 3: // right
 						if (col < COL - 1) {
-							nextCal++;
+							nextCol++;
 						}
 						break;
 					}
 					moved = true;
-					final Ball temp = ballMap[nextRaw][nextCal];
-					ballMap[nextRaw][nextCal] = ballMap[row][col];
-					ballMap[row][col] = temp;
+					final int temp = ballMap[nextRow][nextCol].type;
+					ballMap[nextRow][nextCol].type = ballMap[row][col].type;
+					ballMap[row][col].type = temp;
+
+					// System.out.println(row + " " + col + " move to " + nextRow + " " + nextCol);
 
 					remove = countBall();
 					for (Ball ball : remove) {
@@ -325,6 +370,8 @@ public class PuzzleFrog {
 			}
 		}
 
+		boolean change = true;
+
 		@Override
 		public String hold() {
 			Hold hold = new Hold();
@@ -333,14 +380,16 @@ public class PuzzleFrog {
 					hold.ballMap[i][j] = ballMap[i][j].type;
 				}
 			}
-			hold.srcR = row;
-			hold.srcC = col;
-			hold.dstR = nextRaw;
-			hold.dstC = nextCal;
-			hold.moved = moved;
-			moved = false;
-			hold.remove = remove;
-			remove.clear();
+			if (moved) {
+				hold.srcR = row;
+				hold.srcC = col;
+				hold.dstR = nextRow;
+				hold.dstC = nextCol;
+				hold.moved = moved;
+				moved = false;
+				hold.remove = (ArrayList<GameModel.Ball>) remove.clone();
+				remove.clear();
+			}
 			return new Gson().toJson(hold);
 		}
 
@@ -355,6 +404,7 @@ public class PuzzleFrog {
 		int row;
 		int col;
 		int move;
+		int[][] balls = new int[ROW][COL];
 	}
 
 	class Hold {
