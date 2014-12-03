@@ -7,6 +7,8 @@ public class State {
 	public static double ALLOW = 0.0;				// Allow
 	public static double BLOCK = 99999999999999.0;	// Block
 	
+	public double global_current = 0.0;
+	
 	public class StateRecord {
 		public int stat;
 		public double time;
@@ -58,9 +60,25 @@ public class State {
 		return now - last.time;
 	}
 	
+	public void setNowTime(double now) {
+		this.global_current = now;
+	}
+	
 	// 轉換狀態, now 代表現在的時間
+	public boolean enter(int stat) {
+		return this.enter(stat, this.global_current, true);
+	}
+	
+	public boolean enter(int stat, boolean pass) {
+		return this.enter(stat, this.global_current, pass);
+	}
+	
 	public boolean enter(int stat, double now) {
-		boolean pass = true;
+		return this.enter(stat, now, true);
+	}
+	
+	public boolean enter(int stat, double now, boolean pass) {
+		//boolean pass = true;
 		StateRecord last = this.records.get( this.records.size() - 1);
 		
 		double timecond = this.cond_table[last.stat][stat];
