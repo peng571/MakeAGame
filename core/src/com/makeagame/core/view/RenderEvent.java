@@ -21,6 +21,9 @@ public class RenderEvent {
 	public int gravity;
 	public Color color;
 	public int size;
+	public boolean useBlend =false;
+	public int srcFunc, dstFunc;
+
 	public TextureRegion texture;
 	public static final int IMAGE = 0x001;
 	public static final int LABEL = 0x002;
@@ -66,7 +69,7 @@ public class RenderEvent {
 		this.ratioY = 1f;
 		return this;
 	}
-	
+
 	public RenderEvent src(int x, int y, int w, int h) {
 		this.srcX = x;
 		this.srcY = y;
@@ -110,13 +113,25 @@ public class RenderEvent {
 		return this;
 	}
 
-	
-	public RenderEvent color(int r, int g, int b, int a)	{
+	public RenderEvent color(int color) {
+		this.color = new Color(color);
+		return this;
+	}
+
+	public RenderEvent color(int r, int g, int b, int a) {
 		color = new Color(r, g, b, a);
 		return this;
 	}
-	
-	public RenderEvent size(int size)	{
+
+	public RenderEvent blend(int srcFunc, int dstFunc)
+	{
+		this.useBlend = true;
+		this.srcFunc = srcFunc;
+		this.dstFunc = dstFunc;
+		return this;
+	}
+
+	public RenderEvent size(int size) {
 		this.size = size;
 		return this;
 	}

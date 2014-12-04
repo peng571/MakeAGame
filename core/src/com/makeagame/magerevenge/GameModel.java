@@ -202,7 +202,7 @@ public class GameModel implements Model {
 			case Role.STATE_ATTACKING:
 				break;
 			case Role.STATE_BACKING:
-				m.x += (m.group == 0 ? -1 : 1) * m.sX *0.5f;
+				m.x += (m.group == 0 ? -1 : 1) * m.sX * 0.5f;
 				break;
 			case Role.STATE_DEATH:
 				break;

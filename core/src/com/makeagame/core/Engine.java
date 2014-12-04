@@ -100,7 +100,15 @@ public class Engine extends ApplicationAdapter {
 			switch (e.type) {
 			case RenderEvent.IMAGE:
 				if (e.texture != null) {
+					if (e.useBlend) {
+						batch.enableBlending();
+						batch.setBlendFunction(e.srcFunc, e.dstFunc);
+					} else {
+						batch.disableBlending();
+					}
+					batch.setColor(e.color);
 					batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
+
 				}
 				break;
 			case RenderEvent.LABEL:
