@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.makeagame.core.Controler;
-import com.makeagame.core.component.Position;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
@@ -13,19 +12,6 @@ import com.makeagame.core.view.View;
 
 public class GameView implements View {
 	Button[] btnCallHeros;
-
-	/**
-	 * [define of res]
-	 */
-	int hline_field_ground = 340;
-	Position<Integer> pos_top_board = new Position<Integer>(0, 480);
-	int hline_base_hp = 27;
-	int x_base_hp_op = 76;
-	Position<Integer> pos_pause = new Position<Integer>(40, 0);
-	Position<Integer> pos_bottom_board = new Position<Integer>(0, 408);
-	Position<Integer> pos_power_ring = new Position<Integer>(34, 25);
-	int vline_res_icon = 217;
-	int hline_send_icon;
 
 	Sprite sprite;
 
@@ -39,11 +25,11 @@ public class GameView implements View {
 
 		sprite = new Sprite("background");
 		sprite.addChild(new Sprite().xy(0, 340)
-				.addChild(new Sprite(MakeAGame.CASTLE + "L").center(-50, 340))
-				.addChild(new Sprite(MakeAGame.CASTLE + "R").center(754, 340)));
-		sprite.addChild(new Sprite("top_board").center(480, 0)
+				.addChild(new Sprite(MakeAGame.CASTLE + "L").xy(-50, 340).center(160, 240))
+				.addChild(new Sprite(MakeAGame.CASTLE + "R").xy(754, 340).center(96, 240)));
+		sprite.addChild(new Sprite("top_board").xy(480,0).center(480, 0)
 				.addChild(new Sprite("base_hp").xy(0, 27))
-				.addChild(new Sprite("pause").xy(40, 0)));
+				.addChild(new Sprite("pause").xy(40, 0).center(24, 0)));
 		sprite.addChild(new Sprite("bottom_board").xy(0, 408).center(0, 60)
 				.addChild(new Sprite("power_ring").xy(34, 25))
 				.addChild(new Sprite().xy(217, 0).addChild(new Sprite("res_icon_money").xy(70, 0)))
@@ -55,7 +41,6 @@ public class GameView implements View {
 						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(573, 0))
 						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(696, 0))
 						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(779, 0))));
-
 	}
 
 	@Override

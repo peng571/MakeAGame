@@ -22,7 +22,7 @@ public class RenderEvent {
 	public int gravity;
 	public Color color;
 	public int size;
-	public boolean useBlend =false;
+	public boolean useBlend = false;
 	public int srcFunc, dstFunc;
 
 	public TextureRegion texture;
@@ -40,24 +40,23 @@ public class RenderEvent {
 		XY(0, 0);
 		srcWH(36, 36);
 		gravity = 0;
+		this.color = new Color(Color.BLACK);
 	}
 
 	public RenderEvent(String s) {
 		this();
 		this.type = LABEL;
 		this.s = s;
-		this.color = new Color(Color.BLACK);
 	}
 
 	public RenderEvent(TextureRegion texture) {
 		this();
 		this.type = IMAGE;
 		this.texture = texture;
-		srcH = 	texture.getRegionHeight();
+		srcH = texture.getRegionHeight();
 		dstH = srcH;
-		srcW = 	texture.getRegionWidth();
+		srcW = texture.getRegionWidth();
 		dstW = srcW;
-		
 	}
 
 	public RenderEvent XY(float x, float y) {
@@ -67,7 +66,7 @@ public class RenderEvent {
 	}
 
 	public RenderEvent srcWH(int w, int h) {
-	
+
 		this.srcW = w;
 		this.srcH = h;
 		this.dstH = h;
@@ -129,9 +128,9 @@ public class RenderEvent {
 		color = new Color(r, g, b, a);
 		return this;
 	}
-	
-	// e.x  ( GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA )
-	public RenderEvent blend(int srcFunc, int dstFunc)	{
+
+	// e.x ( GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA )
+	public RenderEvent blend(int srcFunc, int dstFunc) {
 		this.useBlend = true;
 		this.srcFunc = srcFunc;
 		this.dstFunc = dstFunc;

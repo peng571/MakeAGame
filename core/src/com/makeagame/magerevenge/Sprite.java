@@ -3,6 +3,7 @@ package com.makeagame.magerevenge;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.magerevenge.KeyTable.ApplyList;
@@ -130,6 +131,7 @@ public class Sprite {
 		// TODO: 等你增加新的RenderEvent後在自己改動這邊
 		// 優先加入 setColor 和 blendfunction 的支援, 其他的以後再說
 		if (image != null) {
+			Engine.logI("render " + image + " to " + (x - image_cntx)  + " , " + (y - image_cnty));
 			list.add(new RenderEvent(ResourceManager.get().fetch(image))
 					.XY(x - image_cntx, y - image_cnty)
 					.color(red, green, blue, alpha)

@@ -70,6 +70,8 @@ public class Engine extends ApplicationAdapter {
 			}
 
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				logI("touch " + screenX + " " + screenY);
+
 				signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DOWN, new int[] { button, screenX, screenY }));
 				return super.touchDown(screenX, screenY, pointer, button);
 			}
@@ -97,12 +99,12 @@ public class Engine extends ApplicationAdapter {
 		batch.begin();
 		renderList = ViewManager.get().render();
 		for (RenderEvent e : renderList) {
-			if (e.useBlend) {
-				batch.enableBlending();
-				batch.setBlendFunction(e.srcFunc, e.dstFunc);
-			} else {
-				batch.disableBlending();
-			}
+			// if (e.useBlend) {
+			// batch.enableBlending();
+			// batch.setBlendFunction(e.srcFunc, e.dstFunc);
+			// } else {
+			// batch.disableBlending();
+			// }
 			batch.setColor(e.color);
 			switch (e.type) {
 			case RenderEvent.IMAGE:
