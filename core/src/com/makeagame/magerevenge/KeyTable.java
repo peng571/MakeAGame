@@ -64,7 +64,7 @@ public class KeyTable {
 	}
 
 	public class ApplyList {
-		HashMap<String, Object> map;
+		public HashMap<String, Object> map;
 
 		public ApplyList() {
 			map = new HashMap<String, Object>();
