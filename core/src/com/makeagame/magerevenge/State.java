@@ -3,16 +3,16 @@ package com.makeagame.magerevenge;
 import java.util.ArrayList;
 
 public class State {
-	double[][] cond_table;
-	public static double ALLOW = 0.0;				// Allow
-	public static double BLOCK = 99999999999999.0;	// Block
+	long[][] cond_table;
+	public static long ALLOW = 0;				// Allow
+	public static long BLOCK = Long.MAX_VALUE;	// Block
 	
-	public double global_current = 0.0;
+	public static  long global_current = 0;
 	
 	public class StateRecord {
 		public int stat;
-		public double time;
-		public StateRecord(int stat, double time) {
+		public long time;
+		public StateRecord(int stat, long time) {
 			this.stat = stat;
 			this.time = time;
 		}
@@ -28,17 +28,18 @@ public class State {
 	 * 				則 轉換成功, 否則轉換失敗
 	 * 
 	 */
-	public State(double[][] cond_table) {
+	public State(long[][] cond_table) {
+		records = new ArrayList<State.StateRecord>();
 		this.cond_table = cond_table;
 		this.reset();
 	}
 	
 	public void reset() {
 		this.records.clear();
-		this.records.add(new StateRecord(0, 0.0));
+		this.records.add(new StateRecord(0, 0));
 	}
 	
-	public void reset(int stat, double time) {
+	public void reset(int stat, long time) {
 		this.records.clear();
 		this.records.add(new StateRecord(stat, time));
 	}
@@ -55,34 +56,34 @@ public class State {
 	}
 	
 	// 取得現在狀態的維持時間
-	public double elapsed(double now) {
+	public long elapsed(long now) {
 		StateRecord last = this.records.get( this.records.size() - 1);
 		return now - last.time;
 	}
 	
-	public void setNowTime(double now) {
-		this.global_current = now;
+	public static void setNowTime(long now) {
+		global_current = now;
 	}
 	
 	// 轉換狀態, now 代表現在的時間
 	public boolean enter(int stat) {
-		return this.enter(stat, this.global_current, true);
+		return this.enter(stat, global_current, true);
 	}
 	
 	public boolean enter(int stat, boolean pass) {
-		return this.enter(stat, this.global_current, pass);
+		return this.enter(stat, global_current, pass);
 	}
 	
-	public boolean enter(int stat, double now) {
+	public boolean enter(int stat, long now) {
 		return this.enter(stat, now, true);
 	}
 	
-	public boolean enter(int stat, double now, boolean pass) {
+	public boolean enter(int stat, long now, boolean pass) {
 		//boolean pass = true;
 		StateRecord last = this.records.get( this.records.size() - 1);
 		
-		double timecond = this.cond_table[last.stat][stat];
-		if (pass && timecond != 0.0) {
+		long timecond = this.cond_table[last.stat][stat];
+		if (pass && timecond != 0) {
 			pass = false;
 			//if (now > last.time + timecond) {
 			if (this.elapsed(now) > timecond) {

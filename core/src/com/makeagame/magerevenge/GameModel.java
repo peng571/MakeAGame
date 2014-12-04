@@ -38,6 +38,8 @@ public class GameModel implements Model {
 	@Override
 	public void process(String gsonString) {
 		Sign signs = new Gson().fromJson(gsonString, Sign.class);
+		State.setNowTime(System.currentTimeMillis());
+
 		if (start) {
 			// button click
 			if (signs.clickBtn != null) {
@@ -79,7 +81,7 @@ public class GameModel implements Model {
 			// run role
 			for (ListIterator<Role> it = roles.listIterator(); it.hasNext();) {
 				Role r = it.next();
-				if (r.m.state < Role.STATE_DEATH) {
+				if (r.state.currentStat() != Role.STATE_DEATH) {
 					r.run();
 				}
 				else {
@@ -109,24 +111,32 @@ public class GameModel implements Model {
 	class Role {
 
 		// 1 Moving, 2 Preparing, 3 Attacking, 4 Backing, 5 Death
-		public final static int STATE_MOVING = 1;
-		public final static int STATE_PERPARING = 2;
-		public final static int STATE_ATTACKING = 3;
-		public final static int STATE_BACKING = 4;
-		public final static int STATE_DEATH = 5;
+		public final static int STATE_MOVING = 0;
+		public final static int STATE_PERPARING = 1;
+		public final static int STATE_ATTACKING = 2;
+		public final static int STATE_BACKING = 3;
+		public final static int STATE_DEATH = 4;
 
+		State state;
 		Role meet;
 
 		Attribute m;
 
 		long lastAttackTime;
+		long backingTime = 100;
 
 		public Role(String gson, int group) {
 			m = init(gson);
 			m.group = group;
 			m.x = group == 0 ? 32 : (Bootstrap.screamWidth() - 32);
 			m.maxHp = m.hp;
-			m.state = 0;
+			// m.state = 0;
+			state = new State(new long[][] {
+					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
+					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW },
+					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
+					{ backingTime, backingTime, State.BLOCK, State.BLOCK, State.ALLOW },
+					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK } });
 		}
 
 		public class Attribute {
@@ -135,7 +145,7 @@ public class GameModel implements Model {
 			int hp;
 			int maxHp;
 			int atk;
-			int state;
+			// int state;
 			int x;
 			float sX;
 			int money;
@@ -154,39 +164,50 @@ public class GameModel implements Model {
 			meet = null;
 			for (Role r : roles) {
 				if (m.group == 0 && r.m.group == 1 && m.x + m.range >= r.m.x
-						|| (m.group == 1 && r.m.group == 0 && m.x - m.range <= r.m.x )) {
-//					m.x = r.m.x;
+						|| (m.group == 1 && r.m.group == 0 && m.x - m.range <= r.m.x)) {
 					meet = r;
-					break;
 				}
 			}
 
-			// move if not meet others
 			if (meet == null) {
-				m.state = Role.STATE_MOVING;
-				m.x += (m.group == 0 ? 1 : -1) * m.sX;
+				state.enter(Role.STATE_MOVING);
 			} else {
-				// attack while stop
-				m.state = Role.STATE_PERPARING;
-				if (System.currentTimeMillis() - lastAttackTime > m.atkTime) {
-					m.state = Role.STATE_ATTACKING;
-					meet.m.hp -= m.atk;
-					meet.m.state = Role.STATE_BACKING;
-					meet.m.x += (meet.m.group == 0 ? -1 : 1) * meet.m.sX;
-					lastAttackTime = System.currentTimeMillis();
-				}
+				state.enter(Role.STATE_PERPARING);
+			}
+
+			if (state.enter(Role.STATE_ATTACKING)) {
+				meet.m.hp -= m.atk;
+				meet.state.enter(Role.STATE_BACKING);
 			}
 
 			// die
 			if (m.hp <= 0) {
-				if (m.group == 1) {
-					totalMoney += m.money;
+				if (state.enter(Role.STATE_DEATH)) {
+					if (m.group == 1) {
+						totalMoney += m.money;
+					}
+					if (m.id.equals("castle")) {
+						start = false;
+					}
 				}
-				if (m.id.equals("castle")) {
-					start = false;
-				}
-				m.state = Role.STATE_DEATH;
 			}
+
+			switch (state.currentStat())
+			{
+			case Role.STATE_MOVING:
+				m.x += (m.group == 0 ? 1 : -1) * m.sX;
+				break;
+			case Role.STATE_PERPARING:
+				break;
+			case Role.STATE_ATTACKING:
+				break;
+			case Role.STATE_BACKING:
+				m.x += (m.group == 0 ? -1 : 1) * m.sX *0.5f;
+				break;
+			case Role.STATE_DEATH:
+				break;
+			}
+
 		}
 	}
 }

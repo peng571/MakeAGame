@@ -1,11 +1,11 @@
 {
 "id":"ball2",
-"hp":150,
-"sX":5,
+"hp":500,
+"sX":3,
 "w":64,
 "h":64,
-"atk":5,
+"atk":10,
 "money":12,
-"atkTime":600,
+"atkTime":800,
 "range":0
 }

@@ -36,10 +36,10 @@ public class MakeAGame {
 				resource.bind(ROLE_2, new Resource().image("image/person91.png").attribute("data/role2.txt"));
 				resource.bind(ROLE_3, new Resource().image("image/group9.png").attribute("data/role3.txt"));
 				resource.bind(CASTLE, new Resource().image("image/pear4.png").attribute("data/castle.txt"));
-				resource.bind(CASTLE + "btn", new Resource().image("image/orange.png"));
 				resource.bind(ROLE_1 + "btn", new Resource().image("image/black.png"));
 				resource.bind(ROLE_2 + "btn", new Resource().image("image/blue.png"));
-				resource.bind(ROLE_3 + "btn", new Resource().image("image/grey.png"));
+				resource.bind(ROLE_3 + "btn", new Resource().image("image/grey.png"));	
+				resource.bind(CASTLE + "btn", new Resource().image("image/orange.png"));
 			}
 		});
 	}
