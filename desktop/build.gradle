@@ -4,13 +4,23 @@ sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.makeagame.first.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets");
+//project.ext.assetsDir = new File("../android/assets");
+
+apply from: 'path.gradle'
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    workingDir = project.assetsDir
+    workingDir = project.assetsDirForTest
+    ignoreExitValue = true
+}
+
+task run_dropbox(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDirForDropBox
     ignoreExitValue = true
 }
 
@@ -18,14 +28,20 @@ task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
+    from files(project.assetsDirForDropBox);
  
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
 }
-
 dist.dependsOn classes
+
+task copy(dependsOn: dist, type: Copy) {
+   from './build/libs/desktop-1.0.jar'
+   into project.bulidPathDropBox
+}
+
+
 
 eclipse {
     project {
