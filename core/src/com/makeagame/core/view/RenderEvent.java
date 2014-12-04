@@ -1,6 +1,7 @@
 package com.makeagame.core.view;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class RenderEvent {
@@ -52,6 +53,11 @@ public class RenderEvent {
 		this();
 		this.type = IMAGE;
 		this.texture = texture;
+		srcH = 	texture.getRegionHeight();
+		dstH = srcH;
+		srcW = 	texture.getRegionWidth();
+		dstW = srcW;
+		
 	}
 
 	public RenderEvent XY(float x, float y) {
@@ -61,6 +67,7 @@ public class RenderEvent {
 	}
 
 	public RenderEvent srcWH(int w, int h) {
+	
 		this.srcW = w;
 		this.srcH = h;
 		this.dstH = h;
@@ -118,13 +125,13 @@ public class RenderEvent {
 		return this;
 	}
 
-	public RenderEvent color(int r, int g, int b, int a) {
+	public RenderEvent color(float r, float g, float b, float a) {
 		color = new Color(r, g, b, a);
 		return this;
 	}
-
-	public RenderEvent blend(int srcFunc, int dstFunc)
-	{
+	
+	// e.x  ( GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA )
+	public RenderEvent blend(int srcFunc, int dstFunc)	{
 		this.useBlend = true;
 		this.srcFunc = srcFunc;
 		this.dstFunc = dstFunc;

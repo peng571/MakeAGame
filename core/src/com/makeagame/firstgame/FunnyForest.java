@@ -55,7 +55,7 @@ public class FunnyForest {
 				resource.bind("banana1", new Resource().image("image/banana4.png"));
 				resource.bind("banana2", new Resource().image("image/banana7.png"));
 				for (int i = 1; i <= 5; i++) {
-					resource.bind("mengo" + i, new Resource().image("image/mengo.png").src(128 * i, 0, 128, 128));
+//					resource.bind("mengo" + i, new Resource().image("image/mengo.png").src(128 * i, 0, 128, 128));
 				}
 				resource.bind("boom", new Resource().image("image/boom3.png"));
 				resource.bind("bird", new Resource().image("image/bird.png").attribute("data/bird.txt"));

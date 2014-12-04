@@ -27,8 +27,8 @@ public class GameModel implements Model {
 
 	public GameModel() {
 		roles = new ArrayList<Role>();
-		roles.add(new Role(ResourceManager.get().read("castle"), 0));
-		roles.add(new Role(ResourceManager.get().read("castle"), 1));
+		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
+		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
 		start = true;
 		totalMoney = 0;
 		castleLevel = 1;
