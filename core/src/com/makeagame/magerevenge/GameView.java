@@ -13,8 +13,8 @@ import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
+import com.makeagame.tools.Bar;
 import com.makeagame.tools.KeyTable;
-import com.makeagame.tools.KeyTable.ApplyList;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
 import com.makeagame.tools.SimpleLayout;
@@ -23,15 +23,13 @@ import com.makeagame.tools.Sprite;
 public class GameView implements View {
 	Button[] btnCallHeros;
 
-	SimpleLayout sprite;
-	
-	
 	class PowerRing extends SimpleLayout {
 		KeyTable keyTable;
-		double count = -10.0;
-		
+		double count = 0.0;
+		Bar bar;
 		public PowerRing() {
 			super(new Sprite("power_ring"));
+			
 			xy(34, -35);
 			keyTable = new KeyTable(new Frame[]{
 					new Frame(0, new Key[]{
@@ -44,14 +42,22 @@ public class GameView implements View {
 							new Key("red", new Double(1.0f), KeyTable.INT_LINEAR)}),
 					
 			});
+			bar = new Bar();
+			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
+			
 		}
+		
 		
 		@Override
 		public void beforeRender() {
-			count += 0.2;
-			this.sprite.apply(keyTable.get(count));
+			super.beforeRender();
+			bar.percent += 0.01;
+			bar.apply(this.sprite);
 		}
 	}
+	
+	SimpleLayout sprite;
+	
 	
 	SimpleLayout background;
 	SimpleLayout hline_field_ground;
@@ -125,6 +131,7 @@ public class GameView implements View {
 						.addChild(send_icon_soldier4)
 						.addChild(send_icon_soldier5)
 				)
+				
 		);
 		
 		sprite = background;
@@ -163,7 +170,7 @@ public class GameView implements View {
 	public String info() {
 		return "main view";
 	}
-
+	/*
 	class Bar {
 		String id;
 		float percent; // 0~1
@@ -182,7 +189,8 @@ public class GameView implements View {
 					new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h).dstWH((int) (w * percent), h) };
 		}
 	}
-
+	*/
+	
 	class Button {
 		String id;
 		int x, y, w, h;

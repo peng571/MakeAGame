@@ -12,13 +12,19 @@ public class Sprite {
 	public int x = 0;
 	public int y = 0;
 
+	// 裁切
+	public int srcX = 0;
+	public int srcY = 0;
+	public int srcW = -1;
+	public int srcH = -1;
+	
 	// 縮放, 暫時不管
 	public double scalex = 1.0f;
 	public double scaley = 1.0f;
 
 	// 旋轉, 暫時不管
 	public double rotateAngle = 0.0f;
-
+	
 	// 翻轉
 	public boolean flipx = false;
 	public boolean flipy = false;
@@ -31,7 +37,7 @@ public class Sprite {
 
 	// 請參照 opneGL的 blendfunction
 	public int blendmethod = 0;
-
+	
 	// 圖片
 	public String image;
 
@@ -50,7 +56,7 @@ public class Sprite {
 	// 基準線
 	public Sprite() {
 	}
-
+	
 	public Sprite xy(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -60,6 +66,14 @@ public class Sprite {
 	public Sprite center(int x, int y) {
 		this.centerX = x;
 		this.centerY = y;
+		return this;
+	}
+	
+	public Sprite srcRect(int x, int y, int w, int h) {
+		srcX = x;
+		srcY = y;
+		srcW = w;
+		srcH = h;
 		return this;
 	}
 
@@ -96,6 +110,20 @@ public class Sprite {
 		if (map.containsKey("y")) {
 			y = ((Double) map.get("y")).intValue();
 		}
+		
+		if (map.containsKey("srcX")) {
+			srcX = ((Double) map.get("srcX")).intValue();
+		}
+		if (map.containsKey("srcY")) {
+			srcY = ((Double) map.get("srcY")).intValue();
+		}
+		if (map.containsKey("srcW")) {
+			srcW = ((Double) map.get("srcW")).intValue();
+		}
+		if (map.containsKey("srcH")) {
+			srcH = ((Double) map.get("srcH")).intValue();
+		}
+		
 		if (map.containsKey("red")) {
 			red = ((Double) map.get("red")).floatValue();
 		}
@@ -117,11 +145,21 @@ public class Sprite {
 		// TODO: 等你增加新的RenderEvent後在自己改動這邊
 		// 優先加入 setColor 和 blendfunction 的支援, 其他的以後再說
 		if (image != null) {
+			/*if (srcW == -1) {
 			list.add(new RenderEvent(ResourceManager.get().fetch(image))
 					.XY(offx + x - centerX, offy + y - centerY)
 					.color(red, green, blue, alpha)
 					// .blend(srcFunc, dstFunc)
 					);
+			} else {*/
+				list.add(new RenderEvent(ResourceManager.get().fetch(image))
+					.XY(offx + x - centerX, offy + y - centerY)
+					.color(red, green, blue, alpha)
+					.src(srcX, srcY, srcW, srcH)
+					
+					// .blend(srcFunc, dstFunc)
+				);
+			//}
 		}
 		return list;
 	}

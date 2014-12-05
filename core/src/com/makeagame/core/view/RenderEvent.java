@@ -3,6 +3,7 @@ package com.makeagame.core.view;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.makeagame.core.Engine;
 
 public class RenderEvent {
 
@@ -14,6 +15,8 @@ public class RenderEvent {
 	public int srcY;
 	public int srcW;
 	public int srcH;
+	public int dstX;
+	public int dstY;
 	public int dstW;
 	public int dstH;
 	public float ratioX;
@@ -43,7 +46,7 @@ public class RenderEvent {
 		XY(0, 0);
 		srcWH(36, 36);
 		gravity = 0;
-		this.color = new Color(Color.BLACK);
+		this.color = new Color(Color.WHITE);
 	}
 
 	public RenderEvent(String s) {
@@ -74,30 +77,42 @@ public class RenderEvent {
 
 		this.srcW = w;
 		this.srcH = h;
-		this.dstH = h;
-		this.dstW = w;
-		this.ratioX = 1f;
-		this.ratioY = 1f;
+		//this.dstH = h;
+		//this.dstW = w;
+		//this.ratioX = 1f;
+		//this.ratioY = 1f;
 		return this;
 	}
 
 	public RenderEvent src(int x, int y, int w, int h) {
 		this.srcX = x;
 		this.srcY = y;
-		this.srcW = w;
-		this.srcH = h;
-		this.dstH = h;
-		this.dstW = w;
-		this.ratioX = 1f;
-		this.ratioY = 1f;
+		
+		if (w != -1) {
+			this.srcW = w;
+			this.dstW = w;
+		}
+		if (h != -1) {
+			this.srcH = h;
+			this.dstH = h;
+		}
+		
+		//this.ratioX = 1f;
+		//this.ratioY = 1f;
 		return this;
 	}
-
+	
+	public RenderEvent dstXY(int x, int y) {
+		this.dstX = x;
+		this.dstY = y;
+		return this;
+	}
+	
 	public RenderEvent dstWH(int w, int h) {
 		this.dstH = h;
 		this.dstW = w;
-		this.ratioX = dstW / srcW;
-		this.ratioY = dstH / srcH;
+		//this.ratioX = dstW / srcW;
+		//this.ratioY = dstH / srcH;
 		return this;
 	}
 
