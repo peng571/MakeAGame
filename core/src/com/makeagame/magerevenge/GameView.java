@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+import com.google.gson.Gson;
 import com.makeagame.core.Controler;
-import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
@@ -29,25 +28,24 @@ public class GameView implements View {
 		double count = 0.0;
 		Bar bar;
 		Button2 btn;
-		
 		public PowerRing() {
 			super(new Sprite("power_ring"));
-			
+
 			xy(34, -35);
-			keyTable = new KeyTable(new Frame[]{
-					new Frame(0, new Key[]{
-							new Key("x", new Double(20), KeyTable.INT_LINEAR)}),
-					new Frame(10, new Key[]{
+			keyTable = new KeyTable(new Frame[] {
+					new Frame(0, new Key[] {
+							new Key("x", new Double(20), KeyTable.INT_LINEAR) }),
+					new Frame(10, new Key[] {
 							new Key("x", new Double(100), KeyTable.INT_LINEAR),
-							new Key("red", new Double(0.0f), KeyTable.INT_LINEAR)}),
-					new Frame(30, new Key[]{
+							new Key("red", new Double(0.0f), KeyTable.INT_LINEAR) }),
+					new Frame(30, new Key[] {
 							new Key("x", new Double(100), KeyTable.INT_LINEAR),
-							new Key("red", new Double(1.0f), KeyTable.INT_LINEAR)}),
-					
+							new Key("red", new Double(1.0f), KeyTable.INT_LINEAR) }),
+
 			});
 			bar = new Bar();
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
-			
+
 			btn = new Button2();
 			btn.setRectArea(x, y, 160, 160);
 			
@@ -59,8 +57,7 @@ public class GameView implements View {
 			btn.setActiveSprite(active);
 			btn.setHoveredSprite(hovered);
 		}
-		
-		
+
 		@Override
 		public void beforeRender() {
 			super.beforeRender();
@@ -72,10 +69,9 @@ public class GameView implements View {
 			this.sprite.apply(keyTable.get(count));
 		}
 	}
-	
+
 	SimpleLayout sprite;
-	
-	
+
 	SimpleLayout background;
 	SimpleLayout hline_field_ground;
 	SimpleLayout castle_L;
@@ -84,7 +80,7 @@ public class GameView implements View {
 	SimpleLayout base_hp;
 	SimpleLayout pause;
 	SimpleLayout bottom_board;
-	//SimpleLayout power_ring;
+	// SimpleLayout power_ring;
 	PowerRing power_ring;
 	SimpleLayout vline_res_icon;
 	SimpleLayout res_icon_money;
@@ -96,27 +92,25 @@ public class GameView implements View {
 	SimpleLayout send_icon_soldier3;
 	SimpleLayout send_icon_soldier4;
 	SimpleLayout send_icon_soldier5;
-	
+
 	public GameView() {
-		
-		
-		
+
 		btnCallHeros = new Button[5];
 		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
 		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
 		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
 		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
-		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
-		
+		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
+
 		background = new SimpleLayout(new Sprite("background"));
 		hline_field_ground = new SimpleLayout().xy(0, 340);
 		castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
 		castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
-		top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).xy(480,0);
+		top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).xy(480, 0);
 		base_hp = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
 		pause = new SimpleLayout(new Sprite("pause").center(24, 0)).xy(0, 40);
 		bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
-		//power_ring = new SimpleLayout(new Sprite("power_ring")).xy(34, -35);
+		// power_ring = new SimpleLayout(new Sprite("power_ring")).xy(34, -35);
 		power_ring = new PowerRing();
 		vline_res_icon = new SimpleLayout().xy(217, 0);
 		res_icon_money = new SimpleLayout(new Sprite("res_icon_money")).xy(0, 10);
@@ -128,31 +122,31 @@ public class GameView implements View {
 		send_icon_soldier3 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(573, 0);
 		send_icon_soldier4 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(676, 0);
 		send_icon_soldier5 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(779, 0);
-		
+
 		background.addChild(hline_field_ground
 				.addChild(castle_L)
 				.addChild(castle_R)
-		).addChild(top_board
-				.addChild(base_hp)
-				.addChild(pause)
-		).addChild(bottom_board
-				.addChild(power_ring)
-				.addChild(vline_res_icon
-						.addChild(res_icon_money)
-						.addChild(res_icon_res1)
-						.addChild(res_icon_res2)
-				).addChild(hline_send_icon
-						.addChild(send_icon_soldier1)
-						.addChild(send_icon_soldier2)
-						.addChild(send_icon_soldier3)
-						.addChild(send_icon_soldier4)
-						.addChild(send_icon_soldier5)
-				)
-				
-		);
-		
+				).addChild(top_board
+						.addChild(base_hp)
+						.addChild(pause)
+				).addChild(bottom_board
+						.addChild(power_ring)
+						.addChild(vline_res_icon
+								.addChild(res_icon_money)
+								.addChild(res_icon_res1)
+								.addChild(res_icon_res2)
+						).addChild(hline_send_icon
+								.addChild(send_icon_soldier1)
+								.addChild(send_icon_soldier2)
+								.addChild(send_icon_soldier3)
+								.addChild(send_icon_soldier4)
+								.addChild(send_icon_soldier5)
+						)
+
+				);
+
 		sprite = background;
-		
+
 	}
 
 	@Override
@@ -174,7 +168,7 @@ public class GameView implements View {
 				}
 			}
 		}
-			Controler.get().call(Sign.BATTLE_SendSoldier, new JSONObject().put("player", 0).put("soldierType", clickBtn));
+		Controler.get().call(Sign.BATTLE_SendSoldier, new JSONObject().put("player", 0).put("soldierType", clickBtn));
 	}
 
 	@Override
@@ -182,6 +176,23 @@ public class GameView implements View {
 
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		list.addAll(sprite.render(0, 0));
+
+		// 這邊先不要刪 >< 我要測model用
+		for (String s : build) {
+			final Hold hold = new Gson().fromJson(s, Hold.class);
+			// Engine.logI("get hold " + s);
+			for (RoleHold r : hold.roles) {
+				if (!r.id.equals(MakeAGame.CASTLE)) {
+					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
+				}
+				list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
+			}
+			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
+			for (int i = 0; i < btnCallHeros.length; i++) {
+				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
+			}
+		}
+
 		return list;
 	}
 
@@ -189,7 +200,7 @@ public class GameView implements View {
 	public String info() {
 		return "main view";
 	}
-	
+
 	class Button {
 		String id;
 		int x, y, w, h;
@@ -231,7 +242,7 @@ public class GameView implements View {
 
 		public ArrayList<RenderEvent> draw(int cost) {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-			list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
+//			list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
 			list.add(new RenderEvent(String.valueOf(cost)).XY(x, y));
 			return list;
 		}
