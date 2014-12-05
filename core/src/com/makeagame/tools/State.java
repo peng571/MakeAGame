@@ -1,4 +1,4 @@
-package com.makeagame.magerevenge;
+package com.makeagame.tools;
 
 import java.util.ArrayList;
 

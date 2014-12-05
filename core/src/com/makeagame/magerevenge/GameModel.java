@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.tools.State;
 
 public class GameModel implements Model {
 

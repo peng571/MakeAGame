@@ -1,4 +1,4 @@
-package com.makeagame.magerevenge;
+package com.makeagame.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
-import com.makeagame.magerevenge.KeyTable.ApplyList;
+import com.makeagame.tools.KeyTable.ApplyList;
 
 public class Sprite {
 	// ¦ì²¾

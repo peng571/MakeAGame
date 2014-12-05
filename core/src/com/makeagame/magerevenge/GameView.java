@@ -9,6 +9,7 @@ import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
+import com.makeagame.tools.Sprite;
 
 public class GameView implements View {
 	Button[] btnCallHeros;
