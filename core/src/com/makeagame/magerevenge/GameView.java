@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.makeagame.core.Controler;
-import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
@@ -85,7 +85,7 @@ public class GameView implements View {
 		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
 		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
 		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
-		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
+		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
 
 		background = new SimpleLayout(new Sprite("background"));
 		hline_field_ground = new SimpleLayout().xy(0, 340);
@@ -159,6 +159,23 @@ public class GameView implements View {
 
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		list.addAll(sprite.render(0, 0));
+
+		// 這邊先不要刪 >< 我要測model用
+		for (String s : build) {
+			final Hold hold = new Gson().fromJson(s, Hold.class);
+			// Engine.logI("get hold " + s);
+			for (RoleHold r : hold.roles) {
+				if (!r.id.equals(MakeAGame.CASTLE)) {
+					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
+				}
+				list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
+			}
+			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
+			for (int i = 0; i < btnCallHeros.length; i++) {
+				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
+			}
+		}
+
 		return list;
 	}
 
@@ -229,7 +246,7 @@ public class GameView implements View {
 
 		public ArrayList<RenderEvent> draw(int cost) {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-			list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
+//			list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
 			list.add(new RenderEvent(String.valueOf(cost)).XY(x, y));
 			return list;
 		}

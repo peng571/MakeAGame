@@ -32,7 +32,7 @@ public class GameModel implements Model {
 	int totalMoney;
 	int castleLevel;
 
-	static int[] COST = { 150, 100, 250, 300 };
+	static int[] COST = { 150, 100, 250, 300, 300 };
 
 	public GameModel() {
 		roles = new ArrayList<Role>();
