@@ -3,9 +3,10 @@ package com.makeagame.firstgame;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
-import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
@@ -82,7 +83,7 @@ public class CatRunning {
 					}
 				}
 			}
-			Controler.get().call("main", new Gson().toJson(sign));
+//			Controler.get().call("main", new Gson().toJson(sign));
 		}
 
 		@Override
@@ -217,9 +218,41 @@ public class CatRunning {
 
 		}
 
+
+		private void start() {
+			reseting = true;
+			running = true;
+			startTime = System.currentTimeMillis();
+			cat = create(ResourceManager.get().read("cat"));
+			humans.clear();
+			humans.add(create(ResourceManager.get().read("human")));
+		}
+
 		@Override
-		public void process(String gsonString) {
-			Sign signs = new Gson().fromJson(gsonString, Sign.class);
+		public String hold() {
+			Hold hold = new Hold();
+			hold.cat.x = cat.x;
+			hold.cat.y = cat.y;
+			for (int i = 0; i < humans.size(); i++) {
+				Poistion p = new Poistion();
+				p.x = humans.get(i).x;
+				p.y = humans.get(i).y;
+				hold.humans.add(p);
+			}
+			hold.countDown = countDown;
+			hold.reseting = reseting;
+			hold.running = running;
+			return new Gson().toJson(hold);
+		}
+
+		@Override
+		public String info() {
+			return "main model";
+		}
+
+		@Override
+		public void process(int command, JSONObject gsonString) {
+			Sign signs = null;// = new Gson().fromJson(gsonString, Sign.class);
 			if (running) {
 				if (reseting) {
 					if (System.currentTimeMillis() - startTime < 1000) {
@@ -256,38 +289,7 @@ public class CatRunning {
 				if (signs.enter) {
 					start();
 				}
-			}
-		}
-
-		private void start() {
-			reseting = true;
-			running = true;
-			startTime = System.currentTimeMillis();
-			cat = create(ResourceManager.get().read("cat"));
-			humans.clear();
-			humans.add(create(ResourceManager.get().read("human")));
-		}
-
-		@Override
-		public String hold() {
-			Hold hold = new Hold();
-			hold.cat.x = cat.x;
-			hold.cat.y = cat.y;
-			for (int i = 0; i < humans.size(); i++) {
-				Poistion p = new Poistion();
-				p.x = humans.get(i).x;
-				p.y = humans.get(i).y;
-				hold.humans.add(p);
-			}
-			hold.countDown = countDown;
-			hold.reseting = reseting;
-			hold.running = running;
-			return new Gson().toJson(hold);
-		}
-
-		@Override
-		public String info() {
-			return "main model";
+			}			
 		}
 
 	}

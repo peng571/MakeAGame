@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
-import com.makeagame.core.Controler;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.ModelManager;
@@ -86,7 +87,7 @@ public class FunnyForest {
 					}
 				}
 			}
-			Controler.get().call("main", new Gson().toJson(sign));
+//			Controler.get().call("main", new Gson().toJson(sign));
 		}
 
 		@Override
@@ -292,7 +293,7 @@ public class FunnyForest {
 		}
 
 		@Override
-		public void process(String gsonString) {
+		public void process(int command, JSONObject params) {
 			// Sign signs = new Gson().fromJson(gsonString, Sign.class);
 			if (System.currentTimeMillis() - timmer.shootTime > timmer.reshootTime) {
 				// System.out.println("shoot again");
@@ -300,7 +301,7 @@ public class FunnyForest {
 				fruits.add(new FruitModel(fruitTypes[num], 1, ResourceManager.get().read("fruit")));
 				timmer.shootTime = System.currentTimeMillis();
 			}
-			bird.run(gsonString);
+			bird.run("");
 			for (ListIterator<FruitModel> it = fruits.listIterator(); it.hasNext();) {
 				FruitModel f = it.next();
 				f.run();

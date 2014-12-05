@@ -2,6 +2,9 @@ package com.makeagame.firstgame;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
@@ -15,11 +18,11 @@ import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
 import com.makeagame.core.view.ViewManager;
 
-
 /**
  * Empty Game Template
+ * 
  * @author Peng
- *
+ * 
  */
 public class Template {
 
@@ -63,7 +66,7 @@ public class Template {
 						touchStartY = s.signal.y;
 					}
 					if (s.action == SignalEvent.ACTION_UP) {
-						
+
 					}
 				}
 			}
@@ -87,13 +90,8 @@ public class Template {
 	}
 
 	class GameModel implements Model {
-		
-		public GameModel() {
-		}
 
-		@Override
-		public void process(String gsonString) {
-			Sign signs = new Gson().fromJson(gsonString, Sign.class);
+		public GameModel() {
 		}
 
 		@Override
@@ -105,6 +103,14 @@ public class Template {
 		@Override
 		public String info() {
 			return "main model";
+		}
+
+		@Override
+		public void process(int command, JSONObject json) throws JSONException {
+			switch (command) {
+			// TODO
+			}
+
 		}
 
 	}

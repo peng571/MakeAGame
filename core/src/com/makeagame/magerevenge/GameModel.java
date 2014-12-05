@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Random;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.model.Model;
@@ -37,15 +40,17 @@ public class GameModel implements Model {
 	}
 
 	@Override
-	public void process(String gsonString) {
-		Sign signs = new Gson().fromJson(gsonString, Sign.class);
+	public void process(int command, JSONObject params) throws JSONException {
 		State.setNowTime(System.currentTimeMillis());
-
 		if (start) {
 			// button click
-			if (signs.clickBtn != null) {
+			switch (command)
+			{
+			// ¥X§L
+			case Sign.BATTLE_SendSoldier:
 				int cost = 0;
-				if (signs.clickBtn.equals(MakeAGame.CASTLE)) {
+				String soldierType = params.getString("soldierType");
+				if (soldierType.equals(MakeAGame.CASTLE)) {
 					cost = COST[0];
 					if (totalMoney >= cost) {
 						totalMoney -= cost;
@@ -53,18 +58,19 @@ public class GameModel implements Model {
 						castleLevel++;
 					}
 				} else {
-					if (signs.clickBtn.equals(MakeAGame.ROLE_1)) {
+					if (soldierType.equals(MakeAGame.ROLE_1)) {
 						cost = COST[1];
-					} else if (signs.clickBtn.equals(MakeAGame.ROLE_2)) {
+					} else if (soldierType.equals(MakeAGame.ROLE_2)) {
 						cost = COST[2];
-					} else if (signs.clickBtn.equals(MakeAGame.ROLE_3)) {
+					} else if (soldierType.equals(MakeAGame.ROLE_3)) {
 						cost = COST[3];
 					}
 					if (cost != 0 && totalMoney >= cost) {
-						roles.add(new Role(ResourceManager.get().read(signs.clickBtn), 0));
+						roles.add(new Role(ResourceManager.get().read(soldierType), 0));
 						totalMoney -= cost;
 					}
 				}
+				break;
 			}
 
 			// create enemy

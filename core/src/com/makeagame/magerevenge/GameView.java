@@ -2,7 +2,10 @@ package com.makeagame.magerevenge;
 
 import java.util.ArrayList;
 
-import com.google.gson.Gson;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 import com.makeagame.core.Controler;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
@@ -51,8 +54,8 @@ public class GameView implements View {
 	}
 
 	@Override
-	public void signal(ArrayList<SignalEvent> signalList) {
-		Sign sign = new Sign();
+	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
+		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
 				if (s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_DOWN) {
@@ -62,12 +65,12 @@ public class GameView implements View {
 
 				for (Button b : btnCallHeros) {
 					if (b.isClick(s)) {
-						sign.clickBtn = b.id;
+						clickBtn = b.id;
 					}
 				}
 			}
 		}
-		Controler.get().call("main", new Gson().toJson(sign));
+			Controler.get().call(Sign.BATTLE_SendSoldier, new JSONObject().put("player", 0).put("soldierType", clickBtn));
 	}
 
 	@Override

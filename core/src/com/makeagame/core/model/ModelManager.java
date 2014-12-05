@@ -3,6 +3,9 @@ package com.makeagame.core.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 // ´xºÞÅÞ¿è
 public class ModelManager {
 
@@ -20,11 +23,26 @@ public class ModelManager {
 		modelMap = new HashMap<String, Model>();
 	}
 
-	public void process(String id, String gsonString) {
-		// process singo model
+	public void process(String id, int command, JSONObject params) {
+		if (id.equals("ALL")) {
+			for (String key : modelMap.keySet()) {
+				apply(key, command, params);
+			}
+		} else {
+			apply(id, command, params);
+		}
+	}
+
+	private void apply(String id, int command, JSONObject params)
+	{
 		Model model = modelMap.get(id);
 		if (model != null) {
-			model.process(gsonString);
+			try {
+				model.process(command, params);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			System.out.println("get error model at " + id);
 		}

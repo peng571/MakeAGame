@@ -3,6 +3,9 @@ package com.makeagame.firstgame;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Controler;
@@ -118,7 +121,7 @@ public class PuzzleFrog {
 						}
 						System.out.println("get move " + move);
 						sign.move = move;
-						Controler.get().call("main", new Gson().toJson(sign));
+//						Controler.get().call("main", new Gson().toJson(sign));
 					}
 				}
 			}
@@ -304,9 +307,38 @@ public class PuzzleFrog {
 		int row, col;
 		int nextRow, nextCol;
 
+
+		boolean change = true;
+
 		@Override
-		public void process(String gsonString) {
-			Sign signs = new Gson().fromJson(gsonString, Sign.class);
+		public String hold() {
+			Hold hold = new Hold();
+			for (int i = 0; i < ROW; i++) {
+				for (int j = 0; j < COL; j++) {
+					hold.ballMap[i][j] = ballMap[i][j].type;
+				}
+			}
+			if (moved) {
+				hold.srcR = row;
+				hold.srcC = col;
+				hold.dstR = nextRow;
+				hold.dstC = nextCol;
+				hold.moved = moved;
+				moved = false;
+				hold.remove = (ArrayList<GameModel.Ball>) remove.clone();
+				remove.clear();
+			}
+			return new Gson().toJson(hold);
+		}
+
+		@Override
+		public String info() {
+			return "main model";
+		}
+
+		@Override
+		public void process(int command, JSONObject json) throws JSONException {
+			Sign signs = null;//new Gson().fromJson(gsonString, Sign.class);
 			if (signs.move != -1) {
 
 				System.out.println(signs.row + ", " + signs.col);
@@ -367,35 +399,7 @@ public class PuzzleFrog {
 						}
 					}
 				}
-			}
-		}
-
-		boolean change = true;
-
-		@Override
-		public String hold() {
-			Hold hold = new Hold();
-			for (int i = 0; i < ROW; i++) {
-				for (int j = 0; j < COL; j++) {
-					hold.ballMap[i][j] = ballMap[i][j].type;
-				}
-			}
-			if (moved) {
-				hold.srcR = row;
-				hold.srcC = col;
-				hold.dstR = nextRow;
-				hold.dstC = nextCol;
-				hold.moved = moved;
-				moved = false;
-				hold.remove = (ArrayList<GameModel.Ball>) remove.clone();
-				remove.clear();
-			}
-			return new Gson().toJson(hold);
-		}
-
-		@Override
-		public String info() {
-			return "main model";
+			}			
 		}
 
 	}

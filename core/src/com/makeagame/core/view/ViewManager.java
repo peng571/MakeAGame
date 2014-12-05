@@ -3,6 +3,8 @@ package com.makeagame.core.view;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONException;
+
 import com.makeagame.core.Controler;
 
 // 掌管顯示，frame 的進出點
@@ -30,7 +32,11 @@ public class ViewManager {
 	// 接收外部指令
 	public void signal(ArrayList<SignalEvent> s) {
 		for (View v : getArray()) {
-			v.signal(s);
+			try {
+				v.signal(s);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

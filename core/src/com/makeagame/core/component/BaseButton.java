@@ -27,11 +27,11 @@ public abstract class BaseButton implements Model, View {
 		return null;
 	}
 
-	@Override
-	public void process(String gsonString) {
-		// TODO Auto-generated method stub
-
-	}
+//	@Override
+//	public void process(String gsonString) {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	public void onButtonClick(int key, Action action) {
 		if (action != null) {
