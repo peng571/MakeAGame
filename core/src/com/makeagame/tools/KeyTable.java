@@ -12,13 +12,13 @@ public class KeyTable {
 
 	}
 
-	public static IntMethod INT_NORMAL = new IntMethod() {
+	public final static IntMethod INT_NORMAL = new IntMethod() {
 		public Object interpolation(Key k1, Key k2, double current) {
 			return k1.value;
 		}
 	};
 
-	public static IntMethod INT_LINEAR = new IntMethod() {
+	public final static IntMethod INT_LINEAR = new IntMethod() {
 		public Object interpolation(Key k1, Key k2, double current) {
 			double f1 = ((Double) k1.value).doubleValue();
 			double f2 = ((Double) k2.value).doubleValue();
@@ -27,7 +27,7 @@ public class KeyTable {
 		}
 	};
 
-	public class Key {
+	public static class Key {
 		public double pos;
 		public String attr;
 		public Object value;
@@ -53,7 +53,7 @@ public class KeyTable {
 		}
 	}
 
-	public class Frame {
+	public static class Frame {
 		Key[] keys;
 		public double pos;
 
@@ -104,7 +104,8 @@ public class KeyTable {
 
 	// double current;
 	public KeyTable(Frame[] frames) {
-		Arrays.sort(frames, FramePosComparator);
+		this.frames = frames;
+		Arrays.sort(this.frames, FramePosComparator);
 	}
 
 	private void _insert_two_map(

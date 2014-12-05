@@ -286,7 +286,8 @@ public class FunnyForest {
 						displacementX += LtoR ? 1 : -1 * model.w;
 						flyTime = System.currentTimeMillis();
 						System.out.println("stop flying");
-						ResourceManager.get().fetch("bird").flip(true, false);
+						// TODO:
+						//ResourceManager.get().fetch("bird").flip(true, false);
 					}
 				}
 			}

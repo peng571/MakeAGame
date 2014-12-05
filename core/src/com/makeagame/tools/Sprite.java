@@ -3,7 +3,6 @@ package com.makeagame.tools;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
@@ -13,13 +12,19 @@ public class Sprite {
 	public int x = 0;
 	public int y = 0;
 
+	// 裁切
+	public int srcX = 0;
+	public int srcY = 0;
+	public int srcW = -1;
+	public int srcH = -1;
+	
 	// 縮放, 暫時不管
 	public double scalex = 1.0f;
 	public double scaley = 1.0f;
 
 	// 旋轉, 暫時不管
 	public double rotateAngle = 0.0f;
-
+	
 	// 翻轉
 	public boolean flipx = false;
 	public boolean flipy = false;
@@ -32,18 +37,17 @@ public class Sprite {
 
 	// 請參照 opneGL的 blendfunction
 	public int blendmethod = 0;
-
+	
 	// 圖片
 	public String image;
 
 	// 該 image 的中心點
-	public int image_cntx = 0;
-	public int image_cnty = 0;
+	public int centerX;
+	public int centerY;
 
-	public boolean visible = true;
 
 	// 階層系統的子物件
-	public ArrayList<Sprite> children;
+	//public ArrayList<Sprite> children;
 
 	public Sprite(String image) {
 		this.image = image;
@@ -52,7 +56,7 @@ public class Sprite {
 	// 基準線
 	public Sprite() {
 	}
-
+	
 	public Sprite xy(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -60,8 +64,16 @@ public class Sprite {
 	}
 
 	public Sprite center(int x, int y) {
-		this.image_cntx = x;
-		this.image_cnty = y;
+		this.centerX = x;
+		this.centerY = y;
+		return this;
+	}
+	
+	public Sprite srcRect(int x, int y, int w, int h) {
+		srcX = x;
+		srcY = y;
+		srcW = w;
+		srcH = h;
 		return this;
 	}
 
@@ -79,27 +91,11 @@ public class Sprite {
 		return this;
 	}
 
-	public Sprite addChild(Sprite sprite) {
-		if (children == null) {
-			children = new ArrayList<Sprite>();
-		}
-		children.add(sprite);
-		return this;
-
-	}
-
-	public void removeChildren() {
-		if (children != null) {
-			children.clear();
-		}
-		children = null;
-	}
-
 	// TODO: 自動抓取中心點(從設定檔?)
 	public void reset_image(String image) {
 		this.image = image;
-		this.image_cntx = 0; // TODO
-		this.image_cnty = 0; // TODO
+		this.centerX = 0; // TODO
+		this.centerY = 0; // TODO
 	}
 
 	// TODO: 有空可以順便做, 或是也可以不做用applylist.apply(sprite)就好
@@ -109,45 +105,65 @@ public class Sprite {
 			reset_image((String) map.get("image"));
 		}
 		if (map.containsKey("x")) {
-			x = (Integer) map.get("x");
+			x = ((Double) map.get("x")).intValue();
 		}
 		if (map.containsKey("y")) {
-			y = (Integer) map.get("y");
+			y = ((Double) map.get("y")).intValue();
 		}
+		
+		if (map.containsKey("srcX")) {
+			srcX = ((Double) map.get("srcX")).intValue();
+		}
+		if (map.containsKey("srcY")) {
+			srcY = ((Double) map.get("srcY")).intValue();
+		}
+		if (map.containsKey("srcW")) {
+			srcW = ((Double) map.get("srcW")).intValue();
+		}
+		if (map.containsKey("srcH")) {
+			srcH = ((Double) map.get("srcH")).intValue();
+		}
+		
+		if (map.containsKey("red")) {
+			red = ((Double) map.get("red")).floatValue();
+		}
+		if (map.containsKey("green")) {
+			green = ((Double) map.get("green")).floatValue();
+		}
+		if (map.containsKey("blue")) {
+			blue = ((Double) map.get("blue")).floatValue();
+		}
+		if (map.containsKey("alpha")) {
+			alpha = ((Double) map.get("alpha")).floatValue();
+		}
+		
 		// TODO: .......
-
 	}
-
+	
 	public ArrayList<RenderEvent> render(int offx, int offy) {
-		// 先暫時這樣
-//		reset_image(this.image);
-
-		// 先算出真正的位置
-		int x = this.x + offx;
-		int y = this.y + offy;
-
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-
 		// TODO: 等你增加新的RenderEvent後在自己改動這邊
 		// 優先加入 setColor 和 blendfunction 的支援, 其他的以後再說
 		if (image != null) {
-//			Engine.logI("render " + image + " to " + (x - image_cntx)  + " , " + (y - image_cnty));
+			/*if (srcW == -1) {
 			list.add(new RenderEvent(ResourceManager.get().fetch(image))
-					.XY(x - image_cntx, y - image_cnty)
+					.XY(offx + x - centerX, offy + y - centerY)
 					.color(red, green, blue, alpha)
 					// .blend(srcFunc, dstFunc)
 					);
+			} else {*/
+				list.add(new RenderEvent(ResourceManager.get().fetch(image))
+					.XY(offx + x - centerX, offy + y - centerY)
+					.color(red, green, blue, alpha)
+					.src(srcX, srcY, srcW, srcH)
+					
+					// .blend(srcFunc, dstFunc)
+				);
+			//}
 		}
-
-		if (children != null) {
-			for (Sprite c : children) {
-				if (c.visible) {
-					list.addAll(c.render(x, y));
-				}
-			}
-		}
-
 		return list;
 	}
+
+	
 
 }

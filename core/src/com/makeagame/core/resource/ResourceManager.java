@@ -2,6 +2,7 @@ package com.makeagame.core.resource;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.makeagame.core.Engine;
 
@@ -27,7 +28,8 @@ public class ResourceManager {
 		return resourceMap.get(id);
 	}
 
-	public TextureRegion fetch(String id) {
+	//public TextureRegion fetch(String id) {
+	public Texture fetch(String id) {
 		if (resourceMap.get(id) == null) {
 			Engine.logE("can't find resource at '" + id + "'");
 			return null;
