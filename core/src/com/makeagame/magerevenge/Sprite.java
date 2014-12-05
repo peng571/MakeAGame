@@ -120,7 +120,7 @@ public class Sprite {
 
 	public ArrayList<RenderEvent> render(int offx, int offy) {
 		// 先暫時這樣
-		//reset_image(this.image);
+//		reset_image(this.image);
 
 		// 先算出真正的位置
 		int x = this.x + offx;
@@ -131,7 +131,7 @@ public class Sprite {
 		// TODO: 等你增加新的RenderEvent後在自己改動這邊
 		// 優先加入 setColor 和 blendfunction 的支援, 其他的以後再說
 		if (image != null) {
-			Engine.logI("render " + image + " to " + (x - image_cntx)  + " , " + (y - image_cnty));
+//			Engine.logI("render " + image + " to " + (x - image_cntx)  + " , " + (y - image_cnty));
 			list.add(new RenderEvent(ResourceManager.get().fetch(image))
 					.XY(x - image_cntx, y - image_cnty)
 					.color(red, green, blue, alpha)
