@@ -47,7 +47,7 @@ public class GameView implements View {
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
 
 			btn = new Button2();
-			btn.setRectArea(x, y, 160, 160);
+			
 			
 			Sprite active = new Sprite("power_ring");
 			active.alpha = 1.0f;
@@ -61,6 +61,9 @@ public class GameView implements View {
 		@Override
 		public void beforeRender() {
 			super.beforeRender();
+			
+			btn.setRectArea(realX, realY, 160, 160);
+			
 			bar.percent += 0.01;
 			btn.apply(this.sprite);
 			bar.apply(this.sprite);
@@ -175,8 +178,9 @@ public class GameView implements View {
 	public ArrayList<RenderEvent> render(ArrayList<String> build) {
 
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-		list.addAll(sprite.render(0, 0));
-
+		sprite.reslove(0, 0);
+		list.addAll(sprite.render());
+		
 		// 這邊先不要刪 >< 我要測model用
 		for (String s : build) {
 			final Hold hold = new Gson().fromJson(s, Hold.class);
