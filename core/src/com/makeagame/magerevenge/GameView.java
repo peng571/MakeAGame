@@ -22,25 +22,31 @@ public class GameView implements View {
 		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
 		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
 		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
-
+		
 		sprite = new Sprite("background");
+		
 		sprite.addChild(new Sprite().xy(0, 340)
-				.addChild(new Sprite(MakeAGame.CASTLE + "L").xy(-50, 340).center(160, 240))
-				.addChild(new Sprite(MakeAGame.CASTLE + "R").xy(754, 340).center(96, 240)));
+				.addChild(new Sprite(MakeAGame.CASTLE + "L").xy(80, 0).center(160, 240))
+				.addChild(new Sprite(MakeAGame.CASTLE + "R").xy(880, 0).center(96, 240)));
+		
+		
 		sprite.addChild(new Sprite("top_board").xy(480,0).center(480, 0)
-				.addChild(new Sprite("base_hp").xy(0, 27))
-				.addChild(new Sprite("pause").xy(40, 0).center(24, 0)));
+				.addChild(new Sprite("base_hp").xy(-230, 28))
+				.addChild(new Sprite("pause").xy(0, 40).center(24, 0)));
+		
 		sprite.addChild(new Sprite("bottom_board").xy(0, 408).center(0, 60)
-				.addChild(new Sprite("power_ring").xy(34, 25))
-				.addChild(new Sprite().xy(217, 0).addChild(new Sprite("res_icon_money").xy(70, 0)))
-				.addChild(new Sprite("res_icon_res1").xy(108, 0))
-				.addChild(new Sprite("res_icon_res2").xy(146, 0))
-				.addChild(new Sprite().xy(0, 70)
+				.addChild(new Sprite("power_ring").xy(34, -35))
+				.addChild(new Sprite().xy(217, 0).addChild(new Sprite("res_icon_money").xy(0, 10))
+						.addChild(new Sprite("res_icon_res1").xy(0, 48))
+						.addChild(new Sprite("res_icon_res2").xy(0, 86)))
+				.addChild(new Sprite().xy(0, 10)
 						.addChild(new Sprite(MakeAGame.CASTLE + "btn").xy(367, 0))
 						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(470, 0))
 						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(573, 0))
-						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(696, 0))
+						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(676, 0))
 						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(779, 0))));
+		
+		
 	}
 
 	@Override

@@ -120,7 +120,7 @@ public class Sprite {
 
 	public ArrayList<RenderEvent> render(int offx, int offy) {
 		// 先暫時這樣
-		reset_image(this.image);
+		//reset_image(this.image);
 
 		// 先算出真正的位置
 		int x = this.x + offx;
