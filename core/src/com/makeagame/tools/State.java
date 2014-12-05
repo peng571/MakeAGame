@@ -39,6 +39,12 @@ public class State {
 		this.records.add(new StateRecord(0, 0));
 	}
 	
+	public void reset(int stat) {
+		this.records.clear();
+		this.records.add(new StateRecord(stat, global_current));
+	}
+	
+	
 	public void reset(int stat, long time) {
 		this.records.clear();
 		this.records.add(new StateRecord(stat, time));
@@ -53,6 +59,12 @@ public class State {
 	public int currentStat() {
 		StateRecord last = this.records.get( this.records.size() - 1);
 		return last.stat;
+	}
+	
+	public int previousStat() {
+		// TODO: 加入檢測程式
+		StateRecord prev = this.records.get( this.records.size() - 2);
+		return prev.stat;
 	}
 	
 	// 取得現在狀態的維持時間
@@ -79,7 +91,7 @@ public class State {
 	}
 	
 	public boolean enter(int stat, long now, boolean pass) {
-		//boolean pass = true;
+		/*
 		StateRecord last = this.records.get( this.records.size() - 1);
 		
 		long timecond = this.cond_table[last.stat][stat];
@@ -90,9 +102,30 @@ public class State {
 				pass = true;
 			}
 		}
+		*/
+		if (pass) {
+			pass = canEnter(stat, now);
+		}
 		
 		if (pass) {
 			this.records.add(new StateRecord(stat, now));
+		}
+		return pass;
+	}
+	
+	public boolean canEnter(int stat) {
+		return this.enter(stat, global_current);
+	}
+	
+	public boolean canEnter(int stat, long now) {
+		StateRecord last = this.records.get( this.records.size() - 1);
+		long timecond = this.cond_table[last.stat][stat];
+		boolean pass = true;
+		if (timecond != 0) {
+			pass = false;
+			if (this.elapsed(now) > timecond) {
+				pass = true;
+			}
 		}
 		return pass;
 	}

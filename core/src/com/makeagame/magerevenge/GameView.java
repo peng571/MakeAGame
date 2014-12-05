@@ -7,19 +7,55 @@ import org.json.JSONObject;
 
 
 import com.makeagame.core.Controler;
+import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
+import com.makeagame.tools.KeyTable;
+import com.makeagame.tools.KeyTable.ApplyList;
+import com.makeagame.tools.KeyTable.Frame;
+import com.makeagame.tools.KeyTable.Key;
+import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
 public class GameView implements View {
 	Button[] btnCallHeros;
 
-	Sprite sprite;
-
+	SimpleLayout sprite;
+	KeyTable testKeyTable;
+	double count = -10.0;
+	
+	
+	
+	SimpleLayout background;
+	SimpleLayout hline_field_ground;
+	SimpleLayout castle_L;
+	SimpleLayout castle_R;
+	SimpleLayout top_board;
+	SimpleLayout base_hp;
+	SimpleLayout pause;
+	SimpleLayout bottom_board;
+	SimpleLayout power_ring;
+	SimpleLayout vline_res_icon;
+	SimpleLayout res_icon_money;
+	SimpleLayout res_icon_res1;
+	SimpleLayout res_icon_res2;
+	SimpleLayout hline_send_icon;
+	SimpleLayout send_icon_soldier1;
+	SimpleLayout send_icon_soldier2;
+	SimpleLayout send_icon_soldier3;
+	SimpleLayout send_icon_soldier4;
+	SimpleLayout send_icon_soldier5;
+	
 	public GameView() {
+		testKeyTable = new KeyTable(new Frame[]{
+				new Frame(0, new Key[]{new Key("x", new Double(100), KeyTable.INT_LINEAR)}),
+				new Frame(10, new Key[]{new Key("x", new Double(200), KeyTable.INT_LINEAR)}),
+		});
+		
+		
 		btnCallHeros = new Button[5];
 		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
 		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
@@ -27,34 +63,58 @@ public class GameView implements View {
 		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
 		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
 		
-		sprite = new Sprite("background");
+		background = new SimpleLayout(new Sprite("background"));
+		hline_field_ground = new SimpleLayout().xy(0, 340);
+		castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
+		castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
+		top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).xy(480,0);
+		base_hp = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
+		pause = new SimpleLayout(new Sprite("pause").center(24, 0)).xy(0, 40);
+		bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
+		power_ring = new SimpleLayout(new Sprite("power_ring")).xy(34, -35);
+		vline_res_icon = new SimpleLayout().xy(217, 0);
+		res_icon_money = new SimpleLayout(new Sprite("res_icon_money")).xy(0, 10);
+		res_icon_res1 = new SimpleLayout(new Sprite("res_icon_res1")).xy(0, 48);
+		res_icon_res2 = new SimpleLayout(new Sprite("res_icon_res2")).xy(0, 86);
+		hline_send_icon = new SimpleLayout().xy(0, 10);
+		send_icon_soldier1 = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "btn")).xy(367, 0);
+		send_icon_soldier2 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(470, 0);
+		send_icon_soldier3 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(573, 0);
+		send_icon_soldier4 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(676, 0);
+		send_icon_soldier5 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(779, 0);
 		
-		sprite.addChild(new Sprite().xy(0, 340)
-				.addChild(new Sprite(MakeAGame.CASTLE + "L").xy(80, 0).center(160, 240))
-				.addChild(new Sprite(MakeAGame.CASTLE + "R").xy(880, 0).center(96, 240)));
+		background.addChild(hline_field_ground
+				.addChild(castle_L)
+				.addChild(castle_R)
+		).addChild(top_board
+				.addChild(base_hp)
+				.addChild(pause)
+		).addChild(bottom_board
+				.addChild(power_ring)
+				.addChild(vline_res_icon
+						.addChild(res_icon_money)
+						.addChild(res_icon_res1)
+						.addChild(res_icon_res2)
+				).addChild(hline_send_icon
+						.addChild(send_icon_soldier1)
+						.addChild(send_icon_soldier2)
+						.addChild(send_icon_soldier3)
+						.addChild(send_icon_soldier4)
+						.addChild(send_icon_soldier5)
+				)
+		);
 		
-		
-		sprite.addChild(new Sprite("top_board").xy(480,0).center(480, 0)
-				.addChild(new Sprite("base_hp").xy(-230, 28))
-				.addChild(new Sprite("pause").xy(0, 40).center(24, 0)));
-		
-		sprite.addChild(new Sprite("bottom_board").xy(0, 408).center(0, 60)
-				.addChild(new Sprite("power_ring").xy(34, -35))
-				.addChild(new Sprite().xy(217, 0).addChild(new Sprite("res_icon_money").xy(0, 10))
-						.addChild(new Sprite("res_icon_res1").xy(0, 48))
-						.addChild(new Sprite("res_icon_res2").xy(0, 86)))
-				.addChild(new Sprite().xy(0, 10)
-						.addChild(new Sprite(MakeAGame.CASTLE + "btn").xy(367, 0))
-						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(470, 0))
-						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(573, 0))
-						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(676, 0))
-						.addChild(new Sprite(MakeAGame.ROLE_1 + "btn").xy(779, 0))));
-		
+		sprite = background;
 		
 	}
 
 	@Override
 	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
+		count += 0.2;
+		ApplyList al = testKeyTable.get(count);
+		background.apply(al);
+		//Engine.logI(al.map.get("x").toString());
+		
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
@@ -78,20 +138,6 @@ public class GameView implements View {
 
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		list.addAll(sprite.render(0, 0));
-//		for (String s : build) {
-//			final Hold hold = new Gson().fromJson(s, Hold.class);
-//			// Engine.logI("get hold " + s);
-//			for (RoleHold r : hold.roles) {
-//				if (!r.id.equals(MakeAGame.CASTLE)) {
-//					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
-//				}
-//				list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
-//			}
-//			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
-//			// for (int i = 0; i < btnCallHeros.length; i++) {
-//			// list.addAll(btnCallHeros[i].draw(hold.cost[i]));
-//			// }
-//		}
 		return list;
 	}
 
