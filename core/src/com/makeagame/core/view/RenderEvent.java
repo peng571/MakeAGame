@@ -2,7 +2,7 @@ package com.makeagame.core.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Texture;
 
 public class RenderEvent {
 
@@ -24,8 +24,11 @@ public class RenderEvent {
 	public int size;
 	public boolean useBlend = false;
 	public int srcFunc, dstFunc;
-
-	public TextureRegion texture;
+	public boolean flipX = false;
+	public boolean flipY = false;
+	
+	
+	public Texture texture;
 	public static final int IMAGE = 0x001;
 	public static final int LABEL = 0x002;
 
@@ -49,13 +52,15 @@ public class RenderEvent {
 		this.s = s;
 	}
 
-	public RenderEvent(TextureRegion texture) {
+	public RenderEvent(Texture texture) {
 		this();
 		this.type = IMAGE;
 		this.texture = texture;
-		srcH = texture.getRegionHeight();
+		//srcH = texture.getRegionHeight();
+		srcH = texture.getHeight();
 		dstH = srcH;
-		srcW = texture.getRegionWidth();
+		//srcW = texture.getRegionWidth();
+		srcW = texture.getWidth();
 		dstW = srcW;
 	}
 
@@ -115,7 +120,9 @@ public class RenderEvent {
 	}
 
 	public RenderEvent filp(boolean x, boolean y) {
-		texture.flip(x, y);
+		//texture.flip(x, y);
+		flipX = x;
+		flipY = y;
 		return this;
 	}
 

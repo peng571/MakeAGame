@@ -97,6 +97,7 @@ public class Engine extends ApplicationAdapter {
 		}
 
 		batch.begin();
+		batch.enableBlending();
 		renderList = ViewManager.get().render();
 		for (RenderEvent e : renderList) {
 			// if (e.useBlend) {
@@ -105,11 +106,18 @@ public class Engine extends ApplicationAdapter {
 			// } else {
 			// batch.disableBlending();
 			// }
+			if (e.useBlend) {
+				batch.setBlendFunction(e.srcFunc, e.dstFunc);
+			}
 			batch.setColor(e.color);
 			switch (e.type) {
 			case RenderEvent.IMAGE:
 				if (e.texture != null) {
-					batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
+					//batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
+					//draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY)
+					float x = e.x;
+					float y = Bootstrap.screamHeight() - e.y - e.dstH;
+					batch.draw(e.texture, x, y, (float)e.srcW, (float)e.srcH, e.srcX, e.srcY, e.srcW, e.srcH, e.flipX, e.flipY);
 				}
 				break;
 			case RenderEvent.LABEL:

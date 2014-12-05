@@ -76,23 +76,6 @@ public class Sprite {
 		this.flipy = y;
 		return this;
 	}
-	/*
-	public Sprite addChild(Sprite sprite) {
-		if (children == null) {
-			children = new ArrayList<Sprite>();
-		}
-		children.add(sprite);
-		return this;
-
-	}
-
-	public void removeChildren() {
-		if (children != null) {
-			children.clear();
-		}
-		children = null;
-	}
-	*/
 
 	// TODO: 自動抓取中心點(從設定檔?)
 	public void reset_image(String image) {
@@ -113,6 +96,19 @@ public class Sprite {
 		if (map.containsKey("y")) {
 			y = ((Double) map.get("y")).intValue();
 		}
+		if (map.containsKey("red")) {
+			red = ((Double) map.get("red")).floatValue();
+		}
+		if (map.containsKey("green")) {
+			green = ((Double) map.get("green")).floatValue();
+		}
+		if (map.containsKey("blue")) {
+			blue = ((Double) map.get("blue")).floatValue();
+		}
+		if (map.containsKey("alpha")) {
+			alpha = ((Double) map.get("alpha")).floatValue();
+		}
+		
 		// TODO: .......
 	}
 	

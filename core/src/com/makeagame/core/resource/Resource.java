@@ -3,16 +3,16 @@ package com.makeagame.core.resource;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Resource {
-	TextureRegion texture;
+	Texture texture;
 	int centerY;
 	int x, y, w, h;
 	String file;
 
 	public Resource image( String texture) {
-		this.texture = new TextureRegion(new Texture(texture));
+		//this.texture = new TextureRegion(new Texture(texture));
+		this.texture = new Texture(texture);
 		return this;
 	}
 

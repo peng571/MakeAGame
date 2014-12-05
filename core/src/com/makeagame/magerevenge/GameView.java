@@ -24,10 +24,34 @@ public class GameView implements View {
 	Button[] btnCallHeros;
 
 	SimpleLayout sprite;
-	KeyTable testKeyTable;
-	double count = -10.0;
 	
 	
+	class PowerRing extends SimpleLayout {
+		KeyTable keyTable;
+		double count = -10.0;
+		
+		public PowerRing() {
+			super(new Sprite("power_ring"));
+			xy(34, -35);
+			keyTable = new KeyTable(new Frame[]{
+					new Frame(0, new Key[]{
+							new Key("x", new Double(20), KeyTable.INT_LINEAR)}),
+					new Frame(10, new Key[]{
+							new Key("x", new Double(100), KeyTable.INT_LINEAR),
+							new Key("red", new Double(0.0f), KeyTable.INT_LINEAR)}),
+					new Frame(30, new Key[]{
+							new Key("x", new Double(100), KeyTable.INT_LINEAR),
+							new Key("red", new Double(1.0f), KeyTable.INT_LINEAR)}),
+					
+			});
+		}
+		
+		@Override
+		public void beforeRender() {
+			count += 0.2;
+			this.sprite.apply(keyTable.get(count));
+		}
+	}
 	
 	SimpleLayout background;
 	SimpleLayout hline_field_ground;
@@ -37,7 +61,8 @@ public class GameView implements View {
 	SimpleLayout base_hp;
 	SimpleLayout pause;
 	SimpleLayout bottom_board;
-	SimpleLayout power_ring;
+	//SimpleLayout power_ring;
+	PowerRing power_ring;
 	SimpleLayout vline_res_icon;
 	SimpleLayout res_icon_money;
 	SimpleLayout res_icon_res1;
@@ -50,10 +75,7 @@ public class GameView implements View {
 	SimpleLayout send_icon_soldier5;
 	
 	public GameView() {
-		testKeyTable = new KeyTable(new Frame[]{
-				new Frame(0, new Key[]{new Key("x", new Double(100), KeyTable.INT_LINEAR)}),
-				new Frame(10, new Key[]{new Key("x", new Double(200), KeyTable.INT_LINEAR)}),
-		});
+		
 		
 		
 		btnCallHeros = new Button[5];
@@ -71,7 +93,8 @@ public class GameView implements View {
 		base_hp = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
 		pause = new SimpleLayout(new Sprite("pause").center(24, 0)).xy(0, 40);
 		bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
-		power_ring = new SimpleLayout(new Sprite("power_ring")).xy(34, -35);
+		//power_ring = new SimpleLayout(new Sprite("power_ring")).xy(34, -35);
+		power_ring = new PowerRing();
 		vline_res_icon = new SimpleLayout().xy(217, 0);
 		res_icon_money = new SimpleLayout(new Sprite("res_icon_money")).xy(0, 10);
 		res_icon_res1 = new SimpleLayout(new Sprite("res_icon_res1")).xy(0, 48);
@@ -110,11 +133,6 @@ public class GameView implements View {
 
 	@Override
 	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
-		count += 0.2;
-		ApplyList al = testKeyTable.get(count);
-		background.apply(al);
-		//Engine.logI(al.map.get("x").toString());
-		
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {

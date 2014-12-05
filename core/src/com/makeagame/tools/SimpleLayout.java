@@ -65,6 +65,15 @@ public class SimpleLayout {
 		}
 	}
 	
+	public void beforeRender() {
+		
+	}
+	
+	public ArrayList<RenderEvent> renderSelf(int x, int y) {
+		beforeRender();
+		return sprite.render(x, y);
+	}
+	
 	public ArrayList<RenderEvent> render(int offx, int offy) {
 
 		// 先算出真正的位置
@@ -73,7 +82,7 @@ public class SimpleLayout {
 		
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 
-		list.addAll(sprite.render(x, y));
+		list.addAll(renderSelf(x, y));
 
 		if (children != null) {
 			for (SimpleLayout c : children) {
