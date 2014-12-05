@@ -68,6 +68,10 @@ public class State {
 	}
 	
 	// 取得現在狀態的維持時間
+	public long elapsed() {
+		return elapsed(global_current);
+	}
+	
 	public long elapsed(long now) {
 		StateRecord last = this.records.get( this.records.size() - 1);
 		return now - last.time;

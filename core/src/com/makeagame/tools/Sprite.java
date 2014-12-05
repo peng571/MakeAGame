@@ -19,11 +19,11 @@ public class Sprite {
 	public int srcH = -1;
 	
 	// 縮放, 暫時不管
-	public double scalex = 1.0f;
-	public double scaley = 1.0f;
+	//public double scalex = 1.0f;
+	//public double scaley = 1.0f;
 
 	// 旋轉, 暫時不管
-	public double rotateAngle = 0.0f;
+	//public double rotateAngle = 0.0f;
 	
 	// 翻轉
 	public boolean flipx = false;
@@ -36,7 +36,7 @@ public class Sprite {
 	public float alpha = 1.0f;
 
 	// 請參照 opneGL的 blendfunction
-	public int blendmethod = 0;
+	//public int blendmethod = 0;
 	
 	// 圖片
 	public String image;
@@ -44,8 +44,31 @@ public class Sprite {
 	// 該 image 的中心點
 	public int centerX;
 	public int centerY;
+	
+	
+	public void copyFrom(Sprite sprite) {
+		this.x = sprite.x;
+		this.y = sprite.y;
 
+		this.srcX = sprite.srcX;
+		this.srcY = sprite.srcY;
+		this.srcW = sprite.srcW;
+		this.srcH = sprite.srcH;
+	
+		this.flipx = sprite.flipx;
+		this.flipy = sprite.flipy;
 
+		this.red = sprite.red;
+		this.green = sprite.green;
+		this.blue = sprite.blue;
+		this.alpha = sprite.alpha;
+
+		this.image = sprite.image;
+		
+		this.centerX = sprite.centerX;
+		this.centerY = sprite.centerY;
+	}
+	
 	// 階層系統的子物件
 	//public ArrayList<Sprite> children;
 
@@ -55,7 +78,10 @@ public class Sprite {
 
 	// 基準線
 	public Sprite() {
+		
 	}
+	
+	
 	
 	public Sprite xy(int x, int y) {
 		this.x = x;

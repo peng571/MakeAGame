@@ -14,6 +14,7 @@ import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
 import com.makeagame.tools.Bar;
+import com.makeagame.tools.Button2;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
@@ -27,6 +28,8 @@ public class GameView implements View {
 		KeyTable keyTable;
 		double count = 0.0;
 		Bar bar;
+		Button2 btn;
+		
 		public PowerRing() {
 			super(new Sprite("power_ring"));
 			
@@ -45,6 +48,16 @@ public class GameView implements View {
 			bar = new Bar();
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
 			
+			btn = new Button2();
+			btn.setRectArea(x, y, 160, 160);
+			
+			Sprite active = new Sprite("power_ring");
+			active.alpha = 1.0f;
+			Sprite hovered = new Sprite("power_ring");
+			hovered.alpha = 0.5f;
+			
+			btn.setActiveSprite(active);
+			btn.setHoveredSprite(hovered);
 		}
 		
 		
@@ -52,7 +65,11 @@ public class GameView implements View {
 		public void beforeRender() {
 			super.beforeRender();
 			bar.percent += 0.01;
+			btn.apply(this.sprite);
 			bar.apply(this.sprite);
+			
+			count += 0.2;
+			this.sprite.apply(keyTable.get(count));
 		}
 	}
 	
@@ -140,6 +157,8 @@ public class GameView implements View {
 
 	@Override
 	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
+		power_ring.btn.signal(signalList);
+		
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
@@ -170,26 +189,6 @@ public class GameView implements View {
 	public String info() {
 		return "main view";
 	}
-	/*
-	class Bar {
-		String id;
-		float percent; // 0~1
-		int x, y, w, h;
-
-		public Bar(int x, int y, int w, int h) {
-			this.x = x;
-			this.y = y;
-			this.h = h;
-			this.w = w;
-		}
-
-		public RenderEvent[] draw() {
-			return new RenderEvent[] {
-					new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h),
-					new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h).dstWH((int) (w * percent), h) };
-		}
-	}
-	*/
 	
 	class Button {
 		String id;
