@@ -1,10 +1,8 @@
 package com.makeagame.magerevenge;
 
 import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.gson.Gson;
 import com.makeagame.core.Controler;
 import com.makeagame.core.resource.ResourceManager;
@@ -28,9 +26,9 @@ public class GameView implements View {
 		double count = 0.0;
 		Bar bar;
 		Button2 btn;
+
 		public PowerRing() {
 			super(new Sprite("power_ring"));
-
 			xy(34, -35);
 			keyTable = new KeyTable(new Frame[] {
 					new Frame(0, new Key[] {
@@ -44,15 +42,11 @@ public class GameView implements View {
 			});
 			bar = new Bar();
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
-
 			btn = new Button2();
-			
-			
 			Sprite active = new Sprite("power_ring");
 			active.alpha = 1.0f;
 			Sprite hovered = new Sprite("power_ring");
 			hovered.alpha = 0.5f;
-			
 			btn.setActiveSprite(active);
 			btn.setHoveredSprite(hovered);
 		}
@@ -60,20 +54,16 @@ public class GameView implements View {
 		@Override
 		public void beforeRender() {
 			super.beforeRender();
-			
 			btn.setRectArea(realX, realY, 160, 160);
-			
 			bar.percent += 0.01;
 			btn.apply(this.sprite);
 			bar.apply(this.sprite);
-			
 			count += 0.2;
 			this.sprite.apply(keyTable.get(count));
 		}
 	}
 
 	SimpleLayout sprite;
-
 	SimpleLayout background;
 	SimpleLayout hline_field_ground;
 	SimpleLayout castle_L;
@@ -96,14 +86,12 @@ public class GameView implements View {
 	SimpleLayout send_icon_soldier5;
 
 	public GameView() {
-
 		btnCallHeros = new Button[5];
 		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
 		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
 		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
 		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
 		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
-
 		background = new SimpleLayout(new Sprite("background"));
 		hline_field_ground = new SimpleLayout().xy(0, 340);
 		castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
@@ -124,7 +112,6 @@ public class GameView implements View {
 		send_icon_soldier3 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(573, 0);
 		send_icon_soldier4 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(676, 0);
 		send_icon_soldier5 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(779, 0);
-
 		background.addChild(hline_field_ground
 				.addChild(castle_L)
 				.addChild(castle_R)
@@ -144,17 +131,13 @@ public class GameView implements View {
 								.addChild(send_icon_soldier4)
 								.addChild(send_icon_soldier5)
 						)
-
 				);
-
 		sprite = background;
-
 	}
 
 	@Override
 	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
 		power_ring.btn.signal(signalList);
-		
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
@@ -162,7 +145,6 @@ public class GameView implements View {
 				}
 				if (s.action == SignalEvent.ACTION_UP) {
 				}
-
 				for (Button b : btnCallHeros) {
 					if (b.isClick(s)) {
 						clickBtn = b.id;
@@ -175,12 +157,10 @@ public class GameView implements View {
 
 	@Override
 	public ArrayList<RenderEvent> render(ArrayList<String> build) {
-
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		sprite.reslove(0, 0);
 		list.addAll(sprite.render());
-		
-		// ³oÃä¥ý¤£­n§R >< §Ú­n´úmodel¥Î
+		// Â³oÃƒÃ¤Â¥Ã½Â¤Â£Â­nÂ§R >< Â§ÃšÂ­nÂ´ÃºmodelÂ¥ÃŽ
 		for (String s : build) {
 			final Hold hold = new Gson().fromJson(s, Hold.class);
 			// Engine.logI("get hold " + s);
@@ -195,7 +175,6 @@ public class GameView implements View {
 				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
 			}
 		}
-
 		return list;
 	}
 
@@ -245,12 +224,11 @@ public class GameView implements View {
 
 		public ArrayList<RenderEvent> draw(int cost) {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-//			list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
+			// list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
 			list.add(new RenderEvent(String.valueOf(cost)).XY(x, y));
 			return list;
 		}
 	}
-
 	// class Role {
 	// String id;
 	// int x, y, w, h;
@@ -260,5 +238,4 @@ public class GameView implements View {
 	// }
 	//
 	// }
-
 }
