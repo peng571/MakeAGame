@@ -27,10 +27,19 @@ public class GameView implements View {
 		KeyTable keyTable;
 		double count = 0.0;
 		Bar bar;
-		Button2 btn;
+		Button2 button;
+		Button2 btn_prev;
+		Button2 btn_next;
+		
+		SimpleLayout layout_icon;
+		SimpleLayout layout_prev;
+		SimpleLayout layout_next;
+		
+		String selectPower;
+		
 		public PowerRing() {
 			super(new Sprite("power_ring"));
-
+			selectPower = "a";
 			xy(34, -35);
 			keyTable = new KeyTable(new Frame[] {
 					new Frame(0, new Key[] {
@@ -46,56 +55,215 @@ public class GameView implements View {
 			bar = new Bar();
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
 
-			btn = new Button2();
+			button = new Button2();
+			{
+				Sprite active = new Sprite("power_ring");
+				active.alpha = 1.0f;
+				Sprite hovered = new Sprite("power_ring");
+				hovered.alpha = 0.5f;
+				
+				button.setActiveSprite(active);
+				button.setHoveredSprite(hovered);
+			}
 			
+			btn_prev = new Button2() {
+				@Override
+				public void OnMouseDown() {
+					PowerRing.this.prevPower();
+				}
+			};
+			layout_prev = new SimpleLayout(new Sprite("power_prev"));
+			{
+				Sprite active = new Sprite("power_prev");
+				active.alpha = 0.5f;
+				Sprite hovered = new Sprite("power_prev");
+				hovered.red = 2.0f;
+				
+				btn_prev.setActiveSprite(active);
+				btn_prev.setHoveredSprite(hovered);
+			}
+			addChild(layout_prev);
 			
-			Sprite active = new Sprite("power_ring");
-			active.alpha = 1.0f;
-			Sprite hovered = new Sprite("power_ring");
-			hovered.alpha = 0.5f;
+			btn_next = new Button2() {
+				@Override
+				public void OnMouseDown() {
+					PowerRing.this.nextPower();
+				}
+			};
+			layout_next = new SimpleLayout(new Sprite("power_next"));
+			{
+				Sprite active = new Sprite("power_next");
+				active.alpha = 0.5f;
+				Sprite hovered = new Sprite("power_next");
+				hovered.red = 2.0f;
+				
+				btn_next.setActiveSprite(active);
+				btn_next.setHoveredSprite(hovered);
+			}
+			addChild(layout_next);
 			
-			btn.setActiveSprite(active);
-			btn.setHoveredSprite(hovered);
+			layout_icon = new SimpleLayout(new Sprite("power_a"));
+			addChild(layout_icon);
 		}
 
 		@Override
 		public void beforeRender() {
 			super.beforeRender();
 			
-			btn.setRectArea(realX, realY, 160, 160);
+			button.setRectArea(realX, realY, 160, 160);
+			button.apply(this.sprite);
+			
+			btn_prev.setRectArea(realX-30, realY-30, 60, 60);
+			btn_prev.apply(layout_prev.sprite);
+			
+			btn_next.setRectArea(realX+100, realY+100, 60, 60);
+			btn_next.apply(layout_next.sprite);
 			
 			bar.percent += 0.01;
-			btn.apply(this.sprite);
 			bar.apply(this.sprite);
 			
 			count += 0.2;
-			this.sprite.apply(keyTable.get(count));
+			//this.sprite.apply(keyTable.get(count));
 		}
+		
+		
+		public void nextPower() {
+			if (selectPower == "a") {
+				selectPower = "b";
+			} else if (selectPower == "b") {
+				selectPower = "c";
+			}
+			layout_icon.sprite.image = "power_" + selectPower;
+		}
+		
+		public void prevPower() {
+			if (selectPower == "b") {
+				selectPower = "a";
+			} else if (selectPower == "c") {
+				selectPower = "b";
+			}
+			layout_icon.sprite.image = "power_" + selectPower;
+		}
+	}
+	
+	class CardTable extends SimpleLayout {
+		public SimpleLayout[] send_icon_soldiers;
+		public Button2[] btn_send_soldiers;
+		
+		public CardTable() {
+			xy(367, 10);
+			send_icon_soldiers = new SimpleLayout[] {
+					new SimpleLayout(new Sprite(MakeAGame.CASTLE + "btn")).xy(0, 0),
+					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(103, 0),
+					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(206, 0),
+					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(309, 0),
+					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(412, 0),
+			};
+			for (int i=0; i<send_icon_soldiers.length; i++) {
+				addChild(send_icon_soldiers[i]);
+			}
+			
+			btn_send_soldiers = new Button2[] { 
+					new Button2() { @Override public void OnMouseDown() { 
+						CardTable.this.sendSoldiers(0); } }, 
+					new Button2() { @Override public void OnMouseDown() { 
+						CardTable.this.sendSoldiers(1); } }, 
+					new Button2() { @Override public void OnMouseDown() { 
+						CardTable.this.sendSoldiers(2); } }, 
+					new Button2() { @Override public void OnMouseDown() { 
+						CardTable.this.sendSoldiers(3); } }, 
+					new Button2() { @Override public void OnMouseDown() { 
+						CardTable.this.sendSoldiers(4); } }, 
+			};
+			
+			for (int i=0; i<send_icon_soldiers.length; i++) {
+				Sprite active = new Sprite(MakeAGame.CASTLE + "btn");
+				active.alpha = 0.5f;
+				// TODO: 按鈕動畫和CD表現
+				btn_send_soldiers[i].setActiveSprite(active);
+				//btn_next.setHoveredSprite(hovered);
+
+			}
+		}
+		
+		@Override
+		public void beforeRender() {
+			super.beforeRender();
+			for (int i=0; i<send_icon_soldiers.length; i++) {
+				btn_send_soldiers[i].setRectArea(
+						send_icon_soldiers[i].realX, 
+						send_icon_soldiers[i].realY, 86, 108);
+				btn_send_soldiers[i].apply(send_icon_soldiers[i].sprite);
+			}
+		}
+		
+		public void sendSoldiers(int index) {
+			// TODO:
+		}
+		
+		public void model() {
+			// TODO: 接收model資料
+		}
+	}
+	
+
+	
+	class ResTable extends SimpleLayout {
+		SimpleLayout res_icon_money;
+		SimpleLayout res_icon_res1;
+		SimpleLayout res_icon_res2;
+		// TODO: res3
+		public ResTable() {
+			xy(217, 0);
+			res_icon_money = new SimpleLayout(new Sprite("res_icon_money")).xy(0, 10);
+			res_icon_res1 = new SimpleLayout(new Sprite("res_icon_res1")).xy(0, 48);
+			res_icon_res2 = new SimpleLayout(new Sprite("res_icon_res2")).xy(0, 86);
+			addChild(res_icon_money);
+			addChild(res_icon_res1);
+			addChild(res_icon_res2);
+		}
+		
+		@Override
+		public void beforeRender() {
+			super.beforeRender();
+		
+		}
+	}
+	
+	class Field extends SimpleLayout {
+		SimpleLayout castle_L;
+		SimpleLayout castle_R;
+		
+		public Field() {
+			xy(0, 340);
+			castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
+			castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
+			addChild(castle_L);
+			addChild(castle_R);
+		}
+		
+		@Override
+		public void beforeRender() {
+			super.beforeRender();
+		
+		}
+		
 	}
 
 	SimpleLayout sprite;
 
 	SimpleLayout background;
-	SimpleLayout hline_field_ground;
-	SimpleLayout castle_L;
-	SimpleLayout castle_R;
+	Field field;
+	
 	SimpleLayout top_board;
 	SimpleLayout base_hp;
 	SimpleLayout pause;
+	
 	SimpleLayout bottom_board;
-	// SimpleLayout power_ring;
 	PowerRing power_ring;
-	SimpleLayout vline_res_icon;
-	SimpleLayout res_icon_money;
-	SimpleLayout res_icon_res1;
-	SimpleLayout res_icon_res2;
-	SimpleLayout hline_send_icon;
-	SimpleLayout send_icon_soldier1;
-	SimpleLayout send_icon_soldier2;
-	SimpleLayout send_icon_soldier3;
-	SimpleLayout send_icon_soldier4;
-	SimpleLayout send_icon_soldier5;
-
+	ResTable res_table;
+	CardTable card_table;
+	
 	public GameView() {
 
 		btnCallHeros = new Button[5];
@@ -106,46 +274,25 @@ public class GameView implements View {
 		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
 
 		background = new SimpleLayout(new Sprite("background"));
-		hline_field_ground = new SimpleLayout().xy(0, 340);
-		castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
-		castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
+		field = new Field();
+		
 		top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).xy(480, 0);
 		base_hp = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
 		pause = new SimpleLayout(new Sprite("pause").center(24, 0)).xy(0, 40);
+		
 		bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
-		// power_ring = new SimpleLayout(new Sprite("power_ring")).xy(34, -35);
 		power_ring = new PowerRing();
-		vline_res_icon = new SimpleLayout().xy(217, 0);
-		res_icon_money = new SimpleLayout(new Sprite("res_icon_money")).xy(0, 10);
-		res_icon_res1 = new SimpleLayout(new Sprite("res_icon_res1")).xy(0, 48);
-		res_icon_res2 = new SimpleLayout(new Sprite("res_icon_res2")).xy(0, 86);
-		hline_send_icon = new SimpleLayout().xy(0, 10);
-		send_icon_soldier1 = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "btn")).xy(367, 0);
-		send_icon_soldier2 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(470, 0);
-		send_icon_soldier3 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(573, 0);
-		send_icon_soldier4 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(676, 0);
-		send_icon_soldier5 = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(779, 0);
-
-		background.addChild(hline_field_ground
-				.addChild(castle_L)
-				.addChild(castle_R)
-				).addChild(top_board
+		res_table = new ResTable();
+		card_table = new CardTable();
+		
+		background.addChild(field)
+				.addChild(top_board
 						.addChild(base_hp)
-						.addChild(pause)
-				).addChild(bottom_board
+						.addChild(pause))
+				.addChild(bottom_board
 						.addChild(power_ring)
-						.addChild(vline_res_icon
-								.addChild(res_icon_money)
-								.addChild(res_icon_res1)
-								.addChild(res_icon_res2)
-						).addChild(hline_send_icon
-								.addChild(send_icon_soldier1)
-								.addChild(send_icon_soldier2)
-								.addChild(send_icon_soldier3)
-								.addChild(send_icon_soldier4)
-								.addChild(send_icon_soldier5)
-						)
-
+						.addChild(res_table)
+						.addChild(card_table)
 				);
 
 		sprite = background;
@@ -154,8 +301,12 @@ public class GameView implements View {
 
 	@Override
 	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
-		power_ring.btn.signal(signalList);
-		
+		power_ring.button.signal(signalList);
+		power_ring.btn_prev.signal(signalList);
+		power_ring.btn_next.signal(signalList);
+		for (int i=0; i<5; i++) {
+			card_table.btn_send_soldiers[i].signal(signalList);
+		}
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
@@ -251,15 +402,4 @@ public class GameView implements View {
 			return list;
 		}
 	}
-
-	// class Role {
-	// String id;
-	// int x, y, w, h;
-	//
-	// public RenderEvent draw() {
-	// return new RenderEvent(ResourceManager.get().fetch(id)).XY(x, y).srcWH(w, h);
-	// }
-	//
-	// }
-
 }
