@@ -8,6 +8,10 @@ import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
 
 public class SimpleLayout {
+	// 畫面中實際值
+	public int realX;
+	public int realY;
+		
 	// 定值
 	public int fixedX;
 	public int fixedY;
@@ -74,20 +78,29 @@ public class SimpleLayout {
 		return sprite.render(x, y);
 	}
 	
-	public ArrayList<RenderEvent> render(int offx, int offy) {
+	public void reslove(int offx, int offy) {
+		realX = fixedX + this.x + offx;
+		realY = fixedY + this.y + offy;
+		if (children != null) {
+			for (SimpleLayout c : children) {
+				c.reslove(realX, realY);
+			}
+		}
+	}
+	
+	public ArrayList<RenderEvent> render() {
 
 		// 先算出真正的位置
-		int x = fixedX + this.x + offx;
-		int y = fixedY + this.y + offy;
+		//int x = fixedX + this.x + offx;
+		//int y = fixedY + this.y + offy;
 		
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-
-		list.addAll(renderSelf(x, y));
+		list.addAll(renderSelf(realX, realY));
 
 		if (children != null) {
 			for (SimpleLayout c : children) {
 				if (c.visible) {
-					list.addAll(c.render(x, y));
+					list.addAll(c.render());
 				}
 			}
 		}
