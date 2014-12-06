@@ -10,6 +10,14 @@ public class Position<T> {
 		this.y = y;
 	}
 	
+	public T getX(){
+		return x;
+	}
+	
+	public T getY(){
+		return y;
+	}
+	
 //	public Position() {
 //		this<Integer>(0,0);
 //	}

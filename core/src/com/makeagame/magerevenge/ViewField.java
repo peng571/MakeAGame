@@ -26,7 +26,7 @@ public class ViewField extends SimpleLayout {
 		
 		roleKeyTable = new KeyTable[5];
 		
-		// 走路動畫
+		// 韏啗楝��
 		roleKeyTable[0] = new KeyTable(new Frame[] {
 				//new Frame(  0	, new Key[] { new Key("sound", "") }),
 				//new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
@@ -50,18 +50,18 @@ public class ViewField extends SimpleLayout {
 		count += 1;
 		
 		role_layout.removeChildren();
-		for (RoleHold r : hold.roles) {
-			if (!r.id.equals(MakeAGame.CASTLE)) {
-				Sprite sp = new Sprite().center(60, 90)
-							.flip(r.group==1 ? true:false, false);//new Sprite("role_walk1")
-				
-				sp.apply(roleKeyTable[0].get(count));
-				role_layout.addChild(
-						new SimpleLayout(sp)
-						.xy(r.x, 0));
-			}
-			// TODO: 加入血條
-			//list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
-		}
+//		for (RoleHold r : hold.roles) {
+//			if (!r.id.equals(MakeAGame.CASTLE)) {
+//				Sprite sp = new Sprite().center(60, 90)
+//							.flip(r.group==1 ? true:false, false);//new Sprite("role_walk1")
+//				
+//				sp.apply(roleKeyTable[0].get(count));
+//				role_layout.addChild(
+//						new SimpleLayout(sp)
+//						.xy(r.x, 0));
+//			}
+//			// TODO: ��銵�璇�
+//			//list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
+//		}
 	}
 }

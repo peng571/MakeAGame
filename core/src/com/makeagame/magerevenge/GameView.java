@@ -19,7 +19,7 @@ import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
 public class GameView implements View {
-	Button[] btnCallHeros;
+//	Button[] btnCallHeros;
 
 	
 	class ViewResTable extends SimpleLayout {
@@ -113,12 +113,12 @@ public class GameView implements View {
 	ViewBattleScene battle_scene;
 	
 	public GameView() {
-		btnCallHeros = new Button[5];
-		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
-		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
-		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
-		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
-		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
+//		btnCallHeros = new Button[5];
+//		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
+//		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
+//		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
+//		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
+//		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
 		battle_scene = new ViewBattleScene();
 		
 		screen = battle_scene;
@@ -142,14 +142,14 @@ public class GameView implements View {
 				}
 				if (s.action == SignalEvent.ACTION_UP) {
 				}
-				for (Button b : btnCallHeros) {
-					if (b.isClick(s)) {
-						clickBtn = b.id;
-					}
-				}
+//				for (Button b : btnCallHeros) {
+//					if (b.isClick(s)) {
+//						clickBtn = b.id;
+//					}
+//				}
 			}
 		}
-		Controler.get().call(Sign.BATTLE_SendSoldier, new JSONObject().put("player", 0).put("soldierType", clickBtn));
+		Controler.get().call(0, null);
 	}
 
 	@Override
@@ -159,21 +159,21 @@ public class GameView implements View {
 		list.addAll(screen.render());
 		
 		
-		// 糧o�刈永蝓刈�簫n禮R >< 禮�要織繳model瞼��
+//		// 糧o�刈永蝓刈�簫n禮R >< 禮�要織繳model瞼��
 		for (String s : build) {
 			final Hold hold = new Gson().fromJson(s, Hold.class);
 			battle_scene.field.model(hold);
 			// Engine.logI("get hold " + s);
-			for (RoleHold r : hold.roles) {
-				if (!r.id.equals(MakeAGame.CASTLE)) {
-					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
-				}
-				list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
+			for (Hold.Unit r : hold.soldier) {
+//				if (!r.id.equals(MakeAGame.CASTLE)) {
+//					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
+//				}
+				list.add(new RenderEvent(String.valueOf(r.hpp)).XY(r.pos.getX() - (r.group == 0 ? 32 : 0), r.pos.getY()));
 			}
 			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
-			for (int i = 0; i < btnCallHeros.length; i++) {
-				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
-			}
+//			for (int i = 0; i < hold.sendcard.length; i++) {
+//				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
+//			}
 		}
 		return list;
 	}

@@ -12,12 +12,12 @@ public class MakeAGame {
 	private Engine engine;
 
 	public static String CASTLE = "castle";
-	public static String ROLE_1 = "ball1";
-	public static String ROLE_2 = "ball2";
-	public static String ROLE_3 = "ball3";
-	public static String ROLE_4 = "ball3";
+	public static String ROLE_1 = "Swordman"; // 劍士(刺客)
+	public static String ROLE_2 = "Warrior"; // 戰士(十字軍) 
+	public static String ROLE_3 = "Mage"; // 法師
+	public static String ROLE_4 = "Shielder"; // (A) 重裝武士
 
-	public MakeAGame() {
+	public MakeAGame() { 
 
 		engine = new Engine(new Bootstrap() {
 
