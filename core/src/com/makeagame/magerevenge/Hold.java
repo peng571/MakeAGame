@@ -29,7 +29,7 @@ public class Hold {
 
 	public static class Unit {
 		int group;
-		Position pos;
+		Position<Integer> pos;
 		int stateRecord;
 		long lastWalkTime;
 		long lastPreparingTime;

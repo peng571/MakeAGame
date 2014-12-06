@@ -29,35 +29,21 @@ public class GameModel implements Model {
 	Random rand = new Random();
 	ArrayList<Role> roles;
 
-	State enemyCreateState;
 	State moneyGetState;
 	State skillCDState;
 
-	long enemyCreateTime = 16000;
-	long moneyGetTime = 1000;
+	long moneyGetTime = 300;
 	long skillCDTime = 3000;
-
-	int moneyGet = 10;
-	int totalMoney;
-	int castleLevel;
-
-	SendCard[] sendCards;
-	static int[] COST = { 150, 100, 250, 300, 300 };
+	Player[] player; // You & computer(before change to online mode)
+	int moneyGet = 5;
+	// int maxCastleLevel = 3;
 
 	public GameModel() {
 		roles = new ArrayList<Role>();
-		sendCards = new SendCard[] {
-				new SendCard(MakeAGame.ROLE_1, 100, 3000),
-				new SendCard(MakeAGame.ROLE_2, 250, 6000),
-				new SendCard(MakeAGame.ROLE_3, 300, 12000),
-				new SendCard(MakeAGame.ROLE_4),
-				new SendCard(MakeAGame.ROLE_4)
-		};
-
+		player = new Player[] { new Player(0), new Player(1) };
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
 		startLevel(1, 1);
-		enemyCreateState = new State(new long[][] { { State.BLOCK, enemyCreateTime }, { enemyCreateTime, State.BLOCK } });
 		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
 		skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
 
@@ -75,10 +61,7 @@ public class GameModel implements Model {
 	}
 
 	private void resumeGame() {
-
 		start = true;
-		totalMoney = 0;
-		castleLevel = 1;
 		// TODO
 	}
 
@@ -91,7 +74,6 @@ public class GameModel implements Model {
 	public void process(int command, JSONObject params) throws JSONException {
 		State.setNowTime(System.currentTimeMillis());
 		if (start) {
-			// button click
 			switch (command)
 			{
 			case Sign.MAIN_NewGame:
@@ -104,20 +86,18 @@ public class GameModel implements Model {
 				// TODO
 				break;
 			case Sign.BATTLE_SendSoldier:
-				int player = params.getInt("player");
-				int cost = 0;
 				String soldierType = params.getString("soldierType");
+				int soldierId = 0;
 				if (soldierType.equals(MakeAGame.ROLE_1)) {
-					cost = COST[1];
+					soldierId = 1;
 				} else if (soldierType.equals(MakeAGame.ROLE_2)) {
-					cost = COST[2];
+					soldierId = 2;
 				} else if (soldierType.equals(MakeAGame.ROLE_3)) {
-					cost = COST[3];
+					soldierId = 3;
+				} else if (soldierType.equals(MakeAGame.ROLE_4)) {
+					soldierId = 4;
 				}
-				if (cost != 0 && totalMoney >= cost) {
-					roles.add(new Role(ResourceManager.get().read(soldierType), 0));
-					totalMoney -= cost;
-				}
+				player[params.getInt("player")].click(soldierId);
 				break;
 			case Sign.BATTLE_UsePower:
 				if (skillCDState.enter(1)) {
@@ -127,13 +107,7 @@ public class GameModel implements Model {
 				}
 				break;
 			case Sign.BATTLE_Upgrade:
-				player = params.getInt("player");
-				cost = COST[0];
-				if (totalMoney >= cost) {
-					totalMoney -= cost;
-					COST[0] *= 2;
-					castleLevel++;
-				}
+				player[params.getInt("player")].click(0);
 				break;
 			case Sign.BATTLE_UseItem:
 				// TODO
@@ -158,7 +132,7 @@ public class GameModel implements Model {
 				// TODO
 				break;
 			case Sign.DEBUG_AddMoney:
-				totalMoney = params.getInt("amonut");
+				player[0].totalMoney += params.getInt("amonut");
 				break;
 			case Sign.DEBUG_ResetColddown:
 				// TODO
@@ -167,20 +141,16 @@ public class GameModel implements Model {
 				System.out.println(hold());
 				break;
 			default:
-				Engine.logE("get unknow command " + command);
-			}
-
-			// create enemy
-			if (enemyCreateState.enter(1)) {
-				roles.add(new Role(ResourceManager.get().read(MakeAGame.ROLE_1), 1));
-				enemyCreateState.enter(0);
+//				Engine.logE("get unknow command " + command);
 			}
 
 			// earn money
 			if (moneyGetState.enter(1)) {
-				totalMoney += moneyGet * castleLevel;
+				player[0].totalMoney += moneyGet * player[0].castleLevel;
+				player[1].totalMoney += moneyGet * player[1].castleLevel;
 				moneyGetState.enter(0);
 			}
+			player[1].ai();
 
 			// run role
 			for (ListIterator<Role> it = roles.listIterator(); it.hasNext();) {
@@ -201,11 +171,11 @@ public class GameModel implements Model {
 		Hold hold = new Hold();
 		hold.screen = screen;
 		if (screen.equals(SCREEN_BATTLE)) {
-			hold.money = totalMoney;
+			hold.money = player[0].totalMoney;
 			hold.resource = new int[] { 0, 0, 0 };
-			hold.sendcard = new Hold.SendCard[sendCards.length];
-			for (int i = 0; i < sendCards.length; i++) {
-				hold.sendcard[i] = sendCards[i].hold();
+			hold.sendcard = new Hold.SendCard[player[0].sendCards.length];
+			for (int i = 0; i < player[0].sendCards.length; i++) {
+				hold.sendcard[i] = player[0].sendCards[i].hold();
 			}
 			hold.soldier = new ArrayList<Hold.Unit>();
 			hold.castle = new Hold.Unit[2];
@@ -230,6 +200,39 @@ public class GameModel implements Model {
 		return "main model";
 	}
 
+	class Player {
+		int group;
+		int totalMoney;
+		int castleLevel;
+		SendCard[] sendCards;
+
+		public Player(int group) {
+			this.group = group;
+			totalMoney = 0;
+			castleLevel = 1;
+			sendCards = new SendCard[] {
+					new SendCard(MakeAGame.CASTLE, 150, 1000),
+					new SendCard(MakeAGame.ROLE_1, 100, 3000),
+					new SendCard(MakeAGame.ROLE_2, 250, 6000),
+					new SendCard(MakeAGame.ROLE_3, 300, 12000),
+					new SendCard(MakeAGame.ROLE_4),
+			};
+		}
+
+		public void ai() {
+			// TODO
+			// create enemy
+			// if (enemyCreateState.enter(1)) {
+			// roles.add(new Role(ResourceManager.get().read(MakeAGame.ROLE_1), 1));
+			// enemyCreateState.enter(0);
+			// }
+		}
+
+		public void click(int id) {
+			sendCards[id].send(this);
+		}
+	}
+
 	class SendCard {
 		long cdTime;
 		State state;
@@ -248,7 +251,7 @@ public class GameModel implements Model {
 			this.type = type;
 			this.costMoney = costMoney;
 			this.cdTime = cdTime;
-			state = new State(new long[][] { { State.BLOCK, State.ALLOW, cdTime, State.BLOCK } });
+			state = new State(new long[][] { { State.BLOCK, State.ALLOW},{ cdTime, State.BLOCK } });
 			costResource = new int[] { 0, 0, 0 };
 			locked = false;
 			strongLevel = 1;
@@ -265,6 +268,21 @@ public class GameModel implements Model {
 				h.strongLevel = strongLevel;
 			}
 			return h;
+		}
+
+		public void send(Player player) {
+			if (player.totalMoney >= costMoney) {
+				if (state.enter(1)) {
+					player.totalMoney -= costMoney;
+					if (type.equals(MakeAGame.CASTLE)) {
+						costMoney *= 2;
+						player.castleLevel++;
+					} else {
+						roles.add(new Role(ResourceManager.get().read(type), 0));
+					}
+					state.enter(0);
+				}
+			}
 		}
 	}
 
@@ -364,9 +382,7 @@ public class GameModel implements Model {
 			// die
 			if (m.hp <= 0) {
 				if (state.enter(Role.STATE_DEATH)) {
-					if (m.group == 1) {
-						totalMoney += m.money;
-					}
+					player[m.group == 0 ? 1 : 0].totalMoney += m.money;
 					if (m.id.equals("castle")) {
 						gameOver();
 					}
@@ -395,7 +411,7 @@ public class GameModel implements Model {
 			h.group = m.group;
 			h.hpp = (float) m.hp / (float) m.maxHp;
 			h.hurtRecord = new ArrayList<Hold.Hurt>();
-			// not a good function
+			// is not a good function
 			for (int i = 0; i < hurtRecord.size(); i++) {
 				if (hurtRecord.get(i).time > State.global_current - 10000) {
 					h.hurtRecord.add(hurtRecord.get(i));
