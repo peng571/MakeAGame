@@ -200,16 +200,14 @@ public class GameModel implements Model {
 		Attribute m;
 
 		long lastAttackTime;
-		long backingTime = 100;
+		long backingTime = 50;
 
 		public Role(String gson, int group) {
 			m = init(gson);
 			m.group = group;
 			m.x = group == 0 ? 32 : (Bootstrap.screamWidth() - 32);
 			m.maxHp = m.hp;
-//			m.atkTime *= (20 - rand.nextInt(40) * 0.01f) + 0.9;
-//			System.out.println(m.atkTime);
-			// m.state = 0;
+			m.baseAtkTime = m.atkTime;
 			state = new State(new long[][] {
 					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
 					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW },
@@ -229,6 +227,7 @@ public class GameModel implements Model {
 			int money;
 			int beAtk;
 			long atkTime;
+			long baseAtkTime;
 			int range;
 		}
 
@@ -238,6 +237,11 @@ public class GameModel implements Model {
 			return model;
 		}
 
+		public long getAtkTime(boolean atked) {
+			m.atkTime = (long) (m.baseAtkTime * (atked ? 1.4f : 0.6f));
+			return m.atkTime;
+		}
+
 		public void run() {
 			// stop while meet other groups role
 			meet = null;
@@ -245,7 +249,7 @@ public class GameModel implements Model {
 				if (m.group == 0 && r.m.group == 1 && m.x + m.range >= r.m.x
 						|| (m.group == 1 && r.m.group == 0 && m.x - m.range <= r.m.x)) {
 					meet = r;
-					System.out.println(m.id + " meet to " + meet.m.id);
+					// System.out.println(m.id + " meet to " + meet.m.id);
 				}
 			}
 
@@ -257,10 +261,14 @@ public class GameModel implements Model {
 
 			if (m.atk > 0) {
 				if (state.enter(Role.STATE_ATTACKING)) {
-					System.out.println(m.id + " attack to " + meet.m.id);
+//					System.out.println(m.id + " attack to " + meet.m.id);
 					meet.m.hp -= m.atk;
-//					meet.m.beAtk = m.atk;
+					if (!meet.m.id.equals("castle")) {
+						meet.m.beAtk = m.atk;
+					}
 					meet.state.enter(Role.STATE_BACKING);
+					state.setTableValue(getAtkTime(true), 1, 2);
+					meet.state.setTableValue(meet.getAtkTime(false),1, 2);
 				}
 			}
 
@@ -276,7 +284,7 @@ public class GameModel implements Model {
 				}
 			}
 
-			System.out.println(m.id + " state is " + state.currentStat());
+			// System.out.println(m.id + " state is " + state.currentStat());
 			switch (state.currentStat())
 			{
 			case Role.STATE_MOVING:
@@ -287,12 +295,11 @@ public class GameModel implements Model {
 			case Role.STATE_ATTACKING:
 				break;
 			case Role.STATE_BACKING:
-				m.x += (m.group == 0 ? -1 : 1) * m.atk * 0.5f;
+				m.x += (m.group == 0 ? -1 : 1) * m.beAtk * 0.5f;
 				break;
 			case Role.STATE_DEATH:
 				break;
 			}
-
 		}
 	}
 }

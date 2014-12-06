@@ -33,6 +33,19 @@ public class State {
 		this.reset();
 	}
 
+	public void setTable(long[][] cond_table)	{
+		// ¥ý³o¼Ë§a
+		if (cond_table.length == this.cond_table.length) {
+			this.cond_table = cond_table;
+		}
+	}
+
+	public void setTableValue(long value, int r, int c)	{
+		if (r < cond_table.length && c < cond_table[r].length) {
+			cond_table[r][c] = value;
+		}
+	}
+
 	public void reset() {
 		this.records.clear();
 		this.records.add(new StateRecord(0, 0));
