@@ -26,6 +26,42 @@ public class KeyTable {
 			return Double.valueOf(r);
 		}
 	};
+	
+	public final static IntMethod INT_EXP = new IntMethod() {
+		@Override
+		public Object interpolation(Key k1, Key k2, double current) {
+			double percent = (current - k1.pos) / (k2.pos - k1.pos);
+			double new_percent = (Math.exp(percent) - 1) / (Math.E - 1);
+			double f1 = ((Double) k1.value).doubleValue();
+			double f2 = ((Double) k2.value).doubleValue();
+			double r = f1 + (f2 - f1) * new_percent;
+			return Double.valueOf(r);
+		}
+	};
+	
+	public final static IntMethod INT_LOG = new IntMethod() {
+		@Override
+		public Object interpolation(Key k1, Key k2, double current) {
+			double percent = (current - k1.pos) / (k2.pos - k1.pos);
+			double new_percent =  Math.log(1 + (percent * (Math.E-1)));
+			double f1 = ((Double) k1.value).doubleValue();
+			double f2 = ((Double) k2.value).doubleValue();
+			double r = f1 + (f2 - f1) * new_percent;
+			return Double.valueOf(r);
+		}
+	};
+	
+	public final static IntMethod INT_SIN = new IntMethod() {
+		@Override
+		public Object interpolation(Key k1, Key k2, double current) {
+			double percent = (current - k1.pos) / (k2.pos - k1.pos);
+			double new_percent =  Math.sin(percent*Math.PI - Math.PI/2) / 2 + 0.5;
+			double f1 = ((Double) k1.value).doubleValue();
+			double f2 = ((Double) k2.value).doubleValue();
+			double r = f1 + (f2 - f1) * new_percent;
+			return Double.valueOf(r);
+		}
+	};
 
 	public static class Key {
 		public double pos;
