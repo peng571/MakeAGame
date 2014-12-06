@@ -87,6 +87,27 @@ public class State {
 		StateRecord last = this.records.get(this.records.size() - 1);
 		return now - last.time;
 	}
+	
+	public long elapsed(int stat)  {
+		return elapsed(stat, global_current);
+	}
+	
+	public long elapsed(int stat, long now) {
+		StateRecord finded = null;
+		for (int i=0; i<records.size(); i++) {
+			int revIdx = records.size() - i - 1;
+			if (records.get(revIdx).stat == stat) {
+				finded = records.get(revIdx);
+				break;
+			}
+		}
+		if (finded != null) {
+			return now - finded.time;
+		} else {
+			// TODO: 找一個更好的回傳值
+			return -1;
+		}
+	}
 
 	public static void setNowTime(long now) {
 		global_current = now;

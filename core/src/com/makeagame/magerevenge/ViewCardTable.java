@@ -7,6 +7,8 @@ import com.makeagame.core.Controler;
 import com.makeagame.tools.Button2;
 import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
+import com.makeagame.tools.KeyTable.Frame;
+import com.makeagame.tools.KeyTable.Key;
 
 public class ViewCardTable extends SimpleLayout {
 	public SimpleLayout[] send_icon_soldiers;
@@ -54,6 +56,10 @@ public class ViewCardTable extends SimpleLayout {
 			hovered.red = 1.0f;
 			hovered.green = 1.0f;
 			hovered.blue = 1.0f;
+			
+			//new Frame(  0	, new Key[] { new Key("sound", "") }),
+			//new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
+			//new Frame(  2	, new Key[] { new Key("sound", "") }),
 			
 			// TODO: 按鈕動畫和CD表現
 			btn_send_soldiers[i].setActiveSprite(active);
