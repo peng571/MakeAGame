@@ -1,22 +1,138 @@
 package com.makeagame.magerevenge;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.badlogic.gdx.graphics.GL30;
 import com.makeagame.core.Controler;
+import com.makeagame.core.view.SignalEvent;
+import com.makeagame.tools.Bar;
 import com.makeagame.tools.Button2;
+import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
 
 public class ViewCardTable extends SimpleLayout {
-	public SimpleLayout[] send_icon_soldiers;
-	public Button2[] btn_send_soldiers;
+	
+	class ViewSendButton extends SimpleLayout {
+		//SimpleLayout back;
+		//SimpleLayout front;
+		
+		SimpleLayout icon;
+		SimpleLayout icon_bar;
+		
+		Bar bar;
+		Button2 button;
+		final int selfIndex;
+		String type;
+		
+		public ViewSendButton(int idx, String type) {
+			super();
+			this.selfIndex = idx;
+			this.type = type;
+			
+			icon = new SimpleLayout();
+			addChild(icon);
+			
+			icon_bar = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive2"));
+			addChild(icon_bar);
+			
+			bar = new Bar();
+			bar.setBar(Bar.Direction.COLUMN_REVERSE, 144);
+			bar.percent = 1.0f;
+			
+			button = new Button2() {
+				@Override
+				public void OnMouseDown() { 
+					ViewCardTable.this.sendSoldiers(selfIndex); 
+				}
+			};
+			
+			KeyTable ktPushed = new KeyTable(new Frame[] {
+					new Frame(  0	, new Key[] { new Key(".sound", "") }),
+					new Frame(  50	, new Key[] { new Key(".sound", "button1.snd") }),
+					new Frame(  100	, new Key[] { new Key(".sound", "") }),
+					
+					new Frame(  0	, new Key[] { new Key("0.y", new Double(7), KeyTable.INT_EXP) }),
+					new Frame(  120	, new Key[] { new Key("0.y", new Double(0), KeyTable.INT_EXP) }),
+					new Frame(  0	, new Key[] { new Key("1.y", new Double(7), KeyTable.INT_EXP) }),
+					new Frame(  120	, new Key[] { new Key("1.y", new Double(0), KeyTable.INT_EXP) }),
+					/*
+					new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_EXP) }),
+					new Frame(  300 , new Key[] { new Key("1.alpha", new Double(0.0), KeyTable.INT_EXP) }),
+					
+					new Frame(  0	, new Key[] { new Key("1.dstFunc", new Integer(GL30.GL_ONE)) }),
+					new Frame(  300 , new Key[] { new Key("1.dstFunc", new Integer(GL30.GL_ONE_MINUS_SRC_ALPHA)) }),
+					*/
+			});
+			
+			KeyTable ktStatic = new KeyTable(new Frame[] {
+					//new Frame(  0	, new Key[] { new Key(".sound", "") }),
+					//new Frame(  50	, new Key[] { new Key(".sound", "button1.snd") }),
+					//new Frame(  100	, new Key[] { new Key(".sound", "") }),
+
+					new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_LOG) }),
+					new Frame(  200 , new Key[] { new Key("1.alpha", new Double(0.0), KeyTable.INT_LOG) }),
+			});
+			
+			button.setInactiveSprite( new SimpleLayout()
+					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+			);
+			
+			button.setActiveSprite( new SimpleLayout()
+					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")))
+					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+					);
+			
+			/*
+			button.setHoveredSprite( new SimpleLayout()
+					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+					.addChild(new SimpleLayout(hovered))
+			);
+			*/
+			
+			//button.setPushedAnimation(ktPushed);
+			button.setStaticAnimation(ktStatic);
+			button.setInactiveAnimation(ktPushed);
+			
+
+			
+		}
+		
+		@Override
+		public void beforeReslove() {
+			super.beforeReslove();
+			button.apply(this.icon);
+		}
+		
+		@Override
+		public void beforeRender() {
+			button.setRectArea(realX-10, realY-10, 117, 144);
+			
+			bar.percent -= 0.005;
+			bar.apply(icon_bar.sprite);
+			
+			if (bar.percent <= 0.0) {
+				button.enable_state.enter(Button2.Active);
+			} else {
+				button.enable_state.enter(Button2.Inactive);
+			}
+		}
+		
+	}
+	
+	
+	public ViewSendButton[] send_buttons;
 	public String[] map;
 	
 	public ViewCardTable() {
-		xy(367, 10);
+		super();
+		xy(349, -13);
 		
 		map = new String[] {
 				MakeAGame.CASTLE,
@@ -25,64 +141,25 @@ public class ViewCardTable extends SimpleLayout {
 				MakeAGame.ROLE_3,
 				MakeAGame.ROLE_4,
 		};
+		send_buttons = new ViewSendButton[5];
 		
-		send_icon_soldiers = new SimpleLayout[5];
 		for (int i=0; i<5; i++) {
-			send_icon_soldiers[i] = new SimpleLayout(
-					new Sprite(map[i] + "btn")).xy(103*i, 0);
-			addChild(send_icon_soldiers[i]);
-		}
-		
-		btn_send_soldiers = new Button2[] { 
-				new Button2() { @Override public void OnMouseDown() { 
-					ViewCardTable.this.sendSoldiers(0); } }, 
-				new Button2() { @Override public void OnMouseDown() { 
-					ViewCardTable.this.sendSoldiers(1); } }, 
-				new Button2() { @Override public void OnMouseDown() { 
-					ViewCardTable.this.sendSoldiers(2); } }, 
-				new Button2() { @Override public void OnMouseDown() { 
-					ViewCardTable.this.sendSoldiers(3); } }, 
-				new Button2() { @Override public void OnMouseDown() { 
-					ViewCardTable.this.sendSoldiers(4); } }, 
-		};
-		
-		for (int i=0; i<send_icon_soldiers.length; i++) {
-			Sprite active = new Sprite(MakeAGame.CASTLE + "btn");
-			active.red = 0.6f;
-			active.green = 0.6f;
-			active.blue = 0.8f;
-			
-			Sprite hovered = new Sprite(MakeAGame.CASTLE + "btn");
-			hovered.red = 1.0f;
-			hovered.green = 1.0f;
-			hovered.blue = 1.0f;
-			
-			//new Frame(  0	, new Key[] { new Key("sound", "") }),
-			//new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
-			//new Frame(  2	, new Key[] { new Key("sound", "") }),
-			
-			// TODO: 按鈕動畫和CD表現
-			btn_send_soldiers[i].setActiveSprite(active);
-			btn_send_soldiers[i].setHoveredSprite(hovered);
-			//btn_next.setHoveredSprite(hovered);
-
+			send_buttons[i] = new ViewSendButton(i, map[i]);
+			send_buttons[i].xy(117*i, 0);
+			this.addChild(send_buttons[i]);
 		}
 	}
 	
+	
 	@Override
-	public void beforeRender() {
-		super.beforeRender();
-		for (int i=0; i<send_icon_soldiers.length; i++) {
-			btn_send_soldiers[i].setRectArea(
-					send_icon_soldiers[i].realX, 
-					send_icon_soldiers[i].realY, 86, 108);
-			btn_send_soldiers[i].apply(send_icon_soldiers[i].sprite);
-		}
+	public void beforeReslove() {
+		super.beforeReslove();
 	}
 	
 	public void sendSoldiers(int index) {
 		try {
-		Controler.get().call(
+			send_buttons[index].bar.percent = 1.0f;
+			Controler.get().call(
 				Sign.BATTLE_SendSoldier, new JSONObject()
 						.put("player", 0)
 						.put("soldierType", map[index]));
@@ -90,7 +167,11 @@ public class ViewCardTable extends SimpleLayout {
 			e.printStackTrace();
 		}
 	}
-	
+	void signal(ArrayList<SignalEvent> signalList) {
+		for (int i=0; i<5; i++) {
+			send_buttons[i].button.signal(signalList);
+		}
+	}
 	public void model() {
 		// TODO: 接收model資料
 	}

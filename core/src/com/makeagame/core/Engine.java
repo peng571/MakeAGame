@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.model.ModelManager;
@@ -109,6 +110,8 @@ public class Engine extends ApplicationAdapter {
 			// }
 			if (e.useBlend) {
 				batch.setBlendFunction(e.srcFunc, e.dstFunc);
+			} else {
+				batch.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 			}
 			batch.setColor(e.color);
 			switch (e.type) {

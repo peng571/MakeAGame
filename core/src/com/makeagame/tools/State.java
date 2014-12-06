@@ -2,6 +2,8 @@ package com.makeagame.tools;
 
 import java.util.ArrayList;
 
+import com.makeagame.core.Engine;
+
 public class State {
 	long[][] cond_table;
 	public static long ALLOW = 0; // Allow
@@ -85,6 +87,8 @@ public class State {
 
 	public long elapsed(long now) {
 		StateRecord last = this.records.get(this.records.size() - 1);
+		//Engine.logI("now: " + Long.toString(now));
+		//Engine.logI("last: " + Long.toString(last.time));
 		return now - last.time;
 	}
 	
@@ -105,7 +109,7 @@ public class State {
 			return now - finded.time;
 		} else {
 			// TODO: 找一個更好的回傳值
-			return -1;
+			return now;
 		}
 	}
 

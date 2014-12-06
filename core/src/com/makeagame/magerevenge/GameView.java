@@ -74,7 +74,7 @@ public class GameView implements View {
 		ViewTopBoard top_board;
 
 		SimpleLayout bottom_board;
-		ViewPowerRing power_ring;
+		ViewPower power_ring;
 		ViewResTable res_table;
 		ViewCardTable card_table;
 		
@@ -85,7 +85,7 @@ public class GameView implements View {
 			top_board = new ViewTopBoard();
 			
 			bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
-			power_ring = new ViewPowerRing();
+			power_ring = new ViewPower();
 			res_table = new ViewResTable();
 			card_table = new ViewCardTable();
 			
@@ -130,9 +130,10 @@ public class GameView implements View {
 		battle_scene.power_ring.button.signal(signalList);
 		battle_scene.power_ring.btn_prev.signal(signalList);
 		battle_scene.power_ring.btn_next.signal(signalList);
-		for (int i=0; i<5; i++) {
-			battle_scene.card_table.btn_send_soldiers[i].signal(signalList);
-		}
+		battle_scene.card_table.signal(signalList);
+		//for (int i=0; i<5; i++) {
+		//	battle_scene.card_table.btn_send_soldiers[i].signal(signalList);
+		//}
 
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {

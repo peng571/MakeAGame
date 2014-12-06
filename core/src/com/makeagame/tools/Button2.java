@@ -17,15 +17,15 @@ public class Button2 {// implements View {
  * Hovered 代表滑鼠(指標)在感應區內時(行動平台上無效)
  * Pushed 代表被按著時
  */
-	static final int Invisible = 0;
-	static final int Visible = 1;
-	static final int Disable = 0;
-	static final int Enable = 1;
-	static final int Active = 2;
-	static final int Inactive = 3;
-	static final int Static = 0;
-	static final int Hovered = 1;
-	static final int Pushed = 2;
+	public static final int Invisible = 0;
+	public static final int Visible = 1;
+	public static final int Disable = 0;
+	public static final int Enable = 1;
+	public static final int Active = 2;
+	public static final int Inactive = 3;
+	public static final int Static = 0;
+	public static final int Hovered = 1;
+	public static final int Pushed = 2;
 	// 進度條, 當達到 1.0 時進入Active, 不到時退回Inactive
 	static double progress = 1.0;
 	public State visible_state;
@@ -141,18 +141,18 @@ public class Button2 {// implements View {
 		return "button view";
 	}
 
-	Sprite spDisable;
-	Sprite spInactive;
-	Sprite spStatic;
-	Sprite spHovered;
-	Sprite spPushed;
+	SimpleLayout spDisable;
+	SimpleLayout spInactive;
+	SimpleLayout spStatic;
+	SimpleLayout spHovered;
+	SimpleLayout spPushed;
 	KeyTable ktDisable;
 	KeyTable ktInactive;
 	KeyTable ktStatic;
 	KeyTable ktHovered;
 	KeyTable ktPushed;
 
-	public void setDisableSprite(Sprite sprite) {
+	public void setDisableSprite(SimpleLayout sprite) {
 		spDisable = sprite;
 	}
 
@@ -160,7 +160,7 @@ public class Button2 {// implements View {
 		ktDisable = keytable;
 	}
 
-	public void setInactiveSprite(Sprite sprite) {
+	public void setInactiveSprite(SimpleLayout sprite) {
 		spInactive = sprite;
 	}
 
@@ -168,7 +168,7 @@ public class Button2 {// implements View {
 		ktInactive = keytable;
 	}
 
-	public void setStaticSprite(Sprite sprite) {
+	public void setStaticSprite(SimpleLayout sprite) {
 		spStatic = sprite;
 	}
 
@@ -176,7 +176,7 @@ public class Button2 {// implements View {
 		ktStatic = keytable;
 	}
 
-	public void setHoveredSprite(Sprite sprite) {
+	public void setHoveredSprite(SimpleLayout sprite) {
 		spHovered = sprite;
 	}
 
@@ -184,7 +184,7 @@ public class Button2 {// implements View {
 		ktHovered = keytable;
 	}
 
-	public void setPushedSprite(Sprite sprite) {
+	public void setPushedSprite(SimpleLayout sprite) {
 		spPushed = sprite;
 	}
 
@@ -192,7 +192,7 @@ public class Button2 {// implements View {
 		ktPushed = keytable;
 	}
 
-	public void setActiveSprite(Sprite sprite) {
+	public void setActiveSprite(SimpleLayout sprite) {
 		spStatic = sprite;
 		spHovered = sprite;
 		spPushed = sprite;
@@ -206,7 +206,7 @@ public class Button2 {// implements View {
 
 	// @Override
 	// public ArrayList<RenderEvent> render(ArrayList<String> build) {
-	public void apply(Sprite sprite) {
+	public void apply(SimpleLayout sprite) {
 		/*
 		 * if (progress >= 1.0) {
 		 * enable_state.enter(Active);
@@ -223,17 +223,13 @@ public class Button2 {// implements View {
 		switch (enable_state.currentStat())
 		{
 		case Disable:
-			if (spDisable != null) {
-				sprite.copyFrom(spDisable);
-			}
+			if (spDisable != null) { sprite.copyFrom(spDisable); }
 			if (ktDisable != null) {
 				sprite.apply(ktDisable.get(enable_state.elapsed()));
 			}
 			break;
 		case Inactive:
-			if (spInactive != null) {
-				sprite.copyFrom(spInactive);
-			}
+			if (spInactive != null) { sprite.copyFrom(spInactive); }
 			if (ktInactive != null) {
 				sprite.apply(ktInactive.get(enable_state.elapsed()));
 			}
@@ -242,31 +238,27 @@ public class Button2 {// implements View {
 			switch (action_state.currentStat())
 			{
 			case Static:
-				if (spStatic != null) {
-					sprite.copyFrom(spStatic);
-				}
-				if (ktStatic != null) {
-					sprite.apply(ktStatic.get(action_state.elapsed()));
-				}
+				if (spStatic != null) { sprite.copyFrom(spStatic); }
+				//Engine.logI("stat: " + Long.toString(action_state.elapsed()));
 				break;
 			case Hovered:
-				if (spHovered != null) {
-					sprite.copyFrom(spHovered);
-				}
-				if (ktHovered != null) {
-					sprite.apply(ktHovered.get(action_state.elapsed()));
-				}
+				if (spHovered != null) { sprite.copyFrom(spHovered); }
 				break;
 			case Pushed:
-				if (spPushed != null) {
-					sprite.copyFrom(spPushed);
-				}
-				if (ktPushed != null) {
-					sprite.apply(ktPushed.get(action_state.elapsed()));
-				}
+				if (spPushed != null) { sprite.copyFrom(spPushed); }
 				break;
+			}
+			if (ktStatic != null) {
+				sprite.apply(ktStatic.get(action_state.elapsed(Static)));
+			}
+			if (ktHovered != null) {
+				sprite.apply(ktHovered.get(action_state.elapsed(Hovered)));
+			}
+			if (ktPushed != null) {
+				sprite.apply(ktPushed.get(action_state.elapsed(Pushed)));
 			}
 			break;
 		}
+		
 	}
 }

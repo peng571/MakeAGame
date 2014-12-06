@@ -36,12 +36,14 @@ public class Sprite {
 	public float alpha = 1.0f;
 
 	// 請參照 opneGL的 blendfunction
-	//public int blendmethod = 0;
+	public int srcFunc = -1;
+	public int dstFunc = -1;
 	
 	// 圖片
 	public String image;
 	// 音效
 	public String sound;
+	public String palyedSound;
 	public float soundVol = 1.0f;
 	
 	// 該 image 的中心點
@@ -65,7 +67,10 @@ public class Sprite {
 		this.green = sprite.green;
 		this.blue = sprite.blue;
 		this.alpha = sprite.alpha;
-
+		
+		this.srcFunc = sprite.srcFunc;
+		this.dstFunc = sprite.dstFunc;
+		
 		this.image = sprite.image;
 		
 		this.centerX = sprite.centerX;
@@ -78,12 +83,14 @@ public class Sprite {
 	public Sprite(String image) {
 		this.image = image;
 		this.sound = "";
+		this.palyedSound = "";
 	}
 
 	// 基準線
 	public Sprite() {
 		this.image = "";
 		this.sound = "";
+		this.palyedSound = "";
 	}
 	
 	
@@ -129,7 +136,24 @@ public class Sprite {
 		this.centerY = 0; // TODO
 	}
 
-	// TODO: 有空可以順便做, 或是也可以不做用applylist.apply(sprite)就好
+	public void set(String key, Object value) {
+		if (key.equals("image")) { this.image = (String) value; }
+		if (key.equals("sound")) { this.sound = (String) value; }
+		if (key.equals("x")) { this.x = ((Double) value).intValue();}
+		if (key.equals("y")) { this.y = ((Double) value).intValue();}
+		if (key.equals("srcX")) { this.srcX = ((Double) value).intValue();}
+		if (key.equals("srcY")) { this.srcY = ((Double) value).intValue();}
+		if (key.equals("srcW")) { this.srcW = ((Double) value).intValue();}
+		if (key.equals("srcH")) { this.srcH = ((Double) value).intValue();}
+		if (key.equals("red")) { this.red = ((Double) value).floatValue();}
+		if (key.equals("green")) { this.green = ((Double) value).floatValue();}
+		if (key.equals("blue")) { this.blue = ((Double) value).floatValue();}
+		if (key.equals("alpha")) { this.alpha = ((Double) value).floatValue();}
+		if (key.equals("srcFunc")) { this.srcFunc = ((Integer) value).intValue();}
+		if (key.equals("dstFunc")) { this.dstFunc = ((Integer) value).intValue();}
+
+	}
+	
 	public void apply(ApplyList applylist) {
 		HashMap<String, Object> map = applylist.map;
 		if (map.containsKey("image")) {
@@ -173,6 +197,12 @@ public class Sprite {
 		if (map.containsKey("alpha")) {
 			alpha = ((Double) map.get("alpha")).floatValue();
 		}
+		if (map.containsKey("srcFunc")) {
+			srcFunc = ((Double) map.get("srcFunc")).intValue();
+		}
+		if (map.containsKey("dstFunc")) {
+			dstFunc = ((Double) map.get("dstFunc")).intValue();
+		}
 		
 		// TODO: .......
 	}
@@ -194,13 +224,14 @@ public class Sprite {
 					.color(red, green, blue, alpha)
 					.src(srcX, srcY, srcW, srcH)
 					.filp(flipx, flipy)
-					// .blend(srcFunc, dstFunc)
+					.blend(srcFunc, dstFunc)
 				);
 			//}
 		}
-		if (sound != "") {
+		if (sound != "" && sound != palyedSound) {
 			list.add(new RenderEvent("").sound(sound, soundVol));
 		}
+		palyedSound = sound;
 		return list;
 	}
 

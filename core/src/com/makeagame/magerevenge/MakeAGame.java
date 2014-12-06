@@ -39,6 +39,8 @@ public class MakeAGame {
 				resource.bind("base_hp", new Resource().image("mr/base_hp.png"));
 				resource.bind("bottom_board", new Resource().image("mr/bottom_board.png"));
 				resource.bind("power_ring", new Resource().image("mr/power_ring.png"));
+				resource.bind("power_ring_inactive", new Resource().image("mr/power_ring_inactive.png"));
+				
 				resource.bind("power_a", new Resource().image("mr/power_a.png"));
 				resource.bind("power_b", new Resource().image("mr/power_b.png"));
 				resource.bind("power_c", new Resource().image("mr/power_c.png"));
@@ -53,11 +55,16 @@ public class MakeAGame {
 				resource.bind(ROLE_3, new Resource().image("image/group9.png").attribute("data/role3.txt"));
 				resource.bind(CASTLE + "L", new Resource().image("mr/castle_al.png").attribute("data/castle.txt"));
 				resource.bind(CASTLE + "R", new Resource().image("mr/castle_op.png").attribute("data/castle.txt"));
-				resource.bind(CASTLE + "btn", new Resource().image("mr/send_icon_soldier1.png"));
-				resource.bind(ROLE_1 + "btn", new Resource().image("mr/send_icon_soldier2.png"));
-				resource.bind(ROLE_2 + "btn", new Resource().image("mr/send_icon_soldier3.png"));
-				resource.bind(ROLE_3 + "btn", new Resource().image("mr/send_icon_soldier4.png"));
-				resource.bind(ROLE_4 + "btn", new Resource().image("mr/send_icon_soldier5.png"));
+				
+				//resource.bind(CASTLE + "btn", new Resource().image("mr/send_icon_soldier1.png"));
+				//resource.bind(ROLE_1 + "btn", new Resource().image("mr/send_icon_soldier2.png"));
+				//resource.bind(ROLE_2 + "btn", new Resource().image("mr/send_icon_soldier3.png"));
+				//resource.bind(ROLE_3 + "btn", new Resource().image("mr/send_icon_soldier4.png"));
+				//resource.bind(ROLE_4 + "btn", new Resource().image("mr/send_icon_soldier5.png"));
+				
+				resource.bind(ROLE_1 + "btn", new Resource().image("mr/send_icon_soldier1.png"));
+				resource.bind(ROLE_1 + "btn_inactive", new Resource().image("mr/send_icon_soldier1_inactive.png"));
+				resource.bind(ROLE_1 + "btn_inactive2", new Resource().image("mr/send_icon_soldier1_inactive2.png"));
 				
 				resource.bind("role_walk1", new Resource().image("mr/role_walk1.png"));
 				resource.bind("role_walk2", new Resource().image("mr/role_walk2.png"));

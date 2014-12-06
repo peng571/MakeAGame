@@ -15,6 +15,7 @@ public class ViewField extends SimpleLayout {
 	int count = 0;
 	
 	public ViewField() {
+		super();
 		xy(0, 340);
 		castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
 		castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
@@ -27,9 +28,9 @@ public class ViewField extends SimpleLayout {
 		
 		// 走路動畫
 		roleKeyTable[0] = new KeyTable(new Frame[] {
-				new Frame(  0	, new Key[] { new Key("sound", "") }),
-				new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
-				new Frame(  2	, new Key[] { new Key("sound", "") }),
+				//new Frame(  0	, new Key[] { new Key("sound", "") }),
+				//new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
+				//new Frame(  2	, new Key[] { new Key("sound", "") }),
 				new Frame(  0	, new Key[] { new Key("image", "role_walk1") }),
 				new Frame(  3	, new Key[] { new Key("image", "role_walk2") }),
 				new Frame(  6	, new Key[] { new Key("image", "role_walk3") }),

@@ -2,8 +2,10 @@ package com.makeagame.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
+import com.makeagame.core.Engine;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
 
@@ -36,6 +38,33 @@ public class SimpleLayout {
 			this.sprite = new Sprite();
 		}
 	}
+	public SimpleLayout copy() {
+		return new SimpleLayout().copyFrom(this);
+	}
+	
+	public SimpleLayout copyFrom(SimpleLayout other) {
+		// TODO: ¤§«á­n§R±¼realX
+		//this.realX = other.realX;
+		//this.realY = other.realY;
+		
+		this.fixedX = other.fixedX;
+		this.fixedY = other.fixedY;
+		this.x = other.x;
+		this.y = other.y;
+		this.visible = other.visible;
+		this.sprite.copyFrom(other.sprite);
+		
+		this.removeChildren();
+		if (other.children != null) {
+			for(int i=0; i < other.children.size(); i++) {
+				SimpleLayout n = new SimpleLayout();
+				n.copyFrom(other.children.get(i));
+				this.addChild(n);
+			}
+		}
+		return this;
+	}
+	
 	
 	public SimpleLayout xy(int x, int y) {
 		this.fixedX = x;
@@ -67,6 +96,29 @@ public class SimpleLayout {
 		if (map.containsKey("y")) {
 			y = ((Double) map.get("y")).intValue();
 		}
+		
+		Iterator<String> it = applylist.map.keySet().iterator();
+		while (it.hasNext()) {
+			String name = it.next();
+			Object value = applylist.map.get(name);
+			if (name.contains(".")) {
+				String[] bArray = name.split("[.]", 2);
+				//Engine.logI(name);
+				//Engine.logI(bArray[0] + "  " + bArray[1]);
+				if (bArray[0].equals("")) {
+					//Engine.logI(bArray[0] + "  " + bArray[1]);
+					this.sprite.set(bArray[1], value);
+				} else {
+					int idx = Integer.parseInt(bArray[0]);
+					this.children.get(idx).sprite.set(bArray[1], value);
+				}
+			}
+		}	
+		
+	}
+	
+	public void beforeReslove() {
+		
 	}
 	
 	public void beforeRender() {
@@ -79,6 +131,7 @@ public class SimpleLayout {
 	}
 	
 	public void reslove(int offx, int offy) {
+		beforeReslove();
 		realX = fixedX + this.x + offx;
 		realY = fixedY + this.y + offy;
 		if (children != null) {
