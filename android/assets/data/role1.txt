@@ -6,6 +6,6 @@
 "h":64,
 "atk":5,
 "money":10,
-"atkTime":800,
+"atkTime":600,
 "range":0
 }

@@ -1,10 +1,8 @@
 package com.makeagame.magerevenge;
 
 import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.gson.Gson;
 import com.makeagame.core.Controler;
 import com.makeagame.core.resource.ResourceManager;
@@ -26,6 +24,7 @@ public class GameView implements View {
 	class PowerRing extends SimpleLayout {
 		KeyTable keyTable;
 		double count = 0.0;
+
 		Bar bar;
 		Button2 button;
 		Button2 btn_prev;
@@ -39,6 +38,7 @@ public class GameView implements View {
 		
 		public PowerRing() {
 			super(new Sprite("power_ring"));
+
 			selectPower = "a";
 			xy(34, -35);
 			keyTable = new KeyTable(new Frame[] {
@@ -50,7 +50,6 @@ public class GameView implements View {
 					new Frame(30, new Key[] {
 							new Key("x", new Double(100), KeyTable.INT_LINEAR),
 							new Key("red", new Double(1.0f), KeyTable.INT_LINEAR) }),
-
 			});
 			bar = new Bar();
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);
@@ -104,6 +103,7 @@ public class GameView implements View {
 			
 			layout_icon = new SimpleLayout(new Sprite("power_a"));
 			addChild(layout_icon);
+			
 		}
 
 		@Override
@@ -121,7 +121,6 @@ public class GameView implements View {
 			
 			bar.percent += 0.01;
 			bar.apply(this.sprite);
-			
 			count += 0.2;
 			//this.sprite.apply(keyTable.get(count));
 		}
@@ -179,7 +178,7 @@ public class GameView implements View {
 			for (int i=0; i<send_icon_soldiers.length; i++) {
 				Sprite active = new Sprite(MakeAGame.CASTLE + "btn");
 				active.alpha = 0.5f;
-				// TODO: «ö¶s°Êµe©MCDªí²{
+				// TODO: æŒ‰éˆ•å‹•ç•«å’ŒCDè¡¨ç¾
 				btn_send_soldiers[i].setActiveSprite(active);
 				//btn_next.setHoveredSprite(hovered);
 
@@ -202,7 +201,7 @@ public class GameView implements View {
 		}
 		
 		public void model() {
-			// TODO: ±µ¦¬model¸ê®Æ
+			// TODO: æŽ¥æ”¶modelè³‡æ–™
 		}
 	}
 	
@@ -251,7 +250,6 @@ public class GameView implements View {
 	}
 
 	SimpleLayout sprite;
-
 	SimpleLayout background;
 	Field field;
 	
@@ -265,14 +263,12 @@ public class GameView implements View {
 	CardTable card_table;
 	
 	public GameView() {
-
 		btnCallHeros = new Button[5];
 		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
 		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
 		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
 		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
 		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
-
 		background = new SimpleLayout(new Sprite("background"));
 		field = new Field();
 		
@@ -282,6 +278,7 @@ public class GameView implements View {
 		
 		bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
 		power_ring = new PowerRing();
+
 		res_table = new ResTable();
 		card_table = new CardTable();
 		
@@ -294,19 +291,19 @@ public class GameView implements View {
 						.addChild(res_table)
 						.addChild(card_table)
 				);
-
 		sprite = background;
-
 	}
 
 	@Override
 	public void signal(ArrayList<SignalEvent> signalList) throws JSONException {
+
 		power_ring.button.signal(signalList);
 		power_ring.btn_prev.signal(signalList);
 		power_ring.btn_next.signal(signalList);
 		for (int i=0; i<5; i++) {
 			card_table.btn_send_soldiers[i].signal(signalList);
 		}
+
 		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
@@ -314,7 +311,6 @@ public class GameView implements View {
 				}
 				if (s.action == SignalEvent.ACTION_UP) {
 				}
-
 				for (Button b : btnCallHeros) {
 					if (b.isClick(s)) {
 						clickBtn = b.id;
@@ -327,12 +323,10 @@ public class GameView implements View {
 
 	@Override
 	public ArrayList<RenderEvent> render(ArrayList<String> build) {
-
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		sprite.reslove(0, 0);
 		list.addAll(sprite.render());
-		
-		// ³oÃä¥ý¤£­n§R >< §Ú­n´úmodel¥Î
+		// ç³§oï¿½ï“åˆˆæ°¸è“åˆˆï¿½ç°«nç¦®R >< ç¦®ï¿½î«è¦ç¹”ç¹³modelçž¼ï¿½ï¿½
 		for (String s : build) {
 			final Hold hold = new Gson().fromJson(s, Hold.class);
 			// Engine.logI("get hold " + s);
@@ -347,7 +341,6 @@ public class GameView implements View {
 				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
 			}
 		}
-
 		return list;
 	}
 
@@ -397,9 +390,10 @@ public class GameView implements View {
 
 		public ArrayList<RenderEvent> draw(int cost) {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-//			list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
+			// list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
 			list.add(new RenderEvent(String.valueOf(cost)).XY(x, y));
 			return list;
 		}
 	}
+	
 }
