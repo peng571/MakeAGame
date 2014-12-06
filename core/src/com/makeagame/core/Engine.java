@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.model.ModelManager;
+import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
@@ -122,6 +123,10 @@ public class Engine extends ApplicationAdapter {
 				break;
 			case RenderEvent.LABEL:
 				gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
+				break;
+			case RenderEvent.SOUND:
+				Resource sound = ResourceManager.get().resourceMap.get(e.s);
+				sound._sound.play(e.vol);
 				break;
 			}
 		}

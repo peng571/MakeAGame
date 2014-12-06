@@ -27,15 +27,15 @@ public class ViewField extends SimpleLayout {
 		
 		// 走路動畫
 		roleKeyTable[0] = new KeyTable(new Frame[] {
-				new Frame(0, new Key[] {
-						new Key("image", "role_walk1") }),
-				new Frame(3, new Key[] {
-						new Key("image", "role_walk2") }),
-				new Frame(6, new Key[] {
-						new Key("image", "role_walk3") }),
-				new Frame(9, new Key[] {
-						new Key("image", "role_walk4") }),
-		});
+				new Frame(  0	, new Key[] { new Key("sound", "") }),
+				new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
+				new Frame(  2	, new Key[] { new Key("sound", "") }),
+				new Frame(  0	, new Key[] { new Key("image", "role_walk1") }),
+				new Frame(  3	, new Key[] { new Key("image", "role_walk2") }),
+				new Frame(  6	, new Key[] { new Key("image", "role_walk3") }),
+				new Frame(  9	, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 12	, new Key[] { new Key("image", "role_walk4") }),
+		}).setLoop(true);
 		
 	}
 	
@@ -47,7 +47,6 @@ public class ViewField extends SimpleLayout {
 	
 	public void model(Hold hold) {
 		count += 1;
-		if (count > 12) { count = 0; }
 		
 		role_layout.removeChildren();
 		for (RoleHold r : hold.roles) {

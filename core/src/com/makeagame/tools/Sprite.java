@@ -40,7 +40,10 @@ public class Sprite {
 	
 	// 圖片
 	public String image;
-
+	// 音效
+	public String sound;
+	public float soundVol = 1.0f;
+	
 	// 該 image 的中心點
 	public int centerX;
 	public int centerY;
@@ -74,11 +77,13 @@ public class Sprite {
 
 	public Sprite(String image) {
 		this.image = image;
+		this.sound = "";
 	}
 
 	// 基準線
 	public Sprite() {
-		
+		this.image = "";
+		this.sound = "";
 	}
 	
 	
@@ -132,6 +137,10 @@ public class Sprite {
 			//reset_image((String) map.get("image"));
 			this.image = (String) map.get("image");
 		}
+		
+		if (map.containsKey("sound")) {
+			this.sound = (String) map.get("sound");
+		}
 		if (map.containsKey("x")) {
 			x = ((Double) map.get("x")).intValue();
 		}
@@ -172,7 +181,7 @@ public class Sprite {
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		// TODO: 等你增加新的RenderEvent後在自己改動這邊
 		// 優先加入 setColor 和 blendfunction 的支援, 其他的以後再說
-		if (image != null) {
+		if (image != "") {
 			/*if (srcW == -1) {
 			list.add(new RenderEvent(ResourceManager.get().fetch(image))
 					.XY(offx + x - centerX, offy + y - centerY)
@@ -188,6 +197,9 @@ public class Sprite {
 					// .blend(srcFunc, dstFunc)
 				);
 			//}
+		}
+		if (sound != "") {
+			list.add(new RenderEvent("").sound(sound, soundVol));
 		}
 		return list;
 	}

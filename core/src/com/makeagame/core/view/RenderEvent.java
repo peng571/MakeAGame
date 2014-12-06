@@ -30,11 +30,13 @@ public class RenderEvent {
 	public boolean flipX = false;
 	public boolean flipY = false;
 	
+	public float vol;
 	
 	public Texture texture;
 	public static final int IMAGE = 0x001;
 	public static final int LABEL = 0x002;
-
+	public static final int SOUND = 0x004;
+	
 	public static final int LEFT = 0x000;
 	public static final int RIGHT = 0x010;
 	public static final int CENTER = 0x001;
@@ -65,6 +67,13 @@ public class RenderEvent {
 		//srcW = texture.getRegionWidth();
 		srcW = texture.getWidth();
 		dstW = srcW;
+	}
+	
+	public RenderEvent sound(String id, float vol) {
+		this.type = SOUND;
+		this.s = id;
+		this.vol = vol;
+		return this;
 	}
 
 	public RenderEvent XY(float x, float y) {

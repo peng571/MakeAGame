@@ -1,11 +1,13 @@
 package com.makeagame.core.resource;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Resource {
 	Texture texture;
+	public Sound _sound;
 	int centerY;
 	int x, y, w, h;
 	String file;
@@ -13,6 +15,12 @@ public class Resource {
 	public Resource image( String texture) {
 		//this.texture = new TextureRegion(new Texture(texture));
 		this.texture = new Texture(texture);
+		return this;
+	}
+	
+	public Resource sound( String path) {
+		//this.texture = new TextureRegion(new Texture(texture));
+		this._sound = Gdx.audio.newSound(Gdx.files.internal(path));
 		return this;
 	}
 

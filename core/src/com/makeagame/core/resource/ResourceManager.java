@@ -9,7 +9,7 @@ import com.makeagame.core.Engine;
 public class ResourceManager {
 
 	public static ResourceManager instance;
-	private HashMap<String, Resource> resourceMap;
+	public HashMap<String, Resource> resourceMap;
 
 	String url;
 
@@ -27,7 +27,9 @@ public class ResourceManager {
 	public Resource use(String id) {
 		return resourceMap.get(id);
 	}
-
+	
+	// Gdx.audio.newSound(Gdx.files.internal("data/wav.wav"));
+	
 	//public TextureRegion fetch(String id) {
 	public Texture fetch(String id) {
 		if (resourceMap.get(id) == null) {

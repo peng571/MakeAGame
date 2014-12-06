@@ -70,6 +70,7 @@ public class MakeAGame {
 				resource.bind("role_fail", new Resource().image("mr/role_fail.png"));
 				resource.bind("role_dead", new Resource().image("mr/role_dead.png"));
 				
+				resource.bind("button1.snd", new Resource().sound("sound/button-50.mp3"));
 			}
 		});
 	}

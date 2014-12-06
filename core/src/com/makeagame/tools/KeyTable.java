@@ -137,11 +137,16 @@ public class KeyTable {
 	};
 
 	Frame[] frames;
-
+	boolean loop = false;
 	// double current;
 	public KeyTable(Frame[] frames) {
 		this.frames = frames;
 		Arrays.sort(this.frames, FramePosComparator);
+	}
+	
+	public KeyTable setLoop(boolean loop) {
+		this.loop = loop;
+		return this;
 	}
 
 	private void _insert_two_map(
@@ -179,6 +184,14 @@ public class KeyTable {
 
 		HashMap<String, Key> before = new HashMap<String, Key>();
 		HashMap<String, Key> after = new HashMap<String, Key>();
+		
+		// 當設定循環播放時, current 應該被取餘數 
+		if (this.loop) {
+			// 先算出整個 keytable 的長度
+			double min = frames[0].pos;
+			double max = frames[frames.length - 1].pos;
+			current = min + current % (max-min);
+		}
 
 		// assert(before.keySet() == after.keySet())
 		// 找出在時間中間的一對key pair
