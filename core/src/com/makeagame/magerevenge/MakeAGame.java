@@ -58,6 +58,18 @@ public class MakeAGame {
 				resource.bind(ROLE_2 + "btn", new Resource().image("mr/send_icon_soldier3.png"));
 				resource.bind(ROLE_3 + "btn", new Resource().image("mr/send_icon_soldier4.png"));
 				resource.bind(ROLE_4 + "btn", new Resource().image("mr/send_icon_soldier5.png"));
+				
+				resource.bind("role_walk1", new Resource().image("mr/role_walk1.png"));
+				resource.bind("role_walk2", new Resource().image("mr/role_walk2.png"));
+				resource.bind("role_walk3", new Resource().image("mr/role_walk3.png"));
+				resource.bind("role_walk4", new Resource().image("mr/role_walk4.png"));
+				resource.bind("role_attack1", new Resource().image("mr/role_attack1.png"));
+				resource.bind("role_attack2", new Resource().image("mr/role_attack2.png"));
+				resource.bind("role_attack3", new Resource().image("mr/role_attack3.png"));
+				resource.bind("role_hurt", new Resource().image("mr/role_hurt.png"));
+				resource.bind("role_fail", new Resource().image("mr/role_fail.png"));
+				resource.bind("role_dead", new Resource().image("mr/role_dead.png"));
+				
 			}
 		});
 	}

@@ -128,7 +128,9 @@ public class Sprite {
 	public void apply(ApplyList applylist) {
 		HashMap<String, Object> map = applylist.map;
 		if (map.containsKey("image")) {
-			reset_image((String) map.get("image"));
+			// TODO:
+			//reset_image((String) map.get("image"));
+			this.image = (String) map.get("image");
 		}
 		if (map.containsKey("x")) {
 			x = ((Double) map.get("x")).intValue();
@@ -182,7 +184,7 @@ public class Sprite {
 					.XY(offx + x - centerX, offy + y - centerY)
 					.color(red, green, blue, alpha)
 					.src(srcX, srcY, srcW, srcH)
-					
+					.filp(flipx, flipy)
 					// .blend(srcFunc, dstFunc)
 				);
 			//}

@@ -148,17 +148,23 @@ public class GameView implements View {
 	class CardTable extends SimpleLayout {
 		public SimpleLayout[] send_icon_soldiers;
 		public Button2[] btn_send_soldiers;
+		public String[] map;
 		
 		public CardTable() {
 			xy(367, 10);
-			send_icon_soldiers = new SimpleLayout[] {
-					new SimpleLayout(new Sprite(MakeAGame.CASTLE + "btn")).xy(0, 0),
-					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(103, 0),
-					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(206, 0),
-					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(309, 0),
-					new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")).xy(412, 0),
+			
+			map = new String[] {
+					MakeAGame.CASTLE,
+					MakeAGame.ROLE_1,
+					MakeAGame.ROLE_2,
+					MakeAGame.ROLE_3,
+					MakeAGame.ROLE_4,
 			};
-			for (int i=0; i<send_icon_soldiers.length; i++) {
+			
+			send_icon_soldiers = new SimpleLayout[5];
+			for (int i=0; i<5; i++) {
+				send_icon_soldiers[i] = new SimpleLayout(
+						new Sprite(map[i] + "btn")).xy(103*i, 0);
 				addChild(send_icon_soldiers[i]);
 			}
 			
@@ -177,9 +183,18 @@ public class GameView implements View {
 			
 			for (int i=0; i<send_icon_soldiers.length; i++) {
 				Sprite active = new Sprite(MakeAGame.CASTLE + "btn");
-				active.alpha = 0.5f;
+				active.red = 0.6f;
+				active.green = 0.6f;
+				active.blue = 0.8f;
+				
+				Sprite hovered = new Sprite(MakeAGame.CASTLE + "btn");
+				hovered.red = 1.0f;
+				hovered.green = 1.0f;
+				hovered.blue = 1.0f;
+				
 				// TODO: 按鈕動畫和CD表現
 				btn_send_soldiers[i].setActiveSprite(active);
+				btn_send_soldiers[i].setHoveredSprite(hovered);
 				//btn_next.setHoveredSprite(hovered);
 
 			}
@@ -197,7 +212,14 @@ public class GameView implements View {
 		}
 		
 		public void sendSoldiers(int index) {
-			// TODO:
+			try {
+			Controler.get().call(
+					Sign.BATTLE_SendSoldier, new JSONObject()
+							.put("player", 0)
+							.put("soldierType", map[index]));
+			} catch(JSONException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		public void model() {
@@ -232,13 +254,34 @@ public class GameView implements View {
 	class Field extends SimpleLayout {
 		SimpleLayout castle_L;
 		SimpleLayout castle_R;
+		SimpleLayout role_layout;
+		//ArrayList<SimpleLayout> roles;
+		KeyTable[] roleKeyTable;
+		int count = 0;
 		
 		public Field() {
 			xy(0, 340);
 			castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
 			castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
+			role_layout = new SimpleLayout();
 			addChild(castle_L);
 			addChild(castle_R);
+			addChild(role_layout);
+			
+			roleKeyTable = new KeyTable[5];
+			
+			// 走路動畫
+			roleKeyTable[0] = new KeyTable(new Frame[] {
+					new Frame(0, new Key[] {
+							new Key("image", "role_walk1") }),
+					new Frame(3, new Key[] {
+							new Key("image", "role_walk2") }),
+					new Frame(6, new Key[] {
+							new Key("image", "role_walk3") }),
+					new Frame(9, new Key[] {
+							new Key("image", "role_walk4") }),
+			});
+			
 		}
 		
 		@Override
@@ -247,6 +290,25 @@ public class GameView implements View {
 		
 		}
 		
+		public void model(Hold hold) {
+			count += 1;
+			if (count > 12) { count = 0; }
+			
+			role_layout.removeChildren();
+			for (RoleHold r : hold.roles) {
+				if (!r.id.equals(MakeAGame.CASTLE)) {
+					Sprite sp = new Sprite().center(60, 90)
+								.flip(r.group==1 ? true:false, false);//new Sprite("role_walk1")
+					
+					sp.apply(roleKeyTable[0].get(count));
+					role_layout.addChild(
+							new SimpleLayout(sp)
+							.xy(r.x, 0));
+				}
+				// TODO: 加入血條
+				//list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
+			}
+		}
 	}
 
 	SimpleLayout sprite;
@@ -326,9 +388,12 @@ public class GameView implements View {
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		sprite.reslove(0, 0);
 		list.addAll(sprite.render());
+		
+		
 		// 糧o�刈永蝓刈�簫n禮R >< 禮�要織繳model瞼��
 		for (String s : build) {
 			final Hold hold = new Gson().fromJson(s, Hold.class);
+			field.model(hold);
 			// Engine.logI("get hold " + s);
 			for (RoleHold r : hold.roles) {
 				if (!r.id.equals(MakeAGame.CASTLE)) {
