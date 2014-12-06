@@ -41,7 +41,6 @@ public class GameView implements View {
 					new Frame(30, new Key[] {
 							new Key("x", new Double(100), KeyTable.INT_LINEAR),
 							new Key("red", new Double(1.0f), KeyTable.INT_LINEAR) }),
-
 			});
 			bar = new Bar();
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 160);

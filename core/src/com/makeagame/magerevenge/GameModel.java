@@ -161,8 +161,7 @@ public class GameModel implements Model {
 				Role r = it.next();
 				if (r.state.currentStat() != Role.STATE_DEATH) {
 					r.run();
-				}
-				else {
+				} else {
 					it.remove();
 				}
 			}
@@ -208,8 +207,8 @@ public class GameModel implements Model {
 			m.group = group;
 			m.x = group == 0 ? 32 : (Bootstrap.screamWidth() - 32);
 			m.maxHp = m.hp;
-			m.atkTime *= (20 - rand.nextInt(40) * 0.01f) + 0.9;
-			System.out.println(m.atkTime);
+//			m.atkTime *= (20 - rand.nextInt(40) * 0.01f) + 0.9;
+//			System.out.println(m.atkTime);
 			// m.state = 0;
 			state = new State(new long[][] {
 					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
@@ -246,6 +245,7 @@ public class GameModel implements Model {
 				if (m.group == 0 && r.m.group == 1 && m.x + m.range >= r.m.x
 						|| (m.group == 1 && r.m.group == 0 && m.x - m.range <= r.m.x)) {
 					meet = r;
+					System.out.println(m.id + " meet to " + meet.m.id);
 				}
 			}
 
@@ -255,10 +255,11 @@ public class GameModel implements Model {
 				state.enter(Role.STATE_PERPARING);
 			}
 
-			if (m.atk != 0) {
+			if (m.atk > 0) {
 				if (state.enter(Role.STATE_ATTACKING)) {
+					System.out.println(m.id + " attack to " + meet.m.id);
 					meet.m.hp -= m.atk;
-					meet.m.beAtk = m.atk;
+//					meet.m.beAtk = m.atk;
 					meet.state.enter(Role.STATE_BACKING);
 				}
 			}
@@ -275,6 +276,7 @@ public class GameModel implements Model {
 				}
 			}
 
+			System.out.println(m.id + " state is " + state.currentStat());
 			switch (state.currentStat())
 			{
 			case Role.STATE_MOVING:
@@ -285,7 +287,7 @@ public class GameModel implements Model {
 			case Role.STATE_ATTACKING:
 				break;
 			case Role.STATE_BACKING:
-				m.x += (m.group == 0 ? -1 : 1) * m.beAtk * 0.5f;
+				m.x += (m.group == 0 ? -1 : 1) * m.atk * 0.5f;
 				break;
 			case Role.STATE_DEATH:
 				break;
