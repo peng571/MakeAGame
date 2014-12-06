@@ -158,22 +158,22 @@ public class GameView implements View {
 		list.addAll(screen.render());
 		
 		
-		// 糧o�刈永蝓刈�簫n禮R >< 禮�要織繳model瞼��
-		for (String s : build) {
-			final Hold hold = new Gson().fromJson(s, Hold.class);
-			battle_scene.field.model(hold);
-			// Engine.logI("get hold " + s);
-			for (RoleHold r : hold.roles) {
-				if (!r.id.equals(MakeAGame.CASTLE)) {
-					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
-				}
-				list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
-			}
-			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
-			for (int i = 0; i < btnCallHeros.length; i++) {
-				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
-			}
-		}
+//		// 糧o�刈永蝓刈�簫n禮R >< 禮�要織繳model瞼��
+//		for (String s : build) {
+//			final Hold hold = new Gson().fromJson(s, Hold.class);
+//			battle_scene.field.model(hold);
+//			// Engine.logI("get hold " + s);
+//			for (RoleHold r : hold.roles) {
+//				if (!r.id.equals(MakeAGame.CASTLE)) {
+//					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
+//				}
+//				list.add(new RenderEvent(String.valueOf(r.hp)).XY(r.x - (r.group == 0 ? 32 : 0), 260));
+//			}
+//			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
+//			for (int i = 0; i < btnCallHeros.length; i++) {
+//				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
+//			}
+//		}
 		return list;
 	}
 

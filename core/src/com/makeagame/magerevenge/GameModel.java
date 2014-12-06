@@ -10,11 +10,20 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
+import com.makeagame.core.component.Position;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.tools.State;
 
 public class GameModel implements Model {
+
+	public final static String SCREEN_MAIN = "main";
+	public final static String SCREEN_BATTLE = "battle";
+	public final static String SCREEN_MENU = "levelmenu";
+
+	String screen; // "main", "battle", "levelmenu"
+	boolean isStoreOpen;
+	int currentTime;
 
 	boolean start;
 	Random rand = new Random();
@@ -32,19 +41,31 @@ public class GameModel implements Model {
 	int totalMoney;
 	int castleLevel;
 
+	SendCard[] sendCards;
 	static int[] COST = { 150, 100, 250, 300, 300 };
 
 	public GameModel() {
 		roles = new ArrayList<Role>();
+		sendCards = new SendCard[] {
+				new SendCard(MakeAGame.ROLE_1, 100, 3000),
+				new SendCard(MakeAGame.ROLE_2, 250, 6000),
+				new SendCard(MakeAGame.ROLE_3, 300, 12000),
+				new SendCard(MakeAGame.ROLE_4),
+				new SendCard(MakeAGame.ROLE_4)
+		};
+
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
 		startLevel(1, 1);
 		enemyCreateState = new State(new long[][] { { State.BLOCK, enemyCreateTime }, { enemyCreateTime, State.BLOCK } });
 		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
+		skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
+
 	}
 
 	private void startLevel(int level, int difficulty) {
-		resume();
+		screen = "battle";
+		resumeGame();
 		// TODO
 	}
 
@@ -53,7 +74,8 @@ public class GameModel implements Model {
 		// TODO
 	}
 
-	private void resume() {
+	private void resumeGame() {
+
 		start = true;
 		totalMoney = 0;
 		castleLevel = 1;
@@ -98,7 +120,11 @@ public class GameModel implements Model {
 				}
 				break;
 			case Sign.BATTLE_UsePower:
-				// TODO
+				if (skillCDState.enter(1)) {
+					// TODO power
+					powerApplyTime = State.global_current;
+					skillCDState.enter(0);
+				}
 				break;
 			case Sign.BATTLE_Upgrade:
 				player = params.getInt("player");
@@ -116,7 +142,7 @@ public class GameModel implements Model {
 				if (params.getBoolean("toggle")) {
 					pause();
 				} else {
-					resume();
+					resumeGame();
 				}
 				break;
 			case Sign.BATTLE_Surrender:
@@ -168,21 +194,78 @@ public class GameModel implements Model {
 		}
 	}
 
+	long powerApplyTime;
+
 	@Override
 	public String hold() {
 		Hold hold = new Hold();
-		for (Role r : roles) {
-			hold.roles.add(new RoleHold(r.m.id, r.m.x, r.m.hp, r.m.group, 1));
+		hold.screen = screen;
+		if (screen.equals(SCREEN_BATTLE)) {
+			hold.money = totalMoney;
+			hold.resource = new int[] { 0, 0, 0 };
+			hold.sendcard = new Hold.SendCard[sendCards.length];
+			for (int i = 0; i < sendCards.length; i++) {
+				hold.sendcard[i] = sendCards[i].hold();
+			}
+			hold.soldier = new ArrayList<Hold.Unit>();
+			hold.castle = new Hold.Unit[2];
+			for (Role r : roles) {
+				if (!r.m.id.equals(MakeAGame.CASTLE)) {
+					hold.soldier.add(r.hold());
+				} else {
+					int id = r.m.group;
+					hold.castle[id] = r.hold();
+				}
+			}
+			hold.powerApplyTime = powerApplyTime;
+			hold.powerCD = (float) skillCDState.elapsed() / (float) skillCDTime;
 		}
-		hold.cost = COST;
-		hold.money = totalMoney;
-		hold.gameStart = start;
+		hold.isStoreOpen = false;
+		hold.currentTime = State.global_current;
 		return new Gson().toJson(hold);
 	}
 
 	@Override
 	public String info() {
 		return "main model";
+	}
+
+	class SendCard {
+		long cdTime;
+		State state;
+		boolean locked;
+		int costMoney;
+		int[] costResource;
+		String type;
+		int strongLevel;
+
+		public SendCard(String type) {
+			this.type = type;
+			this.locked = true;
+		}
+
+		public SendCard(String type, int costMoney, long cdTime) {
+			this.type = type;
+			this.costMoney = costMoney;
+			this.cdTime = cdTime;
+			state = new State(new long[][] { { State.BLOCK, State.ALLOW, cdTime, State.BLOCK } });
+			costResource = new int[] { 0, 0, 0 };
+			locked = false;
+			strongLevel = 1;
+		}
+
+		public Hold.SendCard hold() {
+			Hold.SendCard h = new Hold.SendCard();
+			h.type = type;
+			h.locked = locked;
+			if (!locked) {
+				h.costMoney = costMoney;
+				h.costResource = costResource;
+				h.sendCD = (float) state.elapsed() / (float) cdTime;
+				h.strongLevel = strongLevel;
+			}
+			return h;
+		}
 	}
 
 	class Role {
@@ -196,18 +279,21 @@ public class GameModel implements Model {
 
 		State state;
 		Role meet;
-
 		Attribute m;
-
 		long lastAttackTime;
 		long backingTime = 50;
+		ArrayList<Hold.Hurt> hurtRecord;
 
 		public Role(String gson, int group) {
 			m = init(gson);
 			m.group = group;
-			m.x = group == 0 ? 32 : (Bootstrap.screamWidth() - 32);
+			m.x = group == 0 ? 110 : 848;
+			m.y = 340 + (20 - rand.nextInt(40));
 			m.maxHp = m.hp;
 			m.baseAtkTime = m.atkTime;
+			m.level = 1;
+			hurtRecord = new ArrayList<Hold.Hurt>();
+
 			state = new State(new long[][] {
 					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
 					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW },
@@ -223,12 +309,14 @@ public class GameModel implements Model {
 			int maxHp;
 			int atk;
 			int x;
+			int y;
 			float sX;
 			int money;
 			int beAtk;
 			long atkTime;
 			long baseAtkTime;
 			int range;
+			int level;
 		}
 
 		public Attribute init(String gson) {
@@ -261,14 +349,15 @@ public class GameModel implements Model {
 
 			if (m.atk > 0) {
 				if (state.enter(Role.STATE_ATTACKING)) {
-//					System.out.println(m.id + " attack to " + meet.m.id);
+					// System.out.println(m.id + " attack to " + meet.m.id);
 					meet.m.hp -= m.atk;
 					if (!meet.m.id.equals("castle")) {
 						meet.m.beAtk = m.atk;
 					}
+					meet.hurtRecord.add(new Hold.Hurt(State.global_current, m.atk));
 					meet.state.enter(Role.STATE_BACKING);
 					state.setTableValue(getAtkTime(true), 1, 2);
-					meet.state.setTableValue(meet.getAtkTime(false),1, 2);
+					meet.state.setTableValue(meet.getAtkTime(false), 1, 2);
 				}
 			}
 
@@ -285,8 +374,7 @@ public class GameModel implements Model {
 			}
 
 			// System.out.println(m.id + " state is " + state.currentStat());
-			switch (state.currentStat())
-			{
+			switch (state.currentStat()) {
 			case Role.STATE_MOVING:
 				m.x += (m.group == 0 ? 1 : -1) * m.sX;
 				break;
@@ -300,6 +388,29 @@ public class GameModel implements Model {
 			case Role.STATE_DEATH:
 				break;
 			}
+		}
+
+		public Hold.Unit hold() {
+			Hold.Unit h = new Hold.Unit();
+			h.group = m.group;
+			h.hpp = (float) m.hp / (float) m.maxHp;
+			h.hurtRecord = new ArrayList<Hold.Hurt>();
+			// not a good function
+			for (int i = 0; i < hurtRecord.size(); i++) {
+				if (hurtRecord.get(i).time > State.global_current - 10000) {
+					h.hurtRecord.add(hurtRecord.get(i));
+				}
+			}
+			h.lastAttackTime = state.elapsed(STATE_ATTACKING);
+			h.lastBackingTime = state.elapsed(STATE_BACKING);
+			h.lastDeathTime = state.elapsed(STATE_DEATH);
+			h.lastPreparingTime = state.elapsed(STATE_PERPARING);
+			h.lastWalkTime = state.elapsed(STATE_MOVING);
+			h.pos = new Position<Integer>(m.x, m.y);
+			h.stateRecord = state.currentStat();
+			h.strongLevel = m.level;
+			h.type = m.id;
+			return h;
 		}
 	}
 }
