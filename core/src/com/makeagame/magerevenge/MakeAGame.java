@@ -82,6 +82,7 @@ public class MakeAGame {
 				resource.bind("role_hurt", new Resource().image("mr/role_hurt.png"));
 				resource.bind("role_fail", new Resource().image("mr/role_fail.png"));
 				resource.bind("role_dead", new Resource().image("mr/role_dead.png"));
+				resource.bind("role_hp", new Resource().image("mr/role_hp.png"));
 				
 				resource.bind("button1.snd", new Resource().sound("sound/button-50.mp3"));
 			}

@@ -1,8 +1,9 @@
 package com.makeagame.magerevenge;
 
 import java.util.ArrayList;
+
 import org.json.JSONException;
-import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.makeagame.core.Controler;
 import com.makeagame.core.resource.ResourceManager;
@@ -11,10 +12,7 @@ import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button2;
-import com.makeagame.tools.KeyTable;
-import com.makeagame.tools.KeyTable.Frame;
-import com.makeagame.tools.KeyTable.Key;
+import com.makeagame.tools.Bar.Direction;
 import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
@@ -43,8 +41,8 @@ public class GameView implements View {
 				int idx = output.codePointAt(i) - 48;
 				offset += 12;
 				list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
-					.XY(x+offset, y)
-					.src(idx*12, 0, 12, 24)
+					.XY(x + offset, y)
+					.src(idx * 12, 0, 12, 24)
 				);
 			}
 			return list;
@@ -110,25 +108,39 @@ public class GameView implements View {
 	class ViewTopBoard extends SimpleLayout {
 		
 		SimpleLayout top_board;
-		SimpleLayout base_hp;
 		SimpleLayout pause;
-		
+		SimpleLayout hp0, hp1;
+		Bar bar0, bar1;
 		public ViewTopBoard() {
 			xy(0, 0);
 			top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).xy(480, 0);
-			base_hp = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
 			pause = new SimpleLayout(new Sprite("pause").center(24, 0)).xy(0, 40);
+			hp0 = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
+			hp1 = new SimpleLayout(new Sprite("base_hp")).xy(75, 28);
 
 			addChild(top_board
-					.addChild(base_hp)
+					.addChild(hp0)
+					.addChild(hp1)
 					.addChild(pause));
+			
+			bar0 = new Bar();
+			bar0.setBar(Direction.ROW_RESVERSE, 155);
+			bar1 = new Bar();
+			bar1.setBar(Direction.ROW, 155);
 		}
 		
 		@Override
 		public void beforeRender() {
 			super.beforeRender();
-		
+			bar0.apply(hp0.sprite);
+			bar1.apply(hp1.sprite);
 		}
+		
+		public void model(Hold data) {
+			bar0.percent = data.castle[0].hpp;
+			bar1.percent = data.castle[1].hpp;
+		}
+		
 	}
 	
 	class ViewBattleScene extends SimpleLayout {
@@ -174,6 +186,8 @@ public class GameView implements View {
 			res_table.model(data);
 			power_ring.model(data);
 			card_table.model(data);
+			top_board.model(data);
+			
 			field.model(data);
 		}
 		
@@ -219,77 +233,13 @@ public class GameView implements View {
 		screen.reslove(0, 0);
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		list.addAll(screen.render());
-		
-		
-//		// 糧o�刈永蝓刈�簫n禮R >< 禮�要織繳model瞼��
-		for (String s : build) {
-			final Hold hold = new Gson().fromJson(s, Hold.class);
-			battle_scene.field.model(hold);
-			// Engine.logI("get hold " + s);
-			for (Hold.Unit r : hold.soldier) {
-//				if (!r.id.equals(MakeAGame.CASTLE)) {
-//					list.add(new RenderEvent(ResourceManager.get().fetch(r.id)).XY(r.x - (r.group == 0 ? 32 : 0), 300).srcWH(32, 32)); // .filp(r.group == 1, false)
-//				}
-				list.add(new RenderEvent(String.valueOf(r.hpp)).XY(r.pos.getX() - (r.group == 0 ? 32 : 0), r.pos.getY()));
-			}
-			list.add(new RenderEvent(String.valueOf(hold.money)).XY(50, 50));
-//			for (int i = 0; i < hold.sendcard.length; i++) {
-//				list.addAll(btnCallHeros[i].draw(hold.cost[i]));
-//			}
-		}
+
 		return list;
 	}
 
 	@Override
 	public String info() {
 		return "main view";
-	}
-
-	class Button {
-		String id;
-		int x, y, w, h;
-		int key = -1;
-
-		public Button(String id, int x, int y, int w, int h) {
-			this.id = id;
-			listenTo(-1);
-			listenTo(x, y, w, h);
-		}
-
-		public void listenTo(int x, int y, int w, int h) {
-			this.x = x;
-			this.y = y;
-			this.h = h;
-			this.w = w;
-		}
-
-		public void listenTo(int key) {
-			this.key = key;
-		}
-
-		public boolean isClick(SignalEvent s) {
-			if (key != -1) {
-				if (s.type == SignalEvent.KEY_EVENT && s.signal.press(key)) {
-					return true;
-				}
-			}
-			if (h != -1 || w != -1) {
-				if ((s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) &&
-						s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_UP) {
-					if (s.signal.x > x && s.signal.x < x + w && s.signal.y > y && s.signal.y < y + h) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
-		public ArrayList<RenderEvent> draw(int cost) {
-			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-			// list.add(new RenderEvent(ResourceManager.get().fetch(id + "btn")).XY(x, y).srcWH(w, h));
-			list.add(new RenderEvent(String.valueOf(cost)).XY(x, y));
-			return list;
-		}
 	}
 	
 }

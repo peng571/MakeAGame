@@ -104,7 +104,7 @@ public class Engine extends ApplicationAdapter {
 		}
 
 		
-		logD("batch begine time " + System.currentTimeMillis());
+//		logD("batch begine time " + System.currentTimeMillis());
 		batch.begin();
 		batch.enableBlending();
 		renderList = ViewManager.get().render();
@@ -141,7 +141,7 @@ public class Engine extends ApplicationAdapter {
 			}
 		}
 		batch.end();
-		logD("batch end time " + System.currentTimeMillis());
+//		logD("batch end time " + System.currentTimeMillis());
 		try {
 			Thread.sleep((long) (1000 / Bootstrap.FPS - Gdx.graphics.getDeltaTime()));
 		} catch (InterruptedException e1) {
