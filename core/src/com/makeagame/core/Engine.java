@@ -118,14 +118,14 @@ public class Engine extends ApplicationAdapter {
 			// } else {
 			// batch.disableBlending();
 			// }
-			/*
+			
 			if (e.useBlend) {
 				batch.setBlendFunction(e.srcFunc, e.dstFunc);
 			} else {
 				batch.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 			}
 			batch.setColor(e.color);
-			*/
+			
 			switch (e.type) {
 			case RenderEvent.IMAGE:
 				//if (e.texture != null) {
