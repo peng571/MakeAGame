@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
-import com.makeagame.core.Engine;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
 
@@ -33,11 +31,10 @@ public class SimpleLayout {
 	}
 	
 	public SimpleLayout(Sprite sprite) {
+		this();
 		this.sprite = sprite;
-		if (this.sprite == null) {
-			this.sprite = new Sprite();
-		}
 	}
+	
 	public SimpleLayout copy() {
 		return new SimpleLayout().copyFrom(this);
 	}
@@ -65,6 +62,11 @@ public class SimpleLayout {
 		return this;
 	}
 	
+	
+	public SimpleLayout sp(Sprite sp)	{
+		this.sprite = sp;
+		return this;
+	}
 	
 	public SimpleLayout xy(int x, int y) {
 		this.fixedX = x;

@@ -2,8 +2,6 @@ package com.makeagame.tools;
 
 import java.util.ArrayList;
 
-import com.makeagame.core.Engine;
-
 public class State {
 	long[][] cond_table;
 	public static long ALLOW = 0; // Allow

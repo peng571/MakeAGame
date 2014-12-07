@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button2;
+import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
@@ -17,9 +17,9 @@ public class ViewPower extends SimpleLayout {
 	KeyTable ktReady;
 
 	Bar bar;
-	Button2 button;
-	Button2 btn_prev;
-	Button2 btn_next;
+	Button button;
+	Button btn_prev;
+	Button btn_next;
 	
 	SimpleLayout layout_ring;
 	SimpleLayout layout_icon;
@@ -39,8 +39,8 @@ public class ViewPower extends SimpleLayout {
 				//new Frame(  100	, new Key[] { new Key(".sound", "") }),
 				
 				new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }),
-				new Frame(  80	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }),
-				new Frame(  160	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }),
+				new Frame(  300	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }), //80
+				new Frame(  600	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }), // 160
 		}).setLoop(true);
 		/*
 		keyTable = new KeyTable(new Frame[] {
@@ -58,7 +58,7 @@ public class ViewPower extends SimpleLayout {
 		bar.setBar(Bar.Direction.COLUMN_REVERSE, 180);
 
 		{
-			button = new Button2() {
+			button = new Button() {
 				@Override
 				public void OnMouseDown() {
 					ViewPower.this.usePower();
@@ -76,7 +76,7 @@ public class ViewPower extends SimpleLayout {
 		
 		
 		
-		btn_prev = new Button2() {
+		btn_prev = new Button() {
 			@Override
 			public void OnMouseDown() {
 				ViewPower.this.prevPower();
@@ -91,7 +91,7 @@ public class ViewPower extends SimpleLayout {
 		}
 		addChild(layout_prev);
 		
-		btn_next = new Button2() {
+		btn_next = new Button() {
 			@Override
 			public void OnMouseDown() {
 				ViewPower.this.nextPower();
@@ -124,9 +124,9 @@ public class ViewPower extends SimpleLayout {
 		btn_next.apply(layout_next);
 		
 		if (bar.percent >= 1.0) {
-			button.enable_state.enter(Button2.Active);
+			button.enable_state.enter(Button.Active);
 		} else {
-			button.enable_state.enter(Button2.Inactive);
+			button.enable_state.enter(Button.Inactive);
 		}
 	}
 	
@@ -142,15 +142,14 @@ public class ViewPower extends SimpleLayout {
 	public void usePower() {
 		//bar.percent = 0.0f;
 		
-//		try {
-//			 TODO(1): call UsePower
-//			Controler.get().call(
-//				Sign.BATTLE_SendSoldier, new JSONObject()
-//						.put("player", 0)
-//						.put("soldierType", typeList[index]));
-//		} catch(JSONException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Controler.get().call(
+				Sign.BATTLE_UsePower, new JSONObject()
+						.put("player", 0)
+						.put("powerType", 0));
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void nextPower() {

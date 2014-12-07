@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.makeagame.core.Controler;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button2;
+import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
@@ -26,7 +26,7 @@ public class ViewCardTable extends SimpleLayout {
 		SimpleLayout icon_bar;
 		
 		Bar bar;
-		Button2 button;
+		Button button;
 		final int selfIndex;
 		String type;
 		
@@ -45,7 +45,7 @@ public class ViewCardTable extends SimpleLayout {
 			bar.setBar(Bar.Direction.COLUMN_REVERSE, 144);
 			bar.percent = 1.0f;
 			
-			button = new Button2() {
+			button = new Button() {
 				@Override
 				public void OnMouseDown() { 
 					ViewCardTable.this.sendSoldiers(selfIndex); 
@@ -118,9 +118,9 @@ public class ViewCardTable extends SimpleLayout {
 			bar.apply(icon_bar.sprite);
 			
 			if (bar.percent <= 0.0) {
-				button.enable_state.enter(Button2.Active);
+				button.enable_state.enter(Button.Active);
 			} else {
-				button.enable_state.enter(Button2.Inactive);
+				button.enable_state.enter(Button.Inactive);
 			}
 		}
 		

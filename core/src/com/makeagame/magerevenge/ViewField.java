@@ -1,20 +1,24 @@
 package com.makeagame.magerevenge;
 
-import com.makeagame.core.Engine;
+import java.util.LinkedList;
+
+import com.makeagame.tools.Bar;
+import com.makeagame.tools.Bar.Direction;
 import com.makeagame.tools.KeyTable;
-import com.makeagame.tools.SimpleLayout;
-import com.makeagame.tools.Sprite;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
+import com.makeagame.tools.SimpleLayout;
+import com.makeagame.tools.Sprite;
 
 public class ViewField extends SimpleLayout {
 	SimpleLayout castle_L;
 	SimpleLayout castle_R;
 	SimpleLayout roleLayer;
-	//ArrayList<SimpleLayout> roles;
+	LinkedList<RoleView> roles;
 	KeyTable[] roleKeyTable;
-	//int count = 0;
-	
+
+	int count = 0;
+
 	public ViewField() {
 		super();
 		xy(0, 340);
@@ -24,8 +28,9 @@ public class ViewField extends SimpleLayout {
 		addChild(castle_L);
 		addChild(castle_R);
 		addChild(roleLayer);
-		
+
 		roleKeyTable = new KeyTable[5];
+
 		
 		// walking
 		roleKeyTable[0] = new KeyTable(new Frame[] {
@@ -66,52 +71,81 @@ public class ViewField extends SimpleLayout {
 				new Frame( 300, new Key[] { new Key("image", "role_dead") }),
 				new Frame( 400, new Key[] { new Key("image", "role_dead") }),
 		});	
+
+		roles = new LinkedList<ViewField.RoleView>();
+
 	}
-	
+
 	@Override
 	public void beforeRender() {
 		super.beforeRender();
-	
-	}
-	
-	public void model(Hold data) {
-		
-		// TODO(3): gc problem, need optimize
-		roleLayer.removeChildren();
-		
-		for (Hold.Unit r : data.soldier) {
-			
-			if (!r.type.equals(MakeAGame.CASTLE)) {
-				Sprite sp = new Sprite("role_walk1").center(60, 90)
-							.flip(r.group==1 ? true:false, false);
-				
-				//Engine.logI(new Long(r.lastWalkTime).toString());
-				
-				// solider animation
-				if (r.stateRecord == 0) {
-					sp.apply(roleKeyTable[0].get(r.lastWalkTime));
-				}
-				if (r.stateRecord == 1) {
-					sp.apply(roleKeyTable[1].get(r.lastPreparingTime));
-				}
-				if (r.stateRecord == 3) {
-					sp.apply(roleKeyTable[3].get(r.lastBackingTime));
-				}
-				if (r.stateRecord == 4) {
-					sp.apply(roleKeyTable[4].get(r.lastDeathTime));
-				}
-				
-				// TODO(3): gc problem, need optimize
-				roleLayer.addChild(new SimpleLayout(sp)
-						.xy(r.pos.getX(), 0));
-			}
-			// TODO(2): hp bar
-			
-			
+		for (RoleView role : roles) {
+			role.bar.apply(role.children.get(0).sprite);
 		}
-		
-		for (Hold.Unit r : data.castle) {
-			// TODO(3): castle
+	}
+
+	public void model(Hold data) {
+
+	
+		while (data.soldier.size() > roles.size()) {
+			roles.add(new RoleView()); 	// add only
+		}
+
+		count = 0;
+		for (Hold.Unit r : data.soldier) {
+			// Engine.logI(new Long(r.lastWalkTime).toString());
+			RoleView role = roles.get(count);
+			role.model(r);
+			role.visible = true;
+			roleLayer.addChild(role.xy(r.pos.getX(), r.pos.getY()));
+			role.bar.percent = r.hpp;
+			count++;
+		}
+		for (int i = count; i < roles.size(); i++) {
+			roles.get(count).visible = false;
+		}
+
+		// TODO(3): castle
+//		for (Hold.Unit r : data.castle) {
+//			
+//		}
+	}
+
+	class RoleView extends SimpleLayout {
+
+		Bar bar;
+
+		public RoleView() {
+			super();
+			addChild(new SimpleLayout(new Sprite("role_hp")).xy(-20, -100));
+			bar = new Bar();
+			bar.setBar(Direction.ROW, 32);
+			sprite = new Sprite("role_walk1").center(60, 90);
+		}
+
+		public void model(Hold.Unit r) {
+
+			if ( r.group == 1) {
+				sprite.flip(true, false);
+			}else{
+				sprite.flip(false, false);
+			}
+
+			// solider animation
+			switch (r.stateRecord) {
+			case 0:
+				sprite.apply(roleKeyTable[0].get(r.lastWalkTime));
+				break;
+			case 1:
+				sprite.apply(roleKeyTable[1].get(r.lastPreparingTime));
+				break;
+			case 3:
+				sprite.apply(roleKeyTable[3].get(r.lastBackingTime));
+				break;
+			case 4:
+				sprite.apply(roleKeyTable[4].get(r.lastDeathTime));
+				break;
+			}
 		}
 	}
 }

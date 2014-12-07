@@ -2,6 +2,7 @@ package com.makeagame.core;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.model.ModelManager;
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
@@ -24,6 +24,7 @@ public class Engine extends ApplicationAdapter {
 
 	public static boolean LOG = true;
 	public static boolean DEBUG = true;
+	public static final String TAG = "MakeAGame";
 
 	SpriteBatch batch;
 	BitmapFont gameLable;
@@ -39,6 +40,9 @@ public class Engine extends ApplicationAdapter {
 	@Override
 	public void create() {
 		System.out.println("game start");
+		if (LOG) {
+			Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		}
 		batch = new SpriteBatch();
 
 		bootstrap.resourceFactory(ResourceManager.get());
@@ -100,6 +104,8 @@ public class Engine extends ApplicationAdapter {
 			signalList = new ArrayList<SignalEvent>();
 		}
 
+		
+//		logD("batch begine time " + System.currentTimeMillis());
 		batch.begin();
 		batch.enableBlending();
 		renderList = ViewManager.get().render();
@@ -161,6 +167,7 @@ public class Engine extends ApplicationAdapter {
 			}
 		}
 		batch.end();
+//		logD("batch end time " + System.currentTimeMillis());
 		try {
 			Thread.sleep((long) (1000 / Bootstrap.FPS - Gdx.graphics.getDeltaTime()));
 		} catch (InterruptedException e1) {
@@ -170,21 +177,25 @@ public class Engine extends ApplicationAdapter {
 
 	public static void logI(String s) {
 		if (LOG) {
+//			Gdx.app.log(TAG, s);
 			System.out.println(s);
 		}
 	}
 
 	public static void logD(String d) {
 		if (LOG) {
+//			Gdx.app.debug(TAG, d);
 			System.out.println(d);
 		}
 	}
 
 	public static void logE(String e) {
+//		Gdx.app.error(TAG, e);
 		System.out.println(e);
 	}
 
 	public static void logE(Exception e) {
+//		Gdx.app.error(TAG, null, e);
 		System.out.println(e);
 	}
 	

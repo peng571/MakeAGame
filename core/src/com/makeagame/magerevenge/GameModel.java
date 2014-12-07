@@ -1,6 +1,8 @@
 package com.makeagame.magerevenge;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -28,10 +30,7 @@ public class GameModel implements Model {
 	ArrayList<Role> roles;
 
 	State moneyGetState;
-	State skillCDState;
-
 	long moneyGetTime = 300;
-	long skillCDTime = 3000;
 	Player[] player; // You & computer(before change to online mode)
 	int moneyGet = 5;
 
@@ -48,7 +47,6 @@ public class GameModel implements Model {
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
 		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
-		skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
 		start = true;
 	}
 
@@ -97,11 +95,7 @@ public class GameModel implements Model {
 				player[params.getInt("player")].click(soldierId);
 				break;
 			case Sign.BATTLE_UsePower:
-				if (skillCDState.enter(1)) {
-					// TODO power
-					powerApplyTime = State.global_current;
-					skillCDState.enter(0);
-				}
+				player[params.getInt("player")].power(params.getInt("powerType"));
 				break;
 			case Sign.BATTLE_Upgrade:
 				player[params.getInt("player")].click(0);
@@ -132,6 +126,7 @@ public class GameModel implements Model {
 				player[0].totalMoney += params.getInt("amonut");
 				break;
 			case Sign.DEBUG_ResetColddown:
+
 				// TODO
 				break;
 			case Sign.DEBUG_PrintData:
@@ -152,7 +147,7 @@ public class GameModel implements Model {
 			// run role
 			for (ListIterator<Role> it = roles.listIterator(); it.hasNext();) {
 				Role r = it.next();
-				if (r.state.currentStat() != Role.STATE_DEATH) {
+				if (r.state.currentStat() != Role.STATE_RECYCLE) {
 					r.run();
 				} else {
 					it.remove();
@@ -176,6 +171,20 @@ public class GameModel implements Model {
 			}
 			hold.soldier = new ArrayList<Hold.Unit>();
 			hold.castle = new Hold.Unit[2];
+
+//			Collections.sort(roles, new Comparator<Role>() {
+//				@Override
+//				public int compare(Role r1, Role r2) {
+//					if (r1.m.y < r2.m.y) {
+//						return -1;
+//					}
+//					if (r1.m.y > r2.m.y) {
+//						return 1;
+//					}
+//					return 0;
+//				}
+//			});
+
 			for (Role r : roles) {
 				if (!r.m.id.equals(MakeAGame.CASTLE)) {
 					hold.soldier.add(r.hold());
@@ -185,7 +194,7 @@ public class GameModel implements Model {
 				}
 			}
 			hold.powerApplyTime = powerApplyTime;
-			hold.powerCD = (float) skillCDState.elapsed() / (float) skillCDTime;
+			hold.powerCD = (float) player[0].skillCDState.elapsed() / (float) player[0].skillCDTime;
 		}
 		hold.isStoreOpen = false;
 		hold.currentTime = State.global_current;
@@ -202,6 +211,8 @@ public class GameModel implements Model {
 		int totalMoney;
 		int castleLevel;
 		SendCard[] sendCards;
+		State skillCDState;
+		long skillCDTime = 20000;
 		boolean ai;
 
 		public Player(int group) {
@@ -216,7 +227,7 @@ public class GameModel implements Model {
 					new SendCard(MakeAGame.ROLE_3, 300, 12000),
 					new SendCard(MakeAGame.ROLE_4),
 			};
-
+			skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
 		}
 
 		public Player(int group, int level) {
@@ -226,30 +237,72 @@ public class GameModel implements Model {
 			{
 			case 1:
 				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 200, 1000),
-						new SendCard(MakeAGame.ROLE_1, 130, 3500),
+						new SendCard(MakeAGame.CASTLE, 250, 1000),
+						new SendCard(MakeAGame.ROLE_1, 160, 3500),
 						new SendCard(MakeAGame.ROLE_2),
 						new SendCard(MakeAGame.ROLE_3),
 						new SendCard(MakeAGame.ROLE_4),
 				};
 				break;
-			case 2:// TODO
+			case 2:
+				sendCards = new SendCard[] {
+						new SendCard(MakeAGame.CASTLE, 200, 1000),
+						new SendCard(MakeAGame.ROLE_1, 140, 3500),
+						new SendCard(MakeAGame.ROLE_2, 300, 7000),
+						new SendCard(MakeAGame.ROLE_3),
+						new SendCard(MakeAGame.ROLE_4),
+				};
+				break;
+			case 3:
+				sendCards = new SendCard[] {
+						new SendCard(MakeAGame.CASTLE, 200, 1000),
+						new SendCard(MakeAGame.ROLE_1, 130, 3500),
+						new SendCard(MakeAGame.ROLE_2, 280, 7000),
+						new SendCard(MakeAGame.ROLE_3),
+						new SendCard(MakeAGame.ROLE_4),
+				};
+				break;
+			case 4:
+				sendCards = new SendCard[] {
+						new SendCard(MakeAGame.CASTLE, 200, 1000),
+						new SendCard(MakeAGame.ROLE_1, 130, 3500),
+						new SendCard(MakeAGame.ROLE_2, 280, 7000),
+						new SendCard(MakeAGame.ROLE_3, 350, 13000),
+						new SendCard(MakeAGame.ROLE_4),
+				};
+				break;
+			case 5:
+				sendCards = new SendCard[] {
+						new SendCard(MakeAGame.CASTLE, 200, 1000),
+						new SendCard(MakeAGame.ROLE_1, 120, 3500),
+						new SendCard(MakeAGame.ROLE_2, 270, 7000),
+						new SendCard(MakeAGame.ROLE_3, 330, 13000),
+						new SendCard(MakeAGame.ROLE_4),
+				};
+				break;
 			}
 
 		}
 
+		public void power(int type) {
+			if (skillCDState.enter(1)) {
+				for (Role r : roles) {
+					if (r.m.group != group) {
+						r.m.hp -= 300;
+					}
+				}
+				powerApplyTime = State.global_current;
+				skillCDState.enter(0);
+			}
+		}
+
 		public void ai() {
-			// TODO
+			// TODO 加入電腦的大決 (大量兵團)
 			for (SendCard card : sendCards) {
 				if (card.canClick(this)) {
 					card.send(this);
 				}
 			}
-			// create enemy
-			// if (enemyCreateState.enter(1)) {
-			// roles.add(new Role(ResourceManager.get().read(MakeAGame.ROLE_1), 1));
-			// enemyCreateState.enter(0);
-			// }
 		}
 
 		public void click(int id) {
@@ -328,30 +381,34 @@ public class GameModel implements Model {
 		public final static int STATE_ATTACKING = 2;
 		public final static int STATE_BACKING = 3;
 		public final static int STATE_DEATH = 4;
+		public final static int STATE_RECYCLE = 5;
 
 		State state;
 		Role meet;
 		Attribute m;
 		long lastAttackTime;
 		long backingTime = 50;
+		long recycleTime = 2000;
+
 		ArrayList<Hold.Hurt> hurtRecord;
 
 		public Role(String gson, int group) {
 			m = init(gson);
 			m.group = group;
 			m.x = group == 0 ? 110 : 848;
-			m.y = 340 + (20 - rand.nextInt(40));
+			m.y = 15 + (15 - rand.nextInt(30));
 			m.maxHp = m.hp;
 			m.baseAtkTime = m.atkTime;
 			m.level = 1;
 			hurtRecord = new ArrayList<Hold.Hurt>();
 
 			state = new State(new long[][] {
-					{ State.BLOCK, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
-					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW },
-					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
-					{ backingTime, backingTime, State.BLOCK, State.BLOCK, State.ALLOW },
-					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK } });
+					{ State.BLOCK, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW, State.BLOCK },
+					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW, State.BLOCK },
+					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW, State.BLOCK },
+					{ backingTime, backingTime, State.BLOCK, State.BLOCK, State.ALLOW, State.BLOCK },
+					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, recycleTime },
+					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK } });
 		}
 
 		public class Attribute {
@@ -420,6 +477,8 @@ public class GameModel implements Model {
 					if (m.id.equals("castle")) {
 						gameOver();
 					}
+				} else {
+					state.enter(STATE_RECYCLE);
 				}
 			}
 

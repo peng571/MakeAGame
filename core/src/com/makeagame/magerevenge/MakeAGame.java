@@ -174,7 +174,7 @@ public class MakeAGame {
 				rm.bindImage("role_hurt", "mr/role_hurt.png");
 				rm.bindImage("role_fail", "mr/role_fail.png");
 				rm.bindImage("role_dead", "mr/role_dead.png");
-				
+				rm.bindImage("role_hp", "mr/role_hp.png");
 //				rm.bind("role_walk1", new Resource().image("mr/role_walk1.png"));
 //				rm.bind("role_walk2", new Resource().image("mr/role_walk2.png"));
 //				rm.bind("role_walk3", new Resource().image("mr/role_walk3.png"));

@@ -1,12 +1,9 @@
 package com.makeagame.core.view;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
-import com.makeagame.core.Engine;
 import com.makeagame.core.resource.Resource;
-import com.makeagame.core.resource.ResourceManager;
 
 public class RenderEvent {
 

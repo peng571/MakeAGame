@@ -1,12 +1,10 @@
 package com.makeagame.tools;
 
 import java.util.ArrayList;
-import com.makeagame.core.Engine;
-import com.makeagame.core.view.RenderEvent;
-import com.makeagame.core.view.SignalEvent;
-import com.makeagame.core.view.View;
 
-public class Button2 {// implements View {
+import com.makeagame.core.view.SignalEvent;
+
+public class Button {// implements View {
 /*
  * 可能的狀態:
  * 定性狀態:
@@ -32,7 +30,7 @@ public class Button2 {// implements View {
 	public State enable_state;
 	public State action_state;
 
-	public Button2()
+	public Button()
 	{
 		action_state = new State(new long[][] {
 				// Static Hovered Pushed
