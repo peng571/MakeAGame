@@ -38,20 +38,18 @@ public class GameModel implements Model {
 	// int maxCastleLevel = 3;
 
 	public GameModel() {
-		roles = new ArrayList<Role>();
-		player = new Player[] { new Player(0), new Player(1) };
-		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
-		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
 		startLevel(1, 1);
-		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
-		skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
-
 	}
 
 	private void startLevel(int level, int difficulty) {
 		screen = "battle";
-		resumeGame();
-		// TODO
+		player = new Player[] { new Player(0), new Player(1, level) };
+		roles = new ArrayList<Role>();
+		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
+		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
+		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
+		skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
+		start = true;
 	}
 
 	private void pause() {
@@ -204,20 +202,29 @@ public class GameModel implements Model {
 		int totalMoney;
 		int castleLevel;
 		SendCard[] sendCards;
+		boolean ai;
 
 		public Player(int group) {
 			this.group = group;
 			totalMoney = 0;
 			castleLevel = 1;
-			if (group == 0) {
-				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 150, 1000),
-						new SendCard(MakeAGame.ROLE_1, 100, 3000),
-						new SendCard(MakeAGame.ROLE_2, 250, 6000),
-						new SendCard(MakeAGame.ROLE_3, 300, 12000),
-						new SendCard(MakeAGame.ROLE_4),
-				};
-			} else {
+			ai = false;
+			sendCards = new SendCard[] {
+					new SendCard(MakeAGame.CASTLE, 150, 1000),
+					new SendCard(MakeAGame.ROLE_1, 100, 3000),
+					new SendCard(MakeAGame.ROLE_2, 250, 6000),
+					new SendCard(MakeAGame.ROLE_3, 300, 12000),
+					new SendCard(MakeAGame.ROLE_4),
+			};
+
+		}
+
+		public Player(int group, int level) {
+			this(group);
+			ai = true;
+			switch (level)
+			{
+			case 1:
 				sendCards = new SendCard[] {
 						new SendCard(MakeAGame.CASTLE, 200, 1000),
 						new SendCard(MakeAGame.ROLE_1, 130, 3500),
@@ -225,7 +232,10 @@ public class GameModel implements Model {
 						new SendCard(MakeAGame.ROLE_3),
 						new SendCard(MakeAGame.ROLE_4),
 				};
+				break;
+			case 2:// TODO
 			}
+
 		}
 
 		public void ai() {
