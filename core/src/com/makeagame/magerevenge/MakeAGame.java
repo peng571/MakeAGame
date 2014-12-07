@@ -33,6 +33,66 @@ public class MakeAGame {
 
 			@Override
 			public void resourceFactory(ResourceManager rm) {
+				rm.bindImage(ROLE_1 + "btn", "mr2/send_icons.png").src(0, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1", "mr2/send_icons.png").src(117, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1", "mr2/send_icons.png").src(234, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1", "mr2/send_icons.png").src(351, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1", "mr2/send_icons.png").src(468, 0, 117, 144);
+				rm.bindImage(ROLE_1 + "btn_inactive", "mr2/send_icons_inactive.png").src(0, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive", "mr2/send_icons_inactive.png").src(117, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive", "mr2/send_icons_inactive.png").src(234, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive", "mr2/send_icons_inactive.png").src(351, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive", "mr2/send_icons_inactive.png").src(468, 0, 117, 144);
+				rm.bindImage(ROLE_1 + "btn_inactive2", "mr2/send_icons_inactive2.png").src(0, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive2", "mr2/send_icons_inactive2.png").src(117, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive2", "mr2/send_icons_inactive2.png").src(234, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive2", "mr2/send_icons_inactive2.png").src(351, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive2", "mr2/send_icons_inactive2.png").src(468, 0, 117, 144);
+				rm.bindImage("role_walk1", "mr2/role.png").src(0, 0, 124, 100);
+				rm.bindImage("role_walk2", "mr2/role.png").src(124, 0, 124, 100);
+				rm.bindImage("role_walk3", "mr2/role.png").src(248, 0, 124, 100);
+				rm.bindImage("role_walk4", "mr2/role.png").src(372, 0, 124, 100);
+				rm.bindImage("role_attack1", "mr2/role.png").src(496, 0, 124, 100);
+				rm.bindImage("role_attack2", "mr2/role.png").src(620, 0, 124, 100);
+				rm.bindImage("role_attack3", "mr2/role.png").src(744, 0, 124, 100);
+				rm.bindImage("role_hurt", "mr2/role.png").src(868, 0, 124, 100);
+				rm.bindImage("role_fail", "mr2/role.png").src(992, 0, 124, 100);
+				rm.bindImage("role_dead", "mr2/role.png").src(1116, 0, 124, 100);
+				rm.bindImage("fund_icon", "mr2/res.png").src(0, 0, 40, 40);
+				rm.bindImage("res1_icon", "mr2/res.png").src(40, 0, 41, 40);
+				rm.bindImage("res2_icon", "mr2/res.png").src(81, 0, 41, 40);
+				rm.bindImage("res3_icon", "mr2/res.png").src(122, 0, 40, 40);
+				rm.bindImage("fund_bg", "mr2/res.png").src(162, 0, 142, 40);
+				rm.bindImage("res_bg", "mr2/res.png").src(304, 0, 100, 40);
+				rm.bindImage("pause", "mr2/res.png").src(404, 0, 48, 48);
+				rm.bindImage("background", "mr2/background1.png").src(0, 0, 960, 540);
+				rm.bindImage("top_board", "mr2/top_board.png").src(0, 0, 960, 100);
+				rm.bindImage("top_title", "mr2/top_title.png").src(0, 0, 140, 80);
+				rm.bindImage("castle_al", "mr2/castle.png").src(0, 0, 256, 256);
+				rm.bindImage("castle_op", "mr2/castle.png").src(256, 0, 256, 256);
+				rm.bindImage("bottom_board", "mr2/bottom_board.png").src(0, 0, 960, 192);
+				rm.bindImage("base_hp", "mr2/base_hp.png").src(0, 0, 155, 14);
+				rm.bindImage("font_number_withe", "mr2/font_number_withe.png").src(0, 0, 120, 24);
+				rm.bindImage("power_next", "mr2/power_btn.png").src(0, 0, 48, 48);
+				rm.bindImage("power_prev", "mr2/power_btn.png").src(48, 0, 48, 48);
+				rm.bindImage("power_a", "mr2/power.png").src(0, 0, 180, 180);
+				rm.bindImage("power_b", "mr2/power.png").src(180, 0, 160, 160);
+				rm.bindImage("power_c", "mr2/power.png").src(340, 0, 160, 160);
+				rm.bindImage("power_ring", "mr2/power.png").src(500, 0, 180, 180);
+				rm.bindImage("power_ring_inactive", "mr2/power.png").src(680, 0, 180, 180);
+
+				
+				rm.bindImage(ROLE_1, "mr2/font_number_withe.png").attribute("data/role1.txt");
+				rm.bindImage(ROLE_2, "mr2/font_number_withe.png").attribute("data/role2.txt");
+				rm.bindImage(ROLE_3, "mr2/font_number_withe.png").attribute("data/role3.txt");
+				rm.bindImage(CASTLE + "L", "mr2/castle.png").attribute("data/castle.txt");
+				rm.bindImage(CASTLE + "R", "mr2/castle.png").attribute("data/castle.txt");
+				
+				rm.bindSound("button1.snd", "sound/button-50.mp3");
+			}
+			
+			//@Override
+			public void resourceFactory2(ResourceManager rm) {
 				rm.bindImage("background", "mr/background1.png");
 				rm.bindImage("top_board", "mr/top_board.png");
 				rm.bindImage("pause", "mr/pause.png");

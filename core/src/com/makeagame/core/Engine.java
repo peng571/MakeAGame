@@ -128,11 +128,23 @@ public class Engine extends ApplicationAdapter {
 					
 					
 					int dim[] = e.res.getSrcDim();
-					int srcX = dim[0] + e.srcX;
-					int srcY = dim[1] + e.srcY;
-					int srcW = e.srcW == -1 ? dim[2] : Math.min(dim[2], e.srcW);
-					int srcH = e.srcH == -1 ? dim[3] : Math.min(dim[3], e.srcH);
-					//Engine.logI("srcW: " + new Integer(srcW).toString());
+					int dim2[] = new int[]{e.srcX, e.srcY, e.srcW, e.srcH};
+					dim2[0] = dim2[0] + dim[0];
+					dim2[1] = dim2[1] + dim[1];
+					dim2[2] = dim2[2] == -1 ? dim[2] : dim2[2];
+					dim2[3] = dim2[3] == -1 ? dim[3] : dim2[3];
+					
+					dim = inner(dim, dim2);
+					int srcX = dim[0];
+					int srcY = dim[1];
+					int srcW = dim[2];
+					int srcH = dim[3];
+					
+//					Engine.logI("src: (" + new Integer(srcX).toString() + ","
+//										+ new Integer(srcY).toString() + ","
+//										+ new Integer(srcW).toString() + ","
+//										+ new Integer(srcH).toString());
+					
 					//Engine.logI("srcH: " + new Integer(srcH).toString());
 					float x = e.x;
 					float y = Bootstrap.screamHeight() - e.y - srcH;
@@ -174,6 +186,42 @@ public class Engine extends ApplicationAdapter {
 
 	public static void logE(Exception e) {
 		System.out.println(e);
+	}
+	
+	public static int[] inner(int[] a, int[] b) {
+		int ax1 = a[0];
+		int ay1 = a[1];
+		int bx1 = b[0];
+		int by1 = b[1];
+		// right bottom point
+		int ax2 = a[0] + a[2];
+		int ay2 = a[1] + a[3];
+		int bx2 = b[0] + b[2];
+		int by2 = b[1] + b[3];
+		
+		// no intersection
+		if (
+				(ax1 <= bx1 && ax2 <= bx1) ||
+				(bx1 <= ax1 && bx2 <= ax1) ||
+				(ax1 >= bx2 && ax2 >= bx2) ||
+				(bx1 >= ax2 && bx2 >= ax2) ||
+				
+				(ay1 <= by1 && ay2 <= by1) ||
+				(by1 <= ay1 && by2 <= ay1) ||
+				(ay1 >= by2 && ay2 >= by2) ||
+				(by1 >= ay2 && by2 >= ay2) 
+				
+				) {
+			return new int[] {0, 0, 0, 0};
+		} else {
+			ax1 = Math.max(ax1, bx1);
+			ay1 = Math.max(ay1, by1);
+			ax2 = Math.min(ax2, bx2);
+			ay2 = Math.min(ay2, by2);
+			return new int[] {ax1, ay1, ax2-ax1, ay2-ay1};
+		}
+		
+		
 	}
 
 }

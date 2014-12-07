@@ -18,8 +18,8 @@ public class ViewField extends SimpleLayout {
 	public ViewField() {
 		super();
 		xy(0, 340);
-		castle_L = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "L").center(160, 240)).xy(80, 0);
-		castle_R = new SimpleLayout(new Sprite(MakeAGame.CASTLE + "R").center(96, 240)).xy(880, 0);
+		castle_L = new SimpleLayout(new Sprite("castle_al").center(160, 240)).xy(80, 0);
+		castle_R = new SimpleLayout(new Sprite("castle_op").center(96, 240)).xy(880, 0);
 		roleLayer = new SimpleLayout();
 		addChild(castle_L);
 		addChild(castle_R);
