@@ -1,5 +1,6 @@
 package com.makeagame.magerevenge;
 
+import com.makeagame.core.Engine;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
@@ -26,6 +27,7 @@ public class ViewField extends SimpleLayout {
 		
 		roleKeyTable = new KeyTable[5];
 		
+		// walking
 		roleKeyTable[0] = new KeyTable(new Frame[] {
 				//new Frame(  0	, new Key[] { new Key("sound", "") }),
 				//new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
@@ -35,8 +37,35 @@ public class ViewField extends SimpleLayout {
 				new Frame( 200, new Key[] { new Key("image", "role_walk3") }),
 				new Frame( 300, new Key[] { new Key("image", "role_walk4") }),
 				new Frame( 400, new Key[] { new Key("image", "role_walk4") }),
+				
 		}).setLoop(true);
 		
+		// preparing
+		roleKeyTable[1] = new KeyTable(new Frame[] {
+				new Frame( 0, new Key[] { new Key("image", "role_walk3") }),
+				new Frame( 100, new Key[] { new Key("image", "role_attack1") }),
+				new Frame( 200, new Key[] { new Key("image", "role_attack2") }),
+				new Frame( 300, new Key[] { new Key("image", "role_attack3") }),
+				new Frame( 400, new Key[] { new Key("image", "role_walk3") }),
+		});	
+		
+		// STATE_BACKING:
+		roleKeyTable[3] = new KeyTable(new Frame[] {
+				new Frame( 0, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 100, new Key[] { new Key("image", "role_hurt") }),
+				new Frame( 200, new Key[] { new Key("image", "role_hurt") }),
+				new Frame( 300, new Key[] { new Key("image", "role_hurt") }),
+				new Frame( 400, new Key[] { new Key("image", "role_walk4") }),
+		});
+		
+		// STATE_DEATH:
+		roleKeyTable[4] = new KeyTable(new Frame[] {
+				new Frame( 0, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 100, new Key[] { new Key("image", "role_hurt") }),
+				new Frame( 200, new Key[] { new Key("image", "role_fail") }),
+				new Frame( 300, new Key[] { new Key("image", "role_dead") }),
+				new Frame( 400, new Key[] { new Key("image", "role_dead") }),
+		});	
 	}
 	
 	@Override
@@ -53,17 +82,28 @@ public class ViewField extends SimpleLayout {
 		for (Hold.Unit r : data.soldier) {
 			
 			if (!r.type.equals(MakeAGame.CASTLE)) {
-				Sprite sp = new Sprite().center(60, 90)
+				Sprite sp = new Sprite("role_walk1").center(60, 90)
 							.flip(r.group==1 ? true:false, false);
 				
-				// TODO(1): solider animation
+				//Engine.logI(new Long(r.lastWalkTime).toString());
+				
+				// solider animation
 				if (r.stateRecord == 0) {
 					sp.apply(roleKeyTable[0].get(r.lastWalkTime));
+				}
+				if (r.stateRecord == 1) {
+					sp.apply(roleKeyTable[1].get(r.lastPreparingTime));
+				}
+				if (r.stateRecord == 3) {
+					sp.apply(roleKeyTable[3].get(r.lastBackingTime));
+				}
+				if (r.stateRecord == 4) {
+					sp.apply(roleKeyTable[4].get(r.lastDeathTime));
 				}
 				
 				// TODO(3): gc problem, need optimize
 				roleLayer.addChild(new SimpleLayout(sp)
-						.xy(r.pos.getX(), r.pos.getY()));
+						.xy(r.pos.getX(), 0));
 			}
 			// TODO(2): hp bar
 			

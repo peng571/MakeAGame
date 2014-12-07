@@ -347,7 +347,7 @@ public class GameModel implements Model {
 			hurtRecord = new ArrayList<Hold.Hurt>();
 
 			state = new State(new long[][] {
-					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
+					{ State.BLOCK, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
 					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW },
 					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
 					{ backingTime, backingTime, State.BLOCK, State.BLOCK, State.ALLOW },
