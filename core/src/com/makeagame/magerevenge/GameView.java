@@ -20,26 +20,90 @@ import com.makeagame.tools.Sprite;
 
 public class GameView implements View {
 
+	class ViewNumber extends SimpleLayout {
+		int number;
+		String output; 
+		
+		public ViewNumber(Sprite sprite) {
+			super(sprite);
+			output = new String();
+		}
+		
+		public void setNumber(int num) {
+			number = num;
+			output = Integer.toString(number);
+		}
+		
+		@Override
+		public ArrayList<RenderEvent> renderSelf(int x, int y) {
+			beforeRender();
+			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+			int offset = -output.length()*12;
+			for (int i=0; i < output.length(); i++) {
+				int idx = output.codePointAt(i) - 48;
+				offset += 12;
+				list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
+					.XY(x+offset, y)
+					.src(idx*12, 0, 12, 24)
+				);
+			}
+			return list;
+		}
+	}
 	
 	class ViewResTable extends SimpleLayout {
-		SimpleLayout res_icon_money;
-		SimpleLayout res_icon_res1;
-		SimpleLayout res_icon_res2;
-		// TODO: res3
+		SimpleLayout fund;
+		SimpleLayout res1;
+		SimpleLayout res2;
+		SimpleLayout res3;
+		ViewNumber fund_number;
+		ViewNumber res1_number;
+		ViewNumber res2_number;
+		ViewNumber res3_number;
+		
 		public ViewResTable() {
-			xy(217, 0);
-			res_icon_money = new SimpleLayout(new Sprite("res_icon_money")).xy(0, 10);
-			res_icon_res1 = new SimpleLayout(new Sprite("res_icon_res1")).xy(0, 48);
-			res_icon_res2 = new SimpleLayout(new Sprite("res_icon_res2")).xy(0, 86);
-			addChild(res_icon_money);
-			addChild(res_icon_res1);
-			addChild(res_icon_res2);
+			xy(206, 0);
+			fund_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(110, 11);
+			fund_number.setNumber(789456);
+			
+			res1_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(63, 11);
+			res1_number.setNumber(12);
+			
+			res2_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(63, 11);
+			res2_number.setNumber(0);
+			
+			res3_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(63, 11);
+			res3_number.setNumber(1);
+			
+			fund = new SimpleLayout(new Sprite("fund_bg")).xy(0, -22)
+					.addChild(new SimpleLayout(new Sprite("fund_icon").xy(4, 0)))
+					.addChild(fund_number);
+			res1 = new SimpleLayout(new Sprite("res_bg")).xy(0, 15)
+					.addChild(new SimpleLayout(new Sprite("res1_icon").xy(4, 0)))
+					.addChild(res1_number);
+			res2 = new SimpleLayout(new Sprite("res_bg")).xy(0, 51)
+					.addChild(new SimpleLayout(new Sprite("res2_icon").xy(3, 0)))
+					.addChild(res2_number);
+			res3 = new SimpleLayout(new Sprite("res_bg")).xy(0, 87)
+					.addChild(new SimpleLayout(new Sprite("res3_icon").xy(4, 0)))
+					.addChild(res3_number);
+			
+			addChild(fund);
+			addChild(res1);
+			addChild(res2);
+			addChild(res3);
 		}
 		
 		@Override
 		public void beforeRender() {
 			super.beforeRender();
 		
+		}
+		public void model(Hold data) {
+			this.fund_number.setNumber(data.money);
+			this.res1_number.setNumber(data.resource[0]);
+			this.res2_number.setNumber(data.resource[1]);
+			this.res3_number.setNumber(data.resource[2]);
 		}
 	}
 	
@@ -106,6 +170,13 @@ public class GameView implements View {
 					);
 		}
 		
+		public void model(Hold data) {
+			res_table.model(data);
+			power_ring.model(data);
+			card_table.model(data);
+			field.model(data);
+		}
+		
 	}
 
 	SimpleLayout screen;
@@ -141,8 +212,12 @@ public class GameView implements View {
 
 	@Override
 	public ArrayList<RenderEvent> render(ArrayList<String> build) {
-		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+		
+		final Hold data = new Gson().fromJson(build.get(build.size()-1), Hold.class);
+		battle_scene.model(data);
+		
 		screen.reslove(0, 0);
+		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 		list.addAll(screen.render());
 		
 		

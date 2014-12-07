@@ -128,13 +128,13 @@ public class ViewCardTable extends SimpleLayout {
 	
 	
 	public ViewSendButton[] send_buttons;
-	public String[] map;
+	public String[] typeList;
 	
 	public ViewCardTable() {
 		super();
 		xy(349, -13);
 		
-		map = new String[] {
+		typeList = new String[] {
 				MakeAGame.CASTLE,
 				MakeAGame.ROLE_1,
 				MakeAGame.ROLE_2,
@@ -144,7 +144,7 @@ public class ViewCardTable extends SimpleLayout {
 		send_buttons = new ViewSendButton[5];
 		
 		for (int i=0; i<5; i++) {
-			send_buttons[i] = new ViewSendButton(i, map[i]);
+			send_buttons[i] = new ViewSendButton(i, typeList[i]);
 			send_buttons[i].xy(117*i, 0);
 			this.addChild(send_buttons[i]);
 		}
@@ -158,11 +158,10 @@ public class ViewCardTable extends SimpleLayout {
 	
 	public void sendSoldiers(int index) {
 		try {
-			send_buttons[index].bar.percent = 1.0f;
 			Controler.get().call(
 				Sign.BATTLE_SendSoldier, new JSONObject()
 						.put("player", 0)
-						.put("soldierType", map[index]));
+						.put("soldierType", typeList[index]));
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}
@@ -172,7 +171,15 @@ public class ViewCardTable extends SimpleLayout {
 			send_buttons[i].button.signal(signalList);
 		}
 	}
-	public void model() {
-		// TODO: 接收model資料
+	
+	public void model(Hold data) {
+		for (int i=0; i < data.sendcard.length; i++) {
+			Hold.SendCard c = data.sendcard[i];
+			
+			typeList[i] = c.type;
+			send_buttons[i].type = c.type;
+			send_buttons[i].bar.percent = 1.0f - c.sendCD;
+			
+		}
 	}
 }

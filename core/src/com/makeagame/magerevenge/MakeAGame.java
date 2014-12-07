@@ -46,10 +46,16 @@ public class MakeAGame {
 				resource.bind("power_c", new Resource().image("mr/power_c.png"));
 				resource.bind("power_next", new Resource().image("mr/bottom_next.png"));
 				resource.bind("power_prev", new Resource().image("mr/bottom_prev.png"));
-				resource.bind("res_icon_money", new Resource().image("mr/res_icon_money.png"));
-				resource.bind("res_icon_res1", new Resource().image("mr/res_icon_res1.png"));
-				resource.bind("res_icon_res2", new Resource().image("mr/res_icon_res2.png"));
-				resource.bind("res_icon_res3", new Resource().image("mr/res_icon_res3.png"));
+				
+				resource.bind("font_number_withe", new Resource().image("mr/font_number_withe.png"));
+				resource.bind("fund_bg", new Resource().image("mr/fund_bg.png"));
+				resource.bind("res_bg", new Resource().image("mr/res_bg.png"));
+				
+				resource.bind("fund_icon", new Resource().image("mr/fund_icon.png"));
+				resource.bind("res1_icon", new Resource().image("mr/res1_icon.png"));
+				resource.bind("res2_icon", new Resource().image("mr/res2_icon.png"));
+				resource.bind("res3_icon", new Resource().image("mr/res3_icon.png"));
+				
 				resource.bind(ROLE_1, new Resource().image("image/pussy.png").attribute("data/role1.txt"));
 				resource.bind(ROLE_2, new Resource().image("image/person91.png").attribute("data/role2.txt"));
 				resource.bind(ROLE_3, new Resource().image("image/group9.png").attribute("data/role3.txt"));

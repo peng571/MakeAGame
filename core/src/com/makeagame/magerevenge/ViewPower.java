@@ -1,5 +1,9 @@
 package com.makeagame.magerevenge;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.makeagame.core.Controler;
 import com.makeagame.tools.Bar;
 import com.makeagame.tools.Button2;
 import com.makeagame.tools.KeyTable;
@@ -11,7 +15,6 @@ import com.makeagame.tools.KeyTable.Key;
 public class ViewPower extends SimpleLayout {
 	KeyTable keyTable;
 	KeyTable ktReady;
-	double count = 0.0;
 
 	Bar bar;
 	Button2 button;
@@ -131,14 +134,23 @@ public class ViewPower extends SimpleLayout {
 	public void beforeRender() {
 		super.beforeRender();
 
-		bar.percent += 0.001;
+		//bar.percent += 0.001;
 		bar.apply(layout_ring.children.get(1).sprite);
-		count += 0.2;
 	}
 	
 	
 	public void usePower() {
-		bar.percent = 0.0f;
+		//bar.percent = 0.0f;
+		
+//		try {
+//			 TODO(1): call UsePower
+//			Controler.get().call(
+//				Sign.BATTLE_SendSoldier, new JSONObject()
+//						.put("player", 0)
+//						.put("soldierType", typeList[index]));
+//		} catch(JSONException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public void nextPower() {
@@ -158,4 +170,10 @@ public class ViewPower extends SimpleLayout {
 		}
 		layout_icon.sprite.image = "power_" + selectPower;
 	}
+	
+	public void model(Hold data) {
+		bar.percent = data.powerCD;
+		
+	}
+	
 }
