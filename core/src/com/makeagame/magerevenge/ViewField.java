@@ -127,6 +127,8 @@ public class ViewField extends SimpleLayout {
 
 			if ( r.group == 1) {
 				sprite.flip(true, false);
+			}else{
+				sprite.flip(false, false);
 			}
 
 			// solider animation

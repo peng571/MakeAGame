@@ -1,10 +1,8 @@
 package com.makeagame.tools;
 
 import java.util.ArrayList;
-import com.makeagame.core.Engine;
-import com.makeagame.core.view.RenderEvent;
+
 import com.makeagame.core.view.SignalEvent;
-import com.makeagame.core.view.View;
 
 public class Button {// implements View {
 /*
