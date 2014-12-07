@@ -72,6 +72,7 @@ public class MakeAGame {
 				rm.bindImage("castle_op", "mr2/castle.png").src(256, 0, 256, 256);
 				rm.bindImage("bottom_board", "mr2/bottom_board.png").src(0, 0, 960, 192);
 				rm.bindImage("base_hp", "mr2/base_hp.png").src(0, 0, 155, 14);
+				rm.bindImage("role_hp", "mr2/role_hp.png").src(0, 0, 33, 3);
 				rm.bindImage("font_number_withe", "mr2/font_number_withe.png").src(0, 0, 120, 24);
 				rm.bindImage("power_next", "mr2/power_btn.png").src(0, 0, 48, 48);
 				rm.bindImage("power_prev", "mr2/power_btn.png").src(48, 0, 48, 48);
