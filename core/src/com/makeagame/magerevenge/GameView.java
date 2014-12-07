@@ -19,7 +19,6 @@ import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
 public class GameView implements View {
-//	Button[] btnCallHeros;
 
 	
 	class ViewResTable extends SimpleLayout {
@@ -113,12 +112,6 @@ public class GameView implements View {
 	ViewBattleScene battle_scene;
 	
 	public GameView() {
-//		btnCallHeros = new Button[5];
-//		btnCallHeros[0] = new Button(MakeAGame.CASTLE, 0, 450, 64, 64);
-//		btnCallHeros[1] = new Button(MakeAGame.ROLE_1, 80, 450, 64, 64);
-//		btnCallHeros[2] = new Button(MakeAGame.ROLE_2, 180, 450, 64, 64);
-//		btnCallHeros[3] = new Button(MakeAGame.ROLE_3, 280, 450, 64, 64);
-//		btnCallHeros[4] = new Button(MakeAGame.ROLE_3, 380, 450, 64, 64);
 		battle_scene = new ViewBattleScene();
 		
 		screen = battle_scene;
@@ -135,18 +128,12 @@ public class GameView implements View {
 		//	battle_scene.card_table.btn_send_soldiers[i].signal(signalList);
 		//}
 
-		String clickBtn = "";
 		for (SignalEvent s : signalList) {
 			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
 				if (s.signal.press(KeyEvent.ANY_KEY) && s.action == SignalEvent.ACTION_DOWN) {
 				}
 				if (s.action == SignalEvent.ACTION_UP) {
 				}
-//				for (Button b : btnCallHeros) {
-//					if (b.isClick(s)) {
-//						clickBtn = b.id;
-//					}
-//				}
 			}
 		}
 		Controler.get().call(0, null);
