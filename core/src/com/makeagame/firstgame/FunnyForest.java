@@ -51,17 +51,18 @@ public class FunnyForest {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("pear1", new Resource().image("image/pear4.png"));
-				resource.bind("pear2", new Resource().image("image/avocado.png"));
-				resource.bind("banana1", new Resource().image("image/banana4.png"));
-				resource.bind("banana2", new Resource().image("image/banana7.png"));
-				for (int i = 1; i <= 5; i++) {
-//					resource.bind("mengo" + i, new Resource().image("image/mengo.png").src(128 * i, 0, 128, 128));
-				}
-				resource.bind("boom", new Resource().image("image/boom3.png"));
-				resource.bind("bird", new Resource().image("image/bird.png").attribute("data/bird.txt"));
-				resource.bind("fruit", new Resource().attribute("data/fruit.txt"));
-				resource.bind("timmer", new Resource().attribute("data/game.txt"));
+				// TODO:
+//				resource.bind("pear1", new Resource().image("image/pear4.png"));
+//				resource.bind("pear2", new Resource().image("image/avocado.png"));
+//				resource.bind("banana1", new Resource().image("image/banana4.png"));
+//				resource.bind("banana2", new Resource().image("image/banana7.png"));
+//				for (int i = 1; i <= 5; i++) {
+////					resource.bind("mengo" + i, new Resource().image("image/mengo.png").src(128 * i, 0, 128, 128));
+//				}
+//				resource.bind("boom", new Resource().image("image/boom3.png"));
+//				resource.bind("bird", new Resource().image("image/bird.png").attribute("data/bird.txt"));
+//				resource.bind("fruit", new Resource().attribute("data/fruit.txt"));
+//				resource.bind("timmer", new Resource().attribute("data/game.txt"));
 			}
 		});
 	}
@@ -95,11 +96,12 @@ public class FunnyForest {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 			for (String s : build) {
 				Hold hold = new Gson().fromJson(s, Hold.class);
-				list.add(new RenderEvent(ResourceManager.get().fetch("bird")).XY(hold.x, hold.y).srcWH(128, 128).Ratio(0.6f).Rotation(hold.angle));
-				for (Fruit f : hold.fruits) {
-					list.add(new RenderEvent(ResourceManager.get().fetch(f.type + f.level)).XY(f.x, f.y).srcWH(128, 128));
-					// list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128));
-				}
+				// TODO:
+//				list.add(new RenderEvent(ResourceManager.get().fetch("bird")).XY(hold.x, hold.y).srcWH(128, 128).Ratio(0.6f).Rotation(hold.angle));
+//				for (Fruit f : hold.fruits) {
+//					list.add(new RenderEvent(ResourceManager.get().fetch(f.type + f.level)).XY(f.x, f.y).srcWH(128, 128));
+//					// list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128));
+//				}
 				list.add(new RenderEvent(String.valueOf(hold.score)).XY(50, 50));
 			}
 			return list;

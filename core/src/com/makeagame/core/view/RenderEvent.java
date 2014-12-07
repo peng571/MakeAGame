@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.makeagame.core.Engine;
+import com.makeagame.core.resource.Resource;
+import com.makeagame.core.resource.ResourceManager;
 
 public class RenderEvent {
 
@@ -57,7 +59,39 @@ public class RenderEvent {
 		this.type = LABEL;
 		this.s = s;
 	}
+	
+	public Resource res;
+	
+	public RenderEvent(Resource res) {
+		this();
+		this.res = res;
+		if (res.type.equals(Resource.TYPE.IMAGE)) {
+			this.type = IMAGE;
+		} else if (res.type.equals(Resource.TYPE.SOUND)) {
+			this.type = SOUND;
+		}
+		
+		/*
+		if (res.type.equals(Resource.TYPE.IMAGE)) {
+			this.type = IMAGE;
+			this.s = res.path;
+			
+//			int[] WH = res.getWH();
+//			//Engine.logI("w: " + new Integer(WH[0]).toString());
+//			//Engine.logI("h: " + new Integer(WH[1]).toString());
+//			srcH = WH[0];
+//			dstH = srcH;
+//			srcW = WH[1];
+//			dstW = srcW;
+			
+		} else if (res.type.equals(Resource.TYPE.SOUND)) {
+			this.type = SOUND;
+			this.s = res.path;
+		}
+		*/
+	}
 
+	/*
 	public RenderEvent(Texture texture) {
 		this();
 		this.type = IMAGE;
@@ -75,7 +109,7 @@ public class RenderEvent {
 		this.s = id;
 		this.vol = vol;
 		return this;
-	}
+	}*/
 
 	public RenderEvent XY(float x, float y) {
 		this.x = x;
@@ -97,7 +131,9 @@ public class RenderEvent {
 	public RenderEvent src(int x, int y, int w, int h) {
 		this.srcX = x;
 		this.srcY = y;
-		
+		this.srcW = w;
+		this.srcH = h;
+		/*
 		if (w != -1) {
 			this.srcW = w;
 			this.dstW = w;
@@ -106,6 +142,7 @@ public class RenderEvent {
 			this.srcH = h;
 			this.dstH = h;
 		}
+		*/
 		
 		//this.ratioX = 1f;
 		//this.ratioY = 1f;

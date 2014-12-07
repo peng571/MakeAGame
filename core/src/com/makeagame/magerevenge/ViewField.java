@@ -109,7 +109,7 @@ public class ViewField extends SimpleLayout {
 			
 			
 		}
-
+		
 		for (Hold.Unit r : data.castle) {
 			// TODO(3): castle
 		}

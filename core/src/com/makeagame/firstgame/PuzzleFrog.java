@@ -53,15 +53,16 @@ public class PuzzleFrog {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("ball", new Resource().attribute("data/automove.txt"));
-				resource.bind("ball1", new Resource().image("image/black.png"));
-				resource.bind("ball2", new Resource().image("image/blue.png"));
-				resource.bind("ball3", new Resource().image("image/grey.png"));
-				resource.bind("ball4", new Resource().image("image/green.png"));
-				resource.bind("ball5", new Resource().image("image/orange.png"));
-				resource.bind("ball6", new Resource().image("image/pink.png"));
-				resource.bind("ball7", new Resource().image("image/red.png"));
-				resource.bind("boom", new Resource().image("image/boom3.png"));
+				// TODO:
+//				resource.bind("ball", new Resource().attribute("data/automove.txt"));
+//				resource.bind("ball1", new Resource().image("image/black.png"));
+//				resource.bind("ball2", new Resource().image("image/blue.png"));
+//				resource.bind("ball3", new Resource().image("image/grey.png"));
+//				resource.bind("ball4", new Resource().image("image/green.png"));
+//				resource.bind("ball5", new Resource().image("image/orange.png"));
+//				resource.bind("ball6", new Resource().image("image/pink.png"));
+//				resource.bind("ball7", new Resource().image("image/red.png"));
+//				resource.bind("boom", new Resource().image("image/boom3.png"));
 			}
 		});
 	}
@@ -168,8 +169,9 @@ public class PuzzleFrog {
 					for (int j = 0; j < COL; j++) {
 						balls[i][j].run();
 						if (hold.ballMap[i][j] > 0) {
-							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(temp[i][j])))
-									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH).dstWH(balls[i][j].model.w, balls[i][j].model.h));
+							// TODO:
+//							list.add(new RenderEvent(ResourceManager.get().fetch("ball" + String.valueOf(temp[i][j])))
+//									.XY(startX + balls[i][j].model.x, startY + balls[i][j].model.y).srcWH(ballW, ballH).dstWH(balls[i][j].model.w, balls[i][j].model.h));
 						}
 					}
 				}

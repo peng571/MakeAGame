@@ -4,14 +4,47 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.makeagame.core.Engine;
 
 public class Resource {
-	Texture texture;
-	public Sound _sound;
-	int centerY;
-	int x, y, w, h;
+	//Texture texture;
+	//public Sound _sound;
+	
+	public enum TYPE {
+		IMAGE,
+		SOUND
+	};
+	
+	public TYPE type;
+	public String path;
+	
+	int centerX, centerY;
+	int srcX, srcY, srcW, srcH;
 	String file;
-
+	
+	//public Resource() {}
+	
+	public Resource(TYPE type, String path) {
+		this.type = type;
+		this.path = path;
+		if (type.equals(TYPE.IMAGE)) {
+			int w = ResourceManager.get().textureMap.get(path).getWidth();
+			int h = ResourceManager.get().textureMap.get(path).getHeight();
+			//Engine.logI("w: " + new Integer(w).toString());
+			//Engine.logI("h: " + new Integer(h).toString());
+			src(w, h);
+		}
+	}
+	
+	//public int[] getWH() {
+	//	return new int[] {srcW, srcH};
+	//}
+	
+	public int[] getSrcDim() {
+		return new int[] {srcX, srcY, srcW, srcH};
+	}
+	
+	/*
 	public Resource image( String texture) {
 		//this.texture = new TextureRegion(new Texture(texture));
 		this.texture = new Texture(texture);
@@ -23,6 +56,7 @@ public class Resource {
 		this._sound = Gdx.audio.newSound(Gdx.files.internal(path));
 		return this;
 	}
+	*/
 
 	public Resource attribute(String file) {
 		FileHandle handle = Gdx.files.internal(file);
@@ -32,14 +66,18 @@ public class Resource {
 		return this;
 	}
 
-//	public Resource src(int srcX, int srcY, int srcW, int srcH) {
-//		texture.setRegion(srcX, srcY, srcW, srcH);
-//		return this;
-//	}
-////
-//	public Resource src(int srcW, int srcH) {
-//		return src(0, 0, srcW, srcH);
-//	}
+	public Resource src(int srcX, int srcY, int srcW, int srcH) {
+		this.srcX = srcX;
+		this.srcY = srcY;
+		this.srcW = srcW;
+		this.srcH = srcH;
+		return this;
+	}
+
+	public Resource src(int srcW, int srcH) {
+		return src(0, 0, srcW, srcH);
+	}
+
 //
 //	public Resource dst(int dstX, int dstY, int dstW, int dstH) {
 //		this.x = dstX;
