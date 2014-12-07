@@ -54,7 +54,7 @@ public class ViewField extends SimpleLayout {
 			
 			if (!r.type.equals(MakeAGame.CASTLE)) {
 				Sprite sp = new Sprite().center(60, 90)
-							.flip(r.group==1 ? true:false, false);
+							.flip(r.group==1 ? true : false, false);
 				
 				// TODO(1): solider animation
 				if (r.stateRecord == 0) {
@@ -66,6 +66,7 @@ public class ViewField extends SimpleLayout {
 						.xy(r.pos.getX(), r.pos.getY()));
 			}
 			// TODO(2): hp bar
+			
 			
 			
 		}
