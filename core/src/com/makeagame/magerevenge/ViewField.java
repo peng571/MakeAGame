@@ -88,7 +88,9 @@ public class ViewField extends SimpleLayout {
 
 	
 		while (data.soldier.size() > roles.size()) {
-			roles.add(new RoleView()); 	// add only
+			RoleView role = new RoleView();
+			roles.add(role); 	// add only
+			roleLayer.addChild(role);
 		}
 
 		count = 0;
@@ -97,7 +99,7 @@ public class ViewField extends SimpleLayout {
 			RoleView role = roles.get(count);
 			role.model(r);
 			role.visible = true;
-			roleLayer.addChild(role.xy(r.pos.getX(), r.pos.getY()));
+			role.xy(r.pos.getX(), r.pos.getY());
 			role.bar.percent = r.hpp;
 			count++;
 		}

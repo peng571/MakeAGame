@@ -28,6 +28,7 @@ public class SimpleLayout {
 	
 	public SimpleLayout() {
 		this.sprite = new Sprite();
+		children = new ArrayList<SimpleLayout>();
 	}
 	
 	public SimpleLayout(Sprite sprite) {
@@ -51,8 +52,16 @@ public class SimpleLayout {
 		this.visible = other.visible;
 		this.sprite.copyFrom(other.sprite);
 		
-		this.removeChildren();
-		if (other.children != null) {
+		if (this.children.size() == other.children.size()) {
+			for(int i=0; i < other.children.size(); i++) {
+				//SimpleLayout n = new SimpleLayout();
+				//n.copyFrom(other.children.get(i));
+				//this.addChild(n);
+				this.children.get(i).copyFrom(other.children.get(i));
+			}
+			
+		} else {
+			this.removeChildren();
 			for(int i=0; i < other.children.size(); i++) {
 				SimpleLayout n = new SimpleLayout();
 				n.copyFrom(other.children.get(i));
