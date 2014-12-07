@@ -65,7 +65,7 @@ public class MakeAGame {
 				rm.bindImage("fund_bg", "mr2/res.png").src(162, 0, 142, 40);
 				rm.bindImage("res_bg", "mr2/res.png").src(304, 0, 100, 40);
 				rm.bindImage("pause", "mr2/res.png").src(404, 0, 48, 48);
-				rm.bindImage("background", "mr2/background1.png").src(0, 0, 960, 540);
+				rm.bindImage("background", "mr2/background1.jpg").src(0, 0, 960, 540);
 				rm.bindImage("top_board", "mr2/top_board.png").src(0, 0, 960, 100);
 				rm.bindImage("top_title", "mr2/top_title.png").src(0, 0, 140, 80);
 				rm.bindImage("castle_al", "mr2/castle.png").src(0, 0, 256, 256);

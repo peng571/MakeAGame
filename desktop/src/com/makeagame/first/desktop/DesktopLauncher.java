@@ -7,14 +7,13 @@ import com.makeagame.core.Engine;
 import com.makeagame.magerevenge.MakeAGame;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
+	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-//	     Settings settings = new Settings();
-	     config.width = Bootstrap.screamWidth();
-	        config.height = Bootstrap.screamHeight();
-//	        TexturePacker.process(settings, "../images", "../game-android/assets", "game");
-//
-//	        new LwjglApplication(new MakeAGame(), "Game", 320, 480, false);
-	  		new LwjglApplication(new MakeAGame().getEngine(), config);
+		config.width = Bootstrap.screamWidth();
+		config.height = Bootstrap.screamHeight();
+		config.title = "Game";
+		// TexturePacker.process(settings, "../images", "../game-android/assets", "game");
+
+		new LwjglApplication(new MakeAGame().getEngine(), config);
 	}
 }
