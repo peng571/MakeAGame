@@ -3,6 +3,7 @@ package com.makeagame.tools;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
@@ -219,6 +220,9 @@ public class Sprite {
 					// .blend(srcFunc, dstFunc)
 					);
 			} else {*/
+			//Engine.logI("x: " + new Integer(offx + x - centerX).toString());
+			//Engine.logI("y: " + new Integer(offy + y - centerY).toString());
+			
 				list.add(new RenderEvent(ResourceManager.get().fetch(image))
 					.XY(offx + x - centerX, offy + y - centerY)
 					.color(red, green, blue, alpha)
@@ -229,7 +233,10 @@ public class Sprite {
 			//}
 		}
 		if (sound != "" && sound != palyedSound) {
-			list.add(new RenderEvent("").sound(sound, soundVol));
+			//list.add(new RenderEvent("").sound(sound, soundVol));
+			RenderEvent re = new RenderEvent(ResourceManager.get().fetch(sound));
+			re.vol = soundVol;
+			list.add(re);
 		}
 		palyedSound = sound;
 		return list;

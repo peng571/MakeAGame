@@ -44,8 +44,9 @@ public class CatRunning {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("cat", new Resource().image("image/pussy.png").attribute("data/cat.txt"));
-				resource.bind("human", new Resource().image("image/person91.png").attribute("data/human.txt"));
+				// TODO:
+				//resource.bind("cat", new Resource().image("image/pussy.png").attribute("data/cat.txt"));
+				//resource.bind("human", new Resource().image("image/person91.png").attribute("data/human.txt"));
 			}
 		});
 	}
@@ -92,10 +93,12 @@ public class CatRunning {
 			for (String s : build) {
 				Hold hold = new Gson().fromJson(s, Hold.class);
 
-				list.add(new RenderEvent(ResourceManager.get().fetch("cat")).XY(hold.cat.x, hold.cat.y));
-				for (Poistion human : hold.humans) {
-					list.add(new RenderEvent(ResourceManager.get().fetch("human")).XY(human.x, human.y));
-				}
+				// TODO:
+//				list.add(new RenderEvent(ResourceManager.get().fetch("cat")).XY(hold.cat.x, hold.cat.y));
+//				for (Poistion human : hold.humans) {
+//					list.add(new RenderEvent(ResourceManager.get().fetch("human")).XY(human.x, human.y));
+//				}
+				
 				String text = "";
 				if (hold.reseting) {
 					if (hold.countDown == -1) {

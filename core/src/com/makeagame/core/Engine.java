@@ -6,13 +6,14 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.model.ModelManager;
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
@@ -123,20 +124,33 @@ public class Engine extends ApplicationAdapter {
 			batch.setColor(e.color);
 			switch (e.type) {
 			case RenderEvent.IMAGE:
-				if (e.texture != null) {
-					// batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
-					// draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY)
+				//if (e.texture != null) {
+					//batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
+					//draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY)
+					//Texture texture = ResourceManager.get().textureMap.get(e.s);
+					Texture texture = ResourceManager.get().textureMap.get(e.res.path);
+					//Engine.logI("x: " + new Float(e.x).toString());
+					//Engine.logI("y: " + new Float(e.y).toString());
+					
+					
+					int dim[] = e.res.getSrcDim();
+					int srcX = dim[0] + e.srcX;
+					int srcY = dim[1] + e.srcY;
+					int srcW = e.srcW == -1 ? dim[2] : Math.min(dim[2], e.srcW);
+					int srcH = e.srcH == -1 ? dim[3] : Math.min(dim[3], e.srcH);
+					//Engine.logI("srcW: " + new Integer(srcW).toString());
+					//Engine.logI("srcH: " + new Integer(srcH).toString());
 					float x = e.x;
-					float y = Bootstrap.screamHeight() - e.y - e.dstH;
-					batch.draw(e.texture, x, y, (float) e.srcW, (float) e.srcH, e.srcX, e.srcY, e.srcW, e.srcH, e.flipX, e.flipY);
-				}
+					float y = Bootstrap.screamHeight() - e.y - srcH;
+					batch.draw(texture, x, y, (float)srcW, (float)srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);
+				//}
 				break;
 			case RenderEvent.LABEL:
 				gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
 				break;
 			case RenderEvent.SOUND:
-				Resource sound = ResourceManager.get().resourceMap.get(e.s);
-				sound._sound.play(e.vol);
+				Sound sound = ResourceManager.get().soundMap.get(e.res.path);
+				sound.play(e.vol);
 				break;
 			}
 		}

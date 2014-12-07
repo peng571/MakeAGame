@@ -48,7 +48,8 @@ public class Template {
 
 			@Override
 			public void resourceFactory(ResourceManager resource) {
-				resource.bind("xx", new Resource().image("image/xx.png"));
+				// TODO:
+//				resource.bind("xx", new Resource().image("image/xx.png"));
 			}
 		});
 	}
