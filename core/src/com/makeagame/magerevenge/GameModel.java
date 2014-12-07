@@ -8,8 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
-import com.makeagame.core.Bootstrap;
-import com.makeagame.core.Engine;
 import com.makeagame.core.component.Position;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
@@ -36,6 +34,7 @@ public class GameModel implements Model {
 	long skillCDTime = 3000;
 	Player[] player; // You & computer(before change to online mode)
 	int moneyGet = 5;
+
 	// int maxCastleLevel = 3;
 
 	public GameModel() {
@@ -141,7 +140,7 @@ public class GameModel implements Model {
 				System.out.println(hold());
 				break;
 			default:
-//				Engine.logE("get unknow command " + command);
+				// Engine.logE("get unknow command " + command);
 			}
 
 			// earn money
@@ -210,17 +209,32 @@ public class GameModel implements Model {
 			this.group = group;
 			totalMoney = 0;
 			castleLevel = 1;
-			sendCards = new SendCard[] {
-					new SendCard(MakeAGame.CASTLE, 150, 1000),
-					new SendCard(MakeAGame.ROLE_1, 100, 3000),
-					new SendCard(MakeAGame.ROLE_2, 250, 6000),
-					new SendCard(MakeAGame.ROLE_3, 300, 12000),
-					new SendCard(MakeAGame.ROLE_4),
-			};
+			if (group == 0) {
+				sendCards = new SendCard[] {
+						new SendCard(MakeAGame.CASTLE, 150, 1000),
+						new SendCard(MakeAGame.ROLE_1, 100, 3000),
+						new SendCard(MakeAGame.ROLE_2, 250, 6000),
+						new SendCard(MakeAGame.ROLE_3, 300, 12000),
+						new SendCard(MakeAGame.ROLE_4),
+				};
+			} else {
+				sendCards = new SendCard[] {
+						new SendCard(MakeAGame.CASTLE, 200, 1000),
+						new SendCard(MakeAGame.ROLE_1, 130, 3500),
+						new SendCard(MakeAGame.ROLE_2),
+						new SendCard(MakeAGame.ROLE_3),
+						new SendCard(MakeAGame.ROLE_4),
+				};
+			}
 		}
 
 		public void ai() {
 			// TODO
+			for (SendCard card : sendCards) {
+				if (card.canClick(this)) {
+					card.send(this);
+				}
+			}
 			// create enemy
 			// if (enemyCreateState.enter(1)) {
 			// roles.add(new Role(ResourceManager.get().read(MakeAGame.ROLE_1), 1));
@@ -251,7 +265,7 @@ public class GameModel implements Model {
 			this.type = type;
 			this.costMoney = costMoney;
 			this.cdTime = cdTime;
-			state = new State(new long[][] { { State.BLOCK, State.ALLOW},{ cdTime, State.BLOCK } });
+			state = new State(new long[][] { { State.BLOCK, cdTime }, { State.ALLOW, State.BLOCK } });
 			costResource = new int[] { 0, 0, 0 };
 			locked = false;
 			strongLevel = 1;
@@ -270,15 +284,25 @@ public class GameModel implements Model {
 			return h;
 		}
 
+		public boolean canClick(Player player) {
+			if (locked) {
+				return false;
+			}
+			if (player.totalMoney < costMoney) {
+				return false;
+			}
+			return true;
+		}
+
 		public void send(Player player) {
-			if (player.totalMoney >= costMoney) {
+			if (canClick(player)) {
 				if (state.enter(1)) {
 					player.totalMoney -= costMoney;
 					if (type.equals(MakeAGame.CASTLE)) {
 						costMoney *= 2;
 						player.castleLevel++;
 					} else {
-						roles.add(new Role(ResourceManager.get().read(type), 0));
+						roles.add(new Role(ResourceManager.get().read(type), player.group));
 					}
 					state.enter(0);
 				}
