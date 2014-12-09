@@ -378,15 +378,15 @@ public class GameModel implements Model {
 		public final static int STATE_MOVING = 0;
 		public final static int STATE_PERPARING = 1;
 		public final static int STATE_ATTACKING = 2;
-		public final static int STATE_BACKING = 3;
-		public final static int STATE_DEATH = 4;
-		public final static int STATE_RECYCLE = 5;
+//		public final static int STATE_BACKING = 3;
+		public final static int STATE_DEATH = 3;
+		public final static int STATE_RECYCLE = 4;
 
 		State state;
 		Role meet;
 		Attribute m;
 		long lastAttackTime;
-		long backingTime = 50;
+//		long backingTime = 0;
 		long recycleTime = 2000;
 
 		ArrayList<Hold.Hurt> hurtRecord;
@@ -401,13 +401,21 @@ public class GameModel implements Model {
 			m.level = 1;
 			hurtRecord = new ArrayList<Hold.Hurt>();
 
+			// no backing
 			state = new State(new long[][] {
-					{ State.BLOCK, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW, State.BLOCK },
-					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW, State.BLOCK },
-					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW, State.BLOCK },
-					{ backingTime, backingTime, State.BLOCK, State.BLOCK, State.ALLOW, State.BLOCK },
-					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, recycleTime },
-					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK } });
+					{ State.BLOCK, State.ALLOW, State.BLOCK, State.ALLOW, State.BLOCK },
+					{ State.ALLOW, State.BLOCK, m.atkTime,  State.ALLOW, State.BLOCK },
+					{ State.ALLOW, State.ALLOW, State.BLOCK,State.ALLOW, State.BLOCK },
+					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, recycleTime },
+					{ State.BLOCK, State.BLOCK, State.BLOCK,  State.BLOCK, State.BLOCK } });
+			
+//			state = new State(new long[][] {
+//					{ State.BLOCK, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW, State.BLOCK },
+//					{ State.ALLOW, State.BLOCK, m.atkTime, State.ALLOW, State.ALLOW, State.BLOCK },
+//					{ State.ALLOW, State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW, State.BLOCK },
+//					{ backingTime, backingTime, State.BLOCK, State.BLOCK, State.ALLOW, State.BLOCK },
+//					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, recycleTime },
+//					{ State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK, State.BLOCK } });
 		}
 
 		public class Attribute {
@@ -420,7 +428,7 @@ public class GameModel implements Model {
 			int y;
 			float sX;
 			int money;
-			int beAtk;
+//			int beAtk;
 			long atkTime;
 			long baseAtkTime;
 			int range;
@@ -459,11 +467,11 @@ public class GameModel implements Model {
 				if (state.enter(Role.STATE_ATTACKING)) {
 					// System.out.println(m.id + " attack to " + meet.m.id);
 					meet.m.hp -= m.atk;
-					if (!meet.m.id.equals("castle")) {
-						meet.m.beAtk = m.atk;
-					}
+//					if (!meet.m.id.equals("castle")) {
+//						meet.m.beAtk = m.atk;
+//					}
 					meet.hurtRecord.add(new Hold.Hurt(State.global_current, m.atk));
-					meet.state.enter(Role.STATE_BACKING);
+//					meet.state.enter(Role.STATE_BACKING);
 					state.setTableValue(getAtkTime(true), 1, 2);
 					meet.state.setTableValue(meet.getAtkTime(false), 1, 2);
 				}
@@ -490,9 +498,9 @@ public class GameModel implements Model {
 				break;
 			case Role.STATE_ATTACKING:
 				break;
-			case Role.STATE_BACKING:
-				m.x += (m.group == 0 ? -1 : 1) * m.beAtk * 0.5f;
-				break;
+//			case Role.STATE_BACKING:
+//				m.x += (m.group == 0 ? -1 : 1) * m.beAtk * 0.5f;
+//				break;
 			case Role.STATE_DEATH:
 				break;
 			}
@@ -510,7 +518,7 @@ public class GameModel implements Model {
 				}
 			}
 			h.lastAttackTime = state.elapsed(STATE_ATTACKING);
-			h.lastBackingTime = state.elapsed(STATE_BACKING);
+//			h.lastBackingTime = state.elapsed(STATE_BACKING);
 			h.lastDeathTime = state.elapsed(STATE_DEATH);
 			h.lastPreparingTime = state.elapsed(STATE_PERPARING);
 			h.lastWalkTime = state.elapsed(STATE_MOVING);

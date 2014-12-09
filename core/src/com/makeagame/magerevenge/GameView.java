@@ -183,6 +183,11 @@ public class GameView implements View {
 					);
 		}
 		
+		public void beforeRender() {
+//			background
+		}
+		
+		
 		public void model(Hold data) {
 			res_table.model(data);
 			power_ring.model(data);
