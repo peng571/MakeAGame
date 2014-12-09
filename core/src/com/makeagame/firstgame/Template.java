@@ -9,14 +9,14 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
-import com.makeagame.core.view.ViewManager;
+import com.makeagame.firstgame.CatRunning.GameModel;
+import com.makeagame.firstgame.CatRunning.GameView;
 
 /**
  * Empty Game Template
@@ -37,13 +37,13 @@ public class Template {
 		engine = new Engine(new Bootstrap() {
 
 			@Override
-			public void viewFactory(ViewManager manager) {
-				manager.add("main", new GameView());
+			public View setMainView() {
+				return new GameView();
 			}
 
 			@Override
-			public void modelFactory(ModelManager manager) {
-				manager.add("main", new GameModel());
+			public Model setMainModel() {
+				return new GameModel();
 			}
 
 			@Override
@@ -74,12 +74,10 @@ public class Template {
 		}
 
 		@Override
-		public ArrayList<RenderEvent> render(ArrayList<String> build) {
+		public ArrayList<RenderEvent> render(String build) {
 
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-			for (String s : build) {
-				Hold hold = new Gson().fromJson(s, Hold.class);
-			}
+				Hold hold = new Gson().fromJson(build, Hold.class);
 			return list;
 		}
 

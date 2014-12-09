@@ -1,9 +1,11 @@
 package com.makeagame.core;
 
 import com.badlogic.gdx.graphics.Color;
-import com.makeagame.core.model.ModelManager;
+import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
-import com.makeagame.core.view.ViewManager;
+import com.makeagame.core.view.View;
+import com.makeagame.magerevenge.GameModel;
+import com.makeagame.magerevenge.GameView;
 
 public abstract class Bootstrap {
 
@@ -13,9 +15,13 @@ public abstract class Bootstrap {
 	public static float ratio = 1f;
 	public static Color BACKGROUND_COLOR = new Color(1, 1, 1, 1);
 
-	public abstract void viewFactory(ViewManager manager);
+	// public abstract void viewFactory(View currentView);
+	//
+	// public abstract void modelFactory(Model currentModel);
 
-	public abstract void modelFactory(ModelManager manager);
+	public abstract View setMainView();
+
+	public abstract Model setMainModel();
 
 	public abstract void resourceFactory(ResourceManager resource);
 

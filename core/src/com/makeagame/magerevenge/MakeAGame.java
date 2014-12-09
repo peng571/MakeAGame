@@ -2,10 +2,9 @@ package com.makeagame.magerevenge;
 
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
-import com.makeagame.core.model.ModelManager;
-import com.makeagame.core.resource.Resource;
+import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
-import com.makeagame.core.view.ViewManager;
+import com.makeagame.core.view.View;
 
 public class MakeAGame {
 
@@ -20,15 +19,15 @@ public class MakeAGame {
 	public MakeAGame() { 
 
 		engine = new Engine(new Bootstrap() {
-
+	
 			@Override
-			public void viewFactory(ViewManager manager) {
-				manager.add("main", new GameView());
+			public View setMainView() {
+				return  new GameView();
 			}
 
 			@Override
-			public void modelFactory(ModelManager manager) {
-				manager.add("main", new GameModel());
+			public Model setMainModel() {
+				return new GameModel();
 			}
 
 			@Override

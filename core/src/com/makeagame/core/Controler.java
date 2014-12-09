@@ -3,17 +3,21 @@ package com.makeagame.core;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.makeagame.core.model.ModelManager;
+import com.makeagame.core.model.Model;
+import com.makeagame.core.view.View;
 
-public  final  class Controler {
+public final class Controler {
 
 	public static Controler instance;
-	public ModelManager model;
+	public Model mainModel;
+	public View mainView;
 
 	private Controler() {
-		model = ModelManager.get();
+		this.mainModel = null;
+		this.mainView = null;
 	}
 
 	public static Controler get() {
@@ -24,16 +28,22 @@ public  final  class Controler {
 
 	}
 
-	public void call(String id, int command ,JSONObject params) {
-		model.process(id , command, params);
+	public void call(int command, JSONObject params) {
+		try {
+			mainModel.process(command, params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public void call( int command ,JSONObject params) {
-		call("ALL" , command, params);
+	public void register(Model mainModel, View mainView) {
+		this.mainModel = mainModel;
+		this.mainView = mainView;
 	}
-	
-	public ArrayList<String> build() {
-		return 	model.hold();
+
+	public String build() {
+		return mainModel.hold();
 	}
 
 }

@@ -13,8 +13,7 @@ import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
 
 public class ViewPower extends SimpleLayout {
-	KeyTable keyTable;
-	KeyTable ktReady;
+//	KeyTable keyTable;
 
 	Bar bar;
 	Button button;
@@ -28,20 +27,21 @@ public class ViewPower extends SimpleLayout {
 	
 	String selectPower;
 	
+	private static final KeyTable ktReady = new KeyTable(new Frame[] {
+			//new Frame(  0	, new Key[] { new Key(".sound", "") }),
+			//new Frame(  50	, new Key[] { new Key(".sound", "button1.snd") }),
+			//new Frame(  100	, new Key[] { new Key(".sound", "") }),
+			
+			new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }),
+			new Frame(  600	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }), //80
+			new Frame(  1200	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }), // 160
+	}).setLoop(true);
+	
 	public ViewPower() {
 		super();
 		
 		selectPower = "a";
 		xy(24, -53);
-		ktReady = new KeyTable(new Frame[] {
-				//new Frame(  0	, new Key[] { new Key(".sound", "") }),
-				//new Frame(  50	, new Key[] { new Key(".sound", "button1.snd") }),
-				//new Frame(  100	, new Key[] { new Key(".sound", "") }),
-				
-				new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }),
-				new Frame(  600	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }), //80
-				new Frame(  1200	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }), // 160
-		}).setLoop(true);
 		/*
 		keyTable = new KeyTable(new Frame[] {
 				new Frame(0, new Key[] {

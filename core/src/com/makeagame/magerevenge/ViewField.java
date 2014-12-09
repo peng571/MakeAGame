@@ -100,7 +100,7 @@ public class ViewField extends SimpleLayout {
 			 role = roles.get(count);
 			role.model(r);
 			role.visible = true;
-			role.xy(r.pos.getX(), r.pos.getY());
+			role.xy(r.pos.x, r.pos.y);
 			role.bar.percent = r.hpp;
 			role = null;
 			count++;

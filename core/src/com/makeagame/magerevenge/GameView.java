@@ -228,9 +228,9 @@ public class GameView implements View {
 	ArrayList<RenderEvent> list =   new ArrayList<RenderEvent>();
 	
 	@Override
-	public ArrayList<RenderEvent> render(ArrayList<String> build) {
+	public ArrayList<RenderEvent> render(String build) {
 		
-		Hold data = new Gson().fromJson(build.get(build.size()-1), Hold.class);
+		Hold data = new Gson().fromJson(build, Hold.class);
 		battle_scene.model(data);
 		
 		currentScreen.reslove(0, 0);

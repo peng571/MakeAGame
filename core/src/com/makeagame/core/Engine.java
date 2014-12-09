@@ -2,6 +2,8 @@ package com.makeagame.core;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -11,12 +13,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.MouseEvent;
-import com.makeagame.core.view.ViewManager;
 
 public class Engine extends ApplicationAdapter {
 
@@ -42,11 +42,8 @@ public class Engine extends ApplicationAdapter {
 			Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		}
 		batch = new SpriteBatch();
-
 		bootstrap.resourceFactory(ResourceManager.get());
-		bootstrap.viewFactory(ViewManager.get());
-		bootstrap.modelFactory(ModelManager.get());
-
+		Controler.get().register( bootstrap.setMainModel(), bootstrap.setMainView());
 		gameLable = new BitmapFont();
 		gameLable.setColor(new Color(1, 0, 0, 1));
 
@@ -102,7 +99,11 @@ public class Engine extends ApplicationAdapter {
 			}
 		});
 
-		ViewManager.get().signal(signalList);
+		try {
+			Controler.get().mainView.signal(signalList);
+		} catch (JSONException e2) {
+			e2.printStackTrace();
+		}
 		signalList.clear();
 
 		// time = System.currentTimeMillis();
@@ -118,7 +119,7 @@ public class Engine extends ApplicationAdapter {
 		logD("batch begine time " + System.currentTimeMillis());
 		batch.begin();
 		// batch.enableBlending();
-		renderList = ViewManager.get().render();
+		renderList = 	Controler.get().mainView.render(Controler.get().build());
 		// Engine.logI("srcH: " + new Integer(renderList.size()).toString());
 
 		for (RenderEvent e : renderList) {

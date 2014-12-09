@@ -10,14 +10,14 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.model.ModelManager;
 import com.makeagame.core.model.MovableObject;
 import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
-import com.makeagame.core.view.ViewManager;
+import com.makeagame.firstgame.CatRunning.GameModel;
+import com.makeagame.firstgame.CatRunning.GameView;
 
 /**
  * [小型][反應] 森林豐收季
@@ -40,13 +40,13 @@ public class FunnyForest {
 		engine = new Engine(new Bootstrap() {
 
 			@Override
-			public void viewFactory(ViewManager manager) {
-				manager.add("main", new GameView());
+			public View setMainView() {
+				return new GameView();
 			}
 
 			@Override
-			public void modelFactory(ModelManager manager) {
-				manager.add("main", new GameModel());
+			public Model setMainModel() {
+				return new GameModel();
 			}
 
 			@Override
@@ -92,10 +92,9 @@ public class FunnyForest {
 		}
 
 		@Override
-		public ArrayList<RenderEvent> render(ArrayList<String> build) {
+		public ArrayList<RenderEvent> render(String build) {
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-			for (String s : build) {
-				Hold hold = new Gson().fromJson(s, Hold.class);
+				Hold hold = new Gson().fromJson(build, Hold.class);
 				// TODO:
 //				list.add(new RenderEvent(ResourceManager.get().fetch("bird")).XY(hold.x, hold.y).srcWH(128, 128).Ratio(0.6f).Rotation(hold.angle));
 //				for (Fruit f : hold.fruits) {
@@ -103,7 +102,6 @@ public class FunnyForest {
 //					// list.add(new RenderEvent(ResourceManager.get().fetch(f.type)).XY(f.x, f.y).srcWH(128, 128));
 //				}
 				list.add(new RenderEvent(String.valueOf(hold.score)).XY(50, 50));
-			}
 			return list;
 		}
 

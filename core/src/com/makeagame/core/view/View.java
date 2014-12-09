@@ -10,7 +10,7 @@ public interface View {
 	public abstract void signal(ArrayList<SignalEvent> s) throws JSONException;
 
 	// °e¥XÃ¸¹Ï«ü¥O
-	public abstract ArrayList<RenderEvent> render(ArrayList<String> list);
+	public abstract ArrayList<RenderEvent> render(String list);
 	
 	public abstract String info();
 }

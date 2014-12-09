@@ -516,7 +516,7 @@ public class GameModel implements Model {
 			h.lastDeathTime = state.elapsed(STATE_DEATH);
 			h.lastPreparingTime = state.elapsed(STATE_PERPARING);
 			h.lastWalkTime = state.elapsed(STATE_MOVING);
-			h.pos = new Position<Integer>(m.x, m.y);
+			h.pos = new Position(m.x, m.y);
 			h.stateRecord = state.currentStat();
 			h.strongLevel = m.level;
 			h.type = m.id;

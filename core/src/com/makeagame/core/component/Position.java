@@ -1,24 +1,12 @@
 package com.makeagame.core.component;
 
-public class Position<T> {
+public class Position {
 
-	T x;
-	T y;
+	public int x;
+	public int y;
 
-	public Position(T x, T y) {
+	public Position(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public T getX(){
-		return x;
-	}
-	
-	public T getY(){
-		return y;
-	}
-	
-//	public Position() {
-//		this<Integer>(0,0);
-//	}
 }
