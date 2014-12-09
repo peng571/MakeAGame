@@ -207,29 +207,76 @@ public class Sprite {
 		// TODO: .......
 	}
 	
-	public ArrayList<RenderEvent> render(int offx, int offy) {
-		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+	private RenderEvent render_event_img = null;
+	private RenderEvent render_event_snd = null;
+	
+	
+	public RenderEvent[] render(int offx, int offy) {
+		//ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+		RenderEvent img=null, snd=null;
+		
 		if (image != "") {
-			//Engine.logI("x: " + new Integer(offx + x - centerX).toString());
-			//Engine.logI("y: " + new Integer(offy + y - centerY).toString());
-			
-			list.add(new RenderEvent(ResourceManager.get().fetch(image))
+			if (this.render_event_img == null) {
+				this.render_event_img = new RenderEvent(ResourceManager.get().fetch(image));
+			} else {
+				this.render_event_img.Res(ResourceManager.get().fetch(image));
+			}
+			this.render_event_img
 				.XY(offx + x - centerX, offy + y - centerY)
 				.color(red, green, blue, alpha)
 				.src(srcX, srcY, srcW, srcH)
 				.filp(flipx, flipy)
-				.blend(srcFunc, dstFunc)
-			);
+				.blend(srcFunc, dstFunc);
+			img = this.render_event_img;
 		}
 		if (sound != "" && sound != palyedSound) {
 			//list.add(new RenderEvent("").sound(sound, soundVol));
-			RenderEvent re = new RenderEvent(ResourceManager.get().fetch(sound));
-			re.vol = soundVol;
-			list.add(re);
+			if (this.render_event_snd == null) {
+				this.render_event_snd = new RenderEvent(ResourceManager.get().fetch(sound));
+			} else {
+				this.render_event_snd.Res(ResourceManager.get().fetch(sound));
+			}
+			this.render_event_snd.vol = soundVol;
+			snd = this.render_event_snd;
+			//list.add(re);
 		}
 		palyedSound = sound;
-		return list;
+		
+		if (img != null && snd != null) {
+			return new RenderEvent[]{img, snd};
+		} else if (img != null) {
+			return new RenderEvent[]{img};
+		} else if (snd != null) {
+			return new RenderEvent[]{snd};
+		} else {
+			return new RenderEvent[]{};
+		}
+		//return list;
 	}
+	
+//	public ArrayList<RenderEvent> render2(int offx, int offy) {
+//		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+//		if (image != "") {
+//			//Engine.logI("x: " + new Integer(offx + x - centerX).toString());
+//			//Engine.logI("y: " + new Integer(offy + y - centerY).toString());
+//			
+//			list.add(new RenderEvent(ResourceManager.get().fetch(image))
+//				.XY(offx + x - centerX, offy + y - centerY)
+//				.color(red, green, blue, alpha)
+//				.src(srcX, srcY, srcW, srcH)
+//				.filp(flipx, flipy)
+//				.blend(srcFunc, dstFunc)
+//			);
+//		}
+//		if (sound != "" && sound != palyedSound) {
+//			//list.add(new RenderEvent("").sound(sound, soundVol));
+//			RenderEvent re = new RenderEvent(ResourceManager.get().fetch(sound));
+//			re.vol = soundVol;
+//			list.add(re);
+//		}
+//		palyedSound = sound;
+//		return list;
+//	}
 
 	
 

@@ -42,13 +42,17 @@ public class MakeAGame {
 				rm.bindImage("role_walk1", "mr3/role.png").src(0, 0, 124, 100);
 				rm.bindImage("role_walk2", "mr3/role.png").src(124, 0, 124, 100);
 				rm.bindImage("role_walk3", "mr3/role.png").src(248, 0, 124, 100);
-				rm.bindImage("role_walk4", "mr3/role2.png").src(0, 0, 124, 100);
-				rm.bindImage("role_attack1", "mr3/role2.png").src(124, 0, 124, 100);
-				rm.bindImage("role_attack2", "mr3/role2.png").src(248, 0, 124, 100);
-				rm.bindImage("role_attack3", "mr3/role2.png").src(372, 0, 124, 100);
-				rm.bindImage("role_hurt", "mr3/role3.png").src(0, 0, 124, 100);
-				rm.bindImage("role_fail", "mr3/role3.png").src(124, 0, 124, 100);
-				rm.bindImage("role_dead", "mr3/role3.png").src(248, 0, 124, 100);
+				rm.bindImage("role_walk4", "mr3/role.png").src(372, 0, 124, 100);
+				rm.bindImage("role_attack1", "mr3/role.png").src(496, 0, 124, 100);
+				rm.bindImage("role_attack2", "mr3/role.png").src(620, 0, 124, 100);
+				rm.bindImage("role_attack3", "mr3/role.png").src(744, 0, 124, 100);
+				rm.bindImage("role_hurt", "mr3/role.png").src(868, 0, 124, 100);
+				rm.bindImage("role_fail", "mr3/role.png").src(992, 0, 124, 100);
+				rm.bindImage("role_dead", "mr3/role.png").src(1116, 0, 124, 100);
+				rm.bindImage("eff_damage_rock1", "mr3/eff_damage_rock.png").src(0, 0, 128, 128);
+				rm.bindImage("eff_damage_rock2", "mr3/eff_damage_rock.png").src(128, 0, 128, 128);
+				rm.bindImage("eff_damage_rock3", "mr3/eff_damage_rock.png").src(256, 0, 128, 128);
+				rm.bindImage("eff_damage_rock4", "mr3/eff_damage_rock.png").src(384, 0, 128, 128);
 				rm.bindImage("fund_icon", "mr3/res.png").src(0, 0, 40, 40);
 				rm.bindImage("res1_icon", "mr3/res.png").src(40, 0, 41, 40);
 				rm.bindImage("res2_icon", "mr3/res.png").src(81, 0, 41, 40);
@@ -56,12 +60,12 @@ public class MakeAGame {
 				rm.bindImage("fund_bg", "mr3/res.png").src(162, 0, 142, 40);
 				rm.bindImage("res_bg", "mr3/res.png").src(304, 0, 100, 40);
 				rm.bindImage("pause", "mr3/res.png").src(404, 0, 48, 48);
-				rm.bindImage("background1", "mr3/background1.png").src(0, 0, 512, 512);
-				rm.bindImage("top_board", "mr3/top_board.png").src(0, 0, 512, 100);
+				rm.bindImage("background1", "mr3/background1.png").src(0, 0, 960, 540);
+				rm.bindImage("top_board", "mr3/top_board.png").src(0, 0, 960, 100);
 				rm.bindImage("top_title", "mr3/top_title.png").src(0, 0, 140, 80);
 				rm.bindImage("castle_al", "mr3/castle.png").src(0, 0, 256, 256);
 				rm.bindImage("castle_op", "mr3/castle.png").src(256, 0, 256, 256);
-				rm.bindImage("bottom_board", "mr3/bottom_board.png").src(0, 0, 512, 192);
+				rm.bindImage("bottom_board", "mr3/bottom_board.png").src(0, 0, 960, 192);
 				rm.bindImage("base_hp", "mr3/base_hp.png").src(0, 0, 155, 14);
 				rm.bindImage("role_hp", "mr3/role_hp.png").src(0, 0, 33, 3);
 				rm.bindImage("font_number_withe", "mr3/font_number_withe.png").src(0, 0, 120, 24);
@@ -72,6 +76,7 @@ public class MakeAGame {
 				rm.bindImage("power_c", "mr3/power.png").src(340, 0, 160, 160);
 				rm.bindImage("power_ring", "mr3/power.png").src(500, 0, 180, 180);
 				rm.bindImage("power_ring_inactive", "mr3/power.png").src(680, 0, 180, 180);
+
 
 				
 				rm.bindImage(ROLE_1, "mr3/font_number_withe.png").attribute("data/role1.txt");

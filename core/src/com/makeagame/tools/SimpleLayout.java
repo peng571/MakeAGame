@@ -1,5 +1,6 @@
 package com.makeagame.tools;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -136,10 +137,15 @@ public class SimpleLayout {
 		
 	}
 	
-	public ArrayList<RenderEvent> renderSelf(int x, int y) {
+	public RenderEvent[] renderSelf(int x, int y) {
 		beforeRender();
 		return sprite.render(x, y);
 	}
+	
+//	public ArrayList<RenderEvent> renderSelf2(int x, int y) {
+//		beforeRender();
+//		return sprite.render(x, y);
+//	}
 	
 	public void reslove(int offx, int offy) {
 		beforeReslove();
@@ -152,23 +158,69 @@ public class SimpleLayout {
 		}
 	}
 	
-	public ArrayList<RenderEvent> render() {
+	public <T> T[] concatenate (T[] a, T[] b) {
+	    int aLen = a.length;
+	    int bLen = b.length;
 
+	    @SuppressWarnings("unchecked")
+	    T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen+bLen);
+	    System.arraycopy(a, 0, b, 0, aLen);
+	    System.arraycopy(b, 0, b, aLen, bLen);
+
+	    return c;
+	}
+	
+	public RenderEvent[] concat(RenderEvent[] a, RenderEvent[] b) {
+	   int aLen = a.length;
+	   int bLen = b.length;
+	   RenderEvent[] c= new RenderEvent[aLen+bLen];
+	   System.arraycopy(a, 0, c, 0, aLen);
+	   System.arraycopy(b, 0, c, aLen, bLen);
+	   return c;
+	}
+	
+	public RenderEvent[] join(RenderEvent[][] array) {
+		//int aLen = a.length;
+	   //int bLen = b.length;
+		int len = 0;
+		for (int i=0; i < array.length; i++) {
+			len += array[i].length;
+	    }
+	    RenderEvent[] c= new RenderEvent[len];
+	   
+	    int pos = 0;
+	    for (int i=0; i < array.length; i++) {
+	    	 System.arraycopy(array[i], 0, c, pos, array[i].length);
+	    	 pos += array[i].length;
+	    }
+	    return c;
+	 }
+	
+	
+	//public ArrayList<RenderEvent> render() {
+	public RenderEvent[] render() {
 		// 先算出真正的位置
 		//int x = fixedX + this.x + offx;
 		//int y = fixedY + this.y + offy;
 		
-		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-		list.addAll(renderSelf(realX, realY));
-
+		RenderEvent[] list = renderSelf(realX, realY);
+				
 		if (children != null) {
-			for (SimpleLayout c : children) {
-				if (c.visible) {
-					list.addAll(c.render());
-				}
+			RenderEvent[][] lists = new RenderEvent[children.size()+1][];
+			lists[0] = list;
+			for (int i=0; i<children.size(); i++) {
+				lists[i+1] = children.get(i).render();
 			}
+			list = join(lists);
+			
+//			for (SimpleLayout c : children) {
+//				if (c.visible) {
+//					//list.addAll(c.render());
+//					list = concat(list, c.render());
+//				}
+//			}
 		}
-
+		
 		return list;
 	}
 	

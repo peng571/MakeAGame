@@ -61,6 +61,9 @@ public class RenderEvent {
 	
 	public RenderEvent(Resource res) {
 		this();
+		Res(res);
+		
+		/*
 		this.res = res;
 		if (res.type.equals(Resource.TYPE.IMAGE)) {
 			this.type = IMAGE;
@@ -68,7 +71,7 @@ public class RenderEvent {
 			this.type = SOUND;
 		}
 		
-		/*
+		
 		if (res.type.equals(Resource.TYPE.IMAGE)) {
 			this.type = IMAGE;
 			this.s = res.path;
@@ -107,7 +110,17 @@ public class RenderEvent {
 		this.vol = vol;
 		return this;
 	}*/
-
+	
+	public RenderEvent Res(Resource res) {
+		this.res = res;
+		if (res.type.equals(Resource.TYPE.IMAGE)) {
+			this.type = IMAGE;
+		} else if (res.type.equals(Resource.TYPE.SOUND)) {
+			this.type = SOUND;
+		}
+		return this;
+	}
+	
 	public RenderEvent XY(float x, float y) {
 		this.x = x;
 		this.y = y;

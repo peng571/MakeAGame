@@ -29,9 +29,9 @@ public class GameModel implements Model {
 	LinkedList<Role> roles;
 
 	State moneyGetState;
-	long moneyGetTime = 300;
+	long moneyGetTime = 600;
 	Player[] player; // You & computer(before change to online mode)
-	int moneyGet = 5;
+	int moneyGet = 15;
 
 	// int maxCastleLevel = 3;
 
@@ -395,7 +395,7 @@ public class GameModel implements Model {
 			m = init(gson);
 			m.group = group;
 			m.x = group == 0 ? 110 : 848;
-			m.y = 15 + (15 - rand.nextInt(30));
+			m.y = 10 + (10 - rand.nextInt(20));
 			m.maxHp = m.hp;
 			m.baseAtkTime = m.atkTime;
 			m.level = 1;
