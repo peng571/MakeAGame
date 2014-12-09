@@ -156,7 +156,7 @@ public class GameView implements View {
 		
 		public ViewBattleScene() {
 			xy(0, 0);
-			background = new SimpleLayout(new Sprite("background"));
+			background = new SimpleLayout(new Sprite("background1"));
 			field = new ViewField();
 			top_board = new ViewTopBoard();
 			

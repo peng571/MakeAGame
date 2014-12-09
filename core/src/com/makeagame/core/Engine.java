@@ -47,7 +47,7 @@ public class Engine extends ApplicationAdapter {
 		gameLable = new BitmapFont();
 		gameLable.setColor(new Color(1, 0, 0, 1));
 
-		texture = new Texture("mr2/role.png");
+		texture = new Texture("mr3/role.png");
 	}
 
 	Texture texture;
