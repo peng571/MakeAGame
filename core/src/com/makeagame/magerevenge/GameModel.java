@@ -3,6 +3,7 @@ package com.makeagame.magerevenge;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -27,7 +28,7 @@ public class GameModel implements Model {
 
 	boolean start;
 	Random rand = new Random();
-	ArrayList<Role> roles;
+	LinkedList<Role> roles;
 
 	State moneyGetState;
 	long moneyGetTime = 300;
@@ -43,7 +44,7 @@ public class GameModel implements Model {
 	private void startLevel(int level, int difficulty) {
 		screen = "battle";
 		player = new Player[] { new Player(0), new Player(1, level) };
-		roles = new ArrayList<Role>();
+		roles = new LinkedList<Role>();
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
 		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
 		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
@@ -387,7 +388,7 @@ public class GameModel implements Model {
 		Role meet;
 		Attribute m;
 		long lastAttackTime;
-		long backingTime = 50;
+		long backingTime = 200;
 		long recycleTime = 2000;
 
 		ArrayList<Hold.Hurt> hurtRecord;

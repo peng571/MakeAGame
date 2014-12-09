@@ -1,6 +1,7 @@
 package com.makeagame.core.view;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.makeagame.core.resource.Resource;
@@ -198,8 +199,8 @@ public class RenderEvent {
 	// e.x ( GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA )
 	public RenderEvent blend(int srcFunc, int dstFunc) {
 		this.useBlend = true;
-		this.srcFunc = (srcFunc == -1) ? GL30.GL_SRC_ALPHA : srcFunc;
-		this.dstFunc = (dstFunc == -1) ? GL30.GL_ONE_MINUS_SRC_ALPHA : dstFunc;
+		this.srcFunc = (srcFunc == -1) ? GL20.GL_SRC_ALPHA : srcFunc;
+		this.dstFunc = (dstFunc == -1) ? GL20.GL_ONE_MINUS_SRC_ALPHA : dstFunc;
 		return this;
 	}
 

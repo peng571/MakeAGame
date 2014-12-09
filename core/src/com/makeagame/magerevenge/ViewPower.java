@@ -39,8 +39,8 @@ public class ViewPower extends SimpleLayout {
 				//new Frame(  100	, new Key[] { new Key(".sound", "") }),
 				
 				new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }),
-				new Frame(  300	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }), //80
-				new Frame(  600	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }), // 160
+				new Frame(  600	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }), //80
+				new Frame(  1200	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }), // 160
 		}).setLoop(true);
 		/*
 		keyTable = new KeyTable(new Frame[] {

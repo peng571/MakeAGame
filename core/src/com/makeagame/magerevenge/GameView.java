@@ -104,7 +104,8 @@ public class GameView implements View {
 			this.res3_number.setNumber(data.resource[2]);
 		}
 	}
-	
+
+
 	class ViewTopBoard extends SimpleLayout {
 		
 		SimpleLayout top_board;
@@ -193,13 +194,13 @@ public class GameView implements View {
 		
 	}
 
-	SimpleLayout screen;
+	SimpleLayout currentScreen;
 	ViewBattleScene battle_scene;
 	
 	public GameView() {
 		battle_scene = new ViewBattleScene();
 		
-		screen = battle_scene;
+		currentScreen = battle_scene;
 	}
 
 	@Override
@@ -224,15 +225,17 @@ public class GameView implements View {
 		Controler.get().call(0, null);
 	}
 
+	ArrayList<RenderEvent> list =   new ArrayList<RenderEvent>();
+	
 	@Override
 	public ArrayList<RenderEvent> render(ArrayList<String> build) {
 		
-		final Hold data = new Gson().fromJson(build.get(build.size()-1), Hold.class);
+		Hold data = new Gson().fromJson(build.get(build.size()-1), Hold.class);
 		battle_scene.model(data);
 		
-		screen.reslove(0, 0);
-		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-		list.addAll(screen.render());
+		currentScreen.reslove(0, 0);
+		list.clear();
+		list.addAll(currentScreen.render());
 
 		return list;
 	}

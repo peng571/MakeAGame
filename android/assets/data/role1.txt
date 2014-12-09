@@ -1,11 +1,11 @@
 {
 "id":"Swordman",
-"hp":200,
-"sX":5,
+"hp":500,
+"sX":3,
 "w":64,
 "h":64,
-"atk":5,
+"atk":200,
 "money":10,
-"atkTime":600,
-"range":0
+"atkTime":3000,
+"range":60
 }

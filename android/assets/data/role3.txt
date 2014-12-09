@@ -1,11 +1,11 @@
 {
 "id":"Mage",
-"hp":75,
-"sX":4,
+"hp":350,
+"sX":2,
 "w":64,
 "h":64,
-"atk":20,
+"atk":400,
 "money":15,
-"atkTime":1200,
-"range":50
+"atkTime":4500,
+"range":150
 }

@@ -1,11 +1,11 @@
 {
 "id":"Warrior",
-"hp":500,
-"sX":3,
+"hp":800,
+"sX":1,
 "w":64,
 "h":64,
-"atk":10,
+"atk":300,
 "money":12,
-"atkTime":800,
-"range":0
+"atkTime":4200,
+"range":60
 }

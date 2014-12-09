@@ -13,8 +13,12 @@ public class ViewManager {
 	private HashMap<String, View> viewMap;
 	private static ViewManager instance;
 
+	ArrayList<RenderEvent> renderList;
+	
+	
 	private ViewManager() {
 		viewMap = new HashMap<String, View>();
+		renderList = new ArrayList<RenderEvent>();
 	}
 
 	public static ViewManager get() {
@@ -27,7 +31,6 @@ public class ViewManager {
 	public void add(String id, View v) {
 		viewMap.put(id, v);
 	}
-
 
 	// 接收外部指令
 	public void signal(ArrayList<SignalEvent> s) {
@@ -46,10 +49,11 @@ public class ViewManager {
 		return vs;
 	}
 
+
 	// 送出繪圖指令
 	public ArrayList<RenderEvent> render() {
 		ArrayList<String> build = Controler.get().build();
-		ArrayList<RenderEvent> renderList = new ArrayList<RenderEvent>();
+		renderList.clear();
 		for (View v : getArray()) {
 			renderList.addAll(v.render(build));
 		}
