@@ -1,10 +1,7 @@
 package com.makeagame.core.resource;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.makeagame.core.Engine;
 
 public class Resource {
 	//Texture texture;

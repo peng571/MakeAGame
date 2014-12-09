@@ -2,7 +2,6 @@ package com.makeagame.core.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.makeagame.core.resource.Resource;
 
@@ -38,11 +37,11 @@ public class RenderEvent {
 	public static final int LABEL = 0x002;
 	public static final int SOUND = 0x004;
 	
-	public static final int LEFT = 0x000;
-	public static final int RIGHT = 0x010;
-	public static final int CENTER = 0x001;
-	public static final int TOP = 0x100;
-	public static final int DOWN = 0x000;
+//	public static final int LEFT = 0x000;
+//	public static final int RIGHT = 0x010;
+//	public static final int CENTER = 0x001;
+//	public static final int TOP = 0x100;
+//	public static final int DOWN = 0x000;
 
 	private RenderEvent() {
 		angle = 0;

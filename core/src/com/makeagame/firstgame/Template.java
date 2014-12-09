@@ -9,14 +9,11 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
 import com.makeagame.core.view.View;
-import com.makeagame.firstgame.CatRunning.GameModel;
-import com.makeagame.firstgame.CatRunning.GameView;
 
 /**
  * Empty Game Template
@@ -49,7 +46,7 @@ public class Template {
 			@Override
 			public void resourceFactory(ResourceManager resource) {
 				// TODO:
-//				resource.bind("xx", new Resource().image("image/xx.png"));
+				// resource.bind("xx", new Resource().image("image/xx.png"));
 			}
 		});
 	}
@@ -77,7 +74,7 @@ public class Template {
 		public ArrayList<RenderEvent> render(String build) {
 
 			ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-				Hold hold = new Gson().fromJson(build, Hold.class);
+			Hold hold = new Gson().fromJson(build, Hold.class);
 			return list;
 		}
 

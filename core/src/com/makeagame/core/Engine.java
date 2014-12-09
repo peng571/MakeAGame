@@ -159,6 +159,8 @@ public class Engine extends ApplicationAdapter {
 				int srcY = dim[1];
 				int srcW = dim[2];
 				int srcH = dim[3];
+//				srcW = 16;
+//				srcH = 16;
 
 				// Engine.logI("src: (" + new Integer(srcX).toString() + ","
 				// + new Integer(srcY).toString() + ","

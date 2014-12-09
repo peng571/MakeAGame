@@ -11,13 +11,10 @@ import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.model.MovableObject;
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
-import com.makeagame.firstgame.CatRunning.GameModel;
-import com.makeagame.firstgame.CatRunning.GameView;
 
 /**
  * [小型][反應] 森林豐收季

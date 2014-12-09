@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.makeagame.core.view.RenderEvent;
-import com.makeagame.magerevenge.Hold;
 import com.makeagame.tools.KeyTable.ApplyList;
 
 public class SimpleLayout {

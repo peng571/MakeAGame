@@ -38,38 +38,38 @@ public class ViewField extends SimpleLayout {
 				//new Frame(  1	, new Key[] { new Key("sound", "button1.snd") }),
 				//new Frame(  2	, new Key[] { new Key("sound", "") }),
 				new Frame( 0, new Key[] { new Key("image", "role_walk1") }),
-				new Frame( 200, new Key[] { new Key("image", "role_walk2") }),
-				new Frame( 400, new Key[] { new Key("image", "role_walk3") }),
-				new Frame( 600, new Key[] { new Key("image", "role_walk4") }),
-				new Frame( 800, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 100, new Key[] { new Key("image", "role_walk2") }),
+				new Frame( 200, new Key[] { new Key("image", "role_walk3") }),
+				new Frame( 300, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 400, new Key[] { new Key("image", "role_walk4") }),
 				
 		}).setLoop(true);
 		
 		// preparing
 		roleKeyTable[1] = new KeyTable(new Frame[] {
 				new Frame( 0, new Key[] { new Key("image", "role_walk3") }),
-				new Frame( 200, new Key[] { new Key("image", "role_attack1") }),
-				new Frame( 400, new Key[] { new Key("image", "role_attack2") }),
-				new Frame( 600, new Key[] { new Key("image", "role_attack3") }),
-				new Frame( 800, new Key[] { new Key("image", "role_walk3") }),
+				new Frame( 100, new Key[] { new Key("image", "role_attack1") }),
+				new Frame( 200, new Key[] { new Key("image", "role_attack2") }),
+				new Frame( 300, new Key[] { new Key("image", "role_attack3") }),
+				new Frame( 400, new Key[] { new Key("image", "role_walk3") }),
 		});	
 		
 		// STATE_BACKING:
 		roleKeyTable[3] = new KeyTable(new Frame[] {
 				new Frame( 0, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 100, new Key[] { new Key("image", "role_hurt") }),
 				new Frame( 200, new Key[] { new Key("image", "role_hurt") }),
-				new Frame( 400, new Key[] { new Key("image", "role_hurt") }),
-				new Frame( 600, new Key[] { new Key("image", "role_hurt") }),
-				new Frame( 800, new Key[] { new Key("image", "role_walk4") }),
+				new Frame( 300, new Key[] { new Key("image", "role_hurt") }),
+				new Frame( 400, new Key[] { new Key("image", "role_walk4") }),
 		});
 		
 		// STATE_DEATH:
 		roleKeyTable[4] = new KeyTable(new Frame[] {
 				new Frame( 0, new Key[] { new Key("image", "role_walk4") }),
-				new Frame( 200, new Key[] { new Key("image", "role_hurt") }),
-				new Frame( 400, new Key[] { new Key("image", "role_fail") }),
-				new Frame( 600, new Key[] { new Key("image", "role_dead") }),
-				new Frame( 800, new Key[] { new Key("image", "role_dead") }),
+				new Frame( 100, new Key[] { new Key("image", "role_hurt") }),
+				new Frame( 200, new Key[] { new Key("image", "role_fail") }),
+				new Frame( 300, new Key[] { new Key("image", "role_dead") }),
+				new Frame( 400, new Key[] { new Key("image", "role_dead") }),
 		});	
 
 		roles = new LinkedList<ViewField.RoleView>();

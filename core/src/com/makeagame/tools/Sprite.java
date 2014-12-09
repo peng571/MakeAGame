@@ -3,7 +3,6 @@ package com.makeagame.tools;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.makeagame.core.Engine;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
@@ -210,27 +209,17 @@ public class Sprite {
 	
 	public ArrayList<RenderEvent> render(int offx, int offy) {
 		ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-		// TODO: 等你增加新的RenderEvent後在自己改動這邊
-		// 優先加入 setColor 和 blendfunction 的支援, 其他的以後再說
 		if (image != "") {
-			/*if (srcW == -1) {
-			list.add(new RenderEvent(ResourceManager.get().fetch(image))
-					.XY(offx + x - centerX, offy + y - centerY)
-					.color(red, green, blue, alpha)
-					// .blend(srcFunc, dstFunc)
-					);
-			} else {*/
 			//Engine.logI("x: " + new Integer(offx + x - centerX).toString());
 			//Engine.logI("y: " + new Integer(offy + y - centerY).toString());
 			
-				list.add(new RenderEvent(ResourceManager.get().fetch(image))
-					.XY(offx + x - centerX, offy + y - centerY)
-					.color(red, green, blue, alpha)
-					.src(srcX, srcY, srcW, srcH)
-					.filp(flipx, flipy)
-					.blend(srcFunc, dstFunc)
-				);
-			//}
+			list.add(new RenderEvent(ResourceManager.get().fetch(image))
+				.XY(offx + x - centerX, offy + y - centerY)
+				.color(red, green, blue, alpha)
+				.src(srcX, srcY, srcW, srcH)
+				.filp(flipx, flipy)
+				.blend(srcFunc, dstFunc)
+			);
 		}
 		if (sound != "" && sound != palyedSound) {
 			//list.add(new RenderEvent("").sound(sound, soundVol));

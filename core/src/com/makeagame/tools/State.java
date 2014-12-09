@@ -20,7 +20,7 @@ public class State {
 
 	public ArrayList<StateRecord> records;
 
-	/*
+	/**
 	 * @cond_table: 狀態條件表, 如果要從[狀態A]轉換成[狀態B],
 	 * 當 cond_table[A][B] == ALLOW 則轉換成功
 	 * 當 cond_table[A][B] == BLOCK 則轉換失敗

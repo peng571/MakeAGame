@@ -1,8 +1,6 @@
 package com.makeagame.magerevenge;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Random;
@@ -388,7 +386,7 @@ public class GameModel implements Model {
 		Role meet;
 		Attribute m;
 		long lastAttackTime;
-		long backingTime = 200;
+		long backingTime = 50;
 		long recycleTime = 2000;
 
 		ArrayList<Hold.Hurt> hurtRecord;

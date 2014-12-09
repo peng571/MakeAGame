@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
