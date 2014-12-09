@@ -143,8 +143,8 @@ public class GameView implements View {
 
 			addChild(top_board
 					.addChild(hp0)
-					.addChild(hp1)
-					.addChild(pause));
+					.addChild(hp1));
+					//.addChild(pause));
 			
 			bar0 = new Bar();
 			bar0.setBar(Direction.ROW_RESVERSE, 155);

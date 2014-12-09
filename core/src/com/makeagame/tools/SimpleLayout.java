@@ -209,7 +209,11 @@ public class SimpleLayout {
 			RenderEvent[][] lists = new RenderEvent[children.size()+1][];
 			lists[0] = list;
 			for (int i=0; i<children.size(); i++) {
-				lists[i+1] = children.get(i).render();
+				if (children.get(i).visible) {
+					lists[i+1] = children.get(i).render();
+				} else {
+					lists[i+1] = new RenderEvent[0];
+				}
 			}
 			list = join(lists);
 			

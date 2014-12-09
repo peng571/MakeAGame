@@ -31,11 +31,26 @@ public class ViewPower extends SimpleLayout {
 			//new Frame(  0	, new Key[] { new Key(".sound", "") }),
 			//new Frame(  50	, new Key[] { new Key(".sound", "button1.snd") }),
 			//new Frame(  100	, new Key[] { new Key(".sound", "") }),
+			new Frame(  0	, new Key[] { new Key("sound", "") }),
+			new Frame(  100	, new Key[] { new Key("sound", "powerup1.snd") }),
+			new Frame(  200	, new Key[] { new Key("sound", "") }),
 			
 			new Frame(  0	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }),
 			new Frame(  600	, new Key[] { new Key("1.alpha", new Double(0.3), KeyTable.INT_SIN) }), //80
 			new Frame(  1200	, new Key[] { new Key("1.alpha", new Double(1.0), KeyTable.INT_SIN) }), // 160
 	}).setLoop(true);
+	
+	private static final KeyTable ktReady2 = new KeyTable(new Frame[] {
+			new Frame(  0	, new Key[] { new Key("sound", "") }),
+			new Frame(  100	, new Key[] { new Key("sound", "powerup1.snd") }),
+			new Frame(  200	, new Key[] { new Key("sound", "") }),
+	});
+	
+	private static final KeyTable ktUse = new KeyTable(new Frame[] {
+			new Frame(  0	, new Key[] { new Key("sound", "") }),
+			new Frame(  100	, new Key[] { new Key("sound", "power.snd") }),
+			new Frame(  200	, new Key[] { new Key("sound", "") }),
+	});
 	
 	public ViewPower() {
 		super();
@@ -136,6 +151,9 @@ public class ViewPower extends SimpleLayout {
 
 		//bar.percent += 0.001;
 		bar.apply(layout_ring.children.get(1).sprite);
+		layout_ring.children.get(1).sprite.apply(ktUse.get(powerApplyTime));
+		layout_ring.children.get(0).sprite.apply(
+				ktReady2.get(button.action_state.elapsed(Button.Static)));
 	}
 	
 	
@@ -170,8 +188,10 @@ public class ViewPower extends SimpleLayout {
 		layout_icon.sprite.image = "power_" + selectPower;
 	}
 	
+	private long powerApplyTime;
 	public void model(Hold data) {
 		bar.percent = data.powerCD;
+		powerApplyTime = data.currentTime - data.powerApplyTime;
 		
 	}
 	
