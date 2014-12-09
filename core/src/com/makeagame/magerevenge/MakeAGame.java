@@ -56,12 +56,12 @@ public class MakeAGame {
 				rm.bindImage("fund_bg", "mr3/res.png").src(162, 0, 142, 40);
 				rm.bindImage("res_bg", "mr3/res.png").src(304, 0, 100, 40);
 				rm.bindImage("pause", "mr3/res.png").src(404, 0, 48, 48);
-				rm.bindImage("background1", "mr3/background1.png").src(0, 0, 512, 512);
+				rm.bindImage("background1", "mr3/background1.png").src(0, 0, 960, 540);
 				rm.bindImage("top_board", "mr3/top_board.png").src(0, 0, 512, 100);
 				rm.bindImage("top_title", "mr3/top_title.png").src(0, 0, 140, 80);
 				rm.bindImage("castle_al", "mr3/castle.png").src(0, 0, 256, 256);
 				rm.bindImage("castle_op", "mr3/castle.png").src(256, 0, 256, 256);
-				rm.bindImage("bottom_board", "mr3/bottom_board.png").src(0, 0, 512, 192);
+				rm.bindImage("bottom_board", "mr3/bottom_board.png").src(0, 0, 960, 192);
 				rm.bindImage("base_hp", "mr3/base_hp.png").src(0, 0, 155, 14);
 				rm.bindImage("role_hp", "mr3/role_hp.png").src(0, 0, 33, 3);
 				rm.bindImage("font_number_withe", "mr3/font_number_withe.png").src(0, 0, 120, 24);
