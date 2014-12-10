@@ -32,13 +32,12 @@ public class MakeAGame {
 
 			@Override
 			public void resourceFactory(ResourceManager rm) {
-				
-				rm.bindImage(ROLE_1 + "btn", "mr3/send_icons.png").src(0, 0, 117, 144);
-				rm.bindImage("send_icon_soldier1", "mr3/send_icons.png").src(117, 0, 117, 144);
-				rm.bindImage(ROLE_1 + "btn_inactive", "mr3/send_icons_inactive.png").src(0, 0, 117, 144);
-				rm.bindImage("send_icon_soldier1_inactive", "mr3/send_icons_inactive.png").src(117, 0, 117, 144);
-				rm.bindImage(ROLE_1 + "btn_inactive2", "mr3/send_icons_inactive2.png").src(0, 0, 117, 144);
-				rm.bindImage("send_icon_soldier1_inactive2", "mr3/send_icons_inactive2.png").src(117, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1", "mr3/send_icons.png").src(0, 0, 117, 144);
+				rm.bindImage(ROLE_1 + "btn", "mr3/send_icons.png").src(117, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive", "mr3/send_icons_inactive.png").src(0, 0, 117, 144);
+				rm.bindImage(ROLE_1 + "btn_inactive", "mr3/send_icons_inactive.png").src(117, 0, 117, 144);
+				rm.bindImage("send_icon_soldier1_inactive2", "mr3/send_icons_inactive2.png").src(0, 0, 117, 144);
+				rm.bindImage(ROLE_1 + "btn_inactive2", "mr3/send_icons_inactive2.png").src(117, 0, 117, 144);
 				rm.bindImage("role_walk1", "mr3/role.png").src(0, 0, 124, 100);
 				rm.bindImage("role_walk2", "mr3/role.png").src(124, 0, 124, 100);
 				rm.bindImage("role_walk3", "mr3/role.png").src(248, 0, 124, 100);
@@ -49,6 +48,22 @@ public class MakeAGame {
 				rm.bindImage("role_hurt", "mr3/role.png").src(868, 0, 124, 100);
 				rm.bindImage("role_fail", "mr3/role.png").src(992, 0, 124, 100);
 				rm.bindImage("role_dead", "mr3/role.png").src(1116, 0, 124, 100);
+				rm.bindImage("role1_walk1", "mr3/role1.png").src(0, 0, 175, 146);
+				rm.bindImage("role1_walk2", "mr3/role1.png").src(175, 0, 175, 146);
+				rm.bindImage("role1_walk3", "mr3/role1.png").src(350, 0, 175, 146);
+				rm.bindImage("role1_walk4", "mr3/role1.png").src(525, 0, 175, 146);
+				rm.bindImage("role1_walk5", "mr3/role1.png").src(700, 0, 175, 146);
+				rm.bindImage("role1_walk6", "mr3/role1.png").src(875, 0, 175, 146);
+				rm.bindImage("role1_walk7", "mr3/role1.png").src(1050, 0, 175, 146);
+				rm.bindImage("role1_walk8", "mr3/role1_2.png").src(0, 0, 175, 146);
+				rm.bindImage("role1_attack1", "mr3/role1_2.png").src(175, 0, 175, 146);
+				rm.bindImage("role1_attack2", "mr3/role1_2.png").src(350, 0, 175, 146);
+				rm.bindImage("role1_attack3", "mr3/role1_2.png").src(525, 0, 175, 146);
+				rm.bindImage("role1_stand1", "mr3/role1_2.png").src(700, 0, 175, 146);
+				rm.bindImage("role1_fail1", "mr3/role1_2.png").src(875, 0, 175, 146);
+				rm.bindImage("role1_dead1", "mr3/role1_2.png").src(1050, 0, 175, 146);
+				rm.bindImage("role1_dead2", "mr3/role1_2.png").src(1225, 0, 175, 146);
+				rm.bindImage("role1_dead3", "mr3/role1_2.png").src(1400, 0, 175, 146);
 				rm.bindImage("eff_damage_rock1", "mr3/eff_damage_rock.png").src(0, 0, 128, 128);
 				rm.bindImage("eff_damage_rock2", "mr3/eff_damage_rock.png").src(128, 0, 128, 128);
 				rm.bindImage("eff_damage_rock3", "mr3/eff_damage_rock.png").src(256, 0, 128, 128);
@@ -72,10 +87,10 @@ public class MakeAGame {
 				rm.bindImage("power_next", "mr3/power_btn.png").src(0, 0, 48, 48);
 				rm.bindImage("power_prev", "mr3/power_btn.png").src(48, 0, 48, 48);
 				rm.bindImage("power_a", "mr3/power.png").src(0, 0, 180, 180);
-				rm.bindImage("power_b", "mr3/power.png").src(180, 0, 160, 160);
-				rm.bindImage("power_c", "mr3/power.png").src(340, 0, 160, 160);
-				rm.bindImage("power_ring", "mr3/power.png").src(500, 0, 180, 180);
-				rm.bindImage("power_ring_inactive", "mr3/power.png").src(680, 0, 180, 180);
+				rm.bindImage("power_b", "mr3/power.png").src(180, 0, 180, 180);
+				rm.bindImage("power_c", "mr3/power.png").src(360, 0, 180, 180);
+				rm.bindImage("power_ring", "mr3/power.png").src(540, 0, 180, 180);
+				rm.bindImage("power_ring_inactive", "mr3/power.png").src(720, 0, 180, 180);
 
 
 				
@@ -86,6 +101,11 @@ public class MakeAGame {
 				rm.bindImage(CASTLE + "R", "mr3/castle.png").attribute("data/castle.txt");
 				
 				rm.bindSound("button1.snd", "sound/button-50.mp3");
+				rm.bindSound("hit1.snd", "sound/hit1.wav");
+				rm.bindSound("powerup1.snd", "sound/powerup1.wav");
+				rm.bindSound("dead1.snd", "sound/knock1.wav");
+				rm.bindSound("power.snd", "sound/buster1.wav");
+				
 			}
 			
 		});

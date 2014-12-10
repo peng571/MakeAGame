@@ -395,7 +395,7 @@ public class GameModel implements Model {
 			m = init(gson);
 			m.group = group;
 			m.x = group == 0 ? 110 : 848;
-			m.y = 10 + (10 - rand.nextInt(20));
+			m.y = 20 + (5 - rand.nextInt(10));
 			m.maxHp = m.hp;
 			m.baseAtkTime = m.atkTime;
 			m.level = 1;
@@ -452,8 +452,10 @@ public class GameModel implements Model {
 			for (Role r : roles) {
 				if (m.group == 0 && r.m.group == 1 && m.x + m.range >= r.m.x
 						|| (m.group == 1 && r.m.group == 0 && m.x - m.range <= r.m.x)) {
-					meet = r;
-					// System.out.println(m.id + " meet to " + meet.m.id);
+					if (r.state.currentStat() < Role.STATE_DEATH) {
+						meet = r;
+						// System.out.println(m.id + " meet to " + meet.m.id);
+					}
 				}
 			}
 
