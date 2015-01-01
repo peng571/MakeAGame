@@ -5,16 +5,15 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.badlogic.gdx.graphics.GL30;
 import com.makeagame.core.Controler;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.tools.Bar;
 import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
-import com.makeagame.tools.SimpleLayout;
-import com.makeagame.tools.Sprite;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
+import com.makeagame.tools.SimpleLayout;
+import com.makeagame.tools.Sprite;
 
 public class ViewCardTable extends SimpleLayout {
 	
@@ -38,7 +37,7 @@ public class ViewCardTable extends SimpleLayout {
 			icon = new SimpleLayout();
 			addChild(icon);
 			
-			icon_bar = new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive2"));
+			icon_bar = new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
 			addChild(icon_bar);
 			
 			bar = new Bar();
@@ -80,18 +79,18 @@ public class ViewCardTable extends SimpleLayout {
 			});
 			
 			button.setInactiveSprite( new SimpleLayout()
-					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
-					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+					.addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
+					.addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
 			);
 			
 			button.setActiveSprite( new SimpleLayout()
-					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn")))
-					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+					.addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn")))
+					.addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
 					);
 			
 			/*
 			button.setHoveredSprite( new SimpleLayout()
-					.addChild(new SimpleLayout(new Sprite(MakeAGame.ROLE_1 + "btn_inactive")))
+					.addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
 					.addChild(new SimpleLayout(hovered))
 			);
 			*/
@@ -135,11 +134,11 @@ public class ViewCardTable extends SimpleLayout {
 		xy(349, -13);
 		
 		typeList = new String[] {
-				MakeAGame.CASTLE,
-				MakeAGame.ROLE_1,
-				MakeAGame.ROLE_2,
-				MakeAGame.ROLE_3,
-				MakeAGame.ROLE_4,
+				MegaRevenge.CASTLE,
+				MegaRevenge.ROLE_1,
+				MegaRevenge.ROLE_2,
+				MegaRevenge.ROLE_3,
+				MegaRevenge.ROLE_4,
 		};
 		send_buttons = new ViewSendButton[5];
 		

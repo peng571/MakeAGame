@@ -43,8 +43,8 @@ public class GameModel implements Model {
 		screen = "battle";
 		player = new Player[] { new Player(0), new Player(1, level) };
 		roles = new LinkedList<Role>();
-		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "L"), 0));
-		roles.add(new Role(ResourceManager.get().read(MakeAGame.CASTLE + "R"), 1));
+		roles.add(new Role(ResourceManager.get().read(MegaRevenge.CASTLE + "L"), 0));
+		roles.add(new Role(ResourceManager.get().read(MegaRevenge.CASTLE + "R"), 1));
 		moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
 		start = true;
 	}
@@ -82,13 +82,13 @@ public class GameModel implements Model {
 			case Sign.BATTLE_SendSoldier:
 				String soldierType = params.getString("soldierType");
 				int soldierId = 0;
-				if (soldierType.equals(MakeAGame.ROLE_1)) {
+				if (soldierType.equals(MegaRevenge.ROLE_1)) {
 					soldierId = 1;
-				} else if (soldierType.equals(MakeAGame.ROLE_2)) {
+				} else if (soldierType.equals(MegaRevenge.ROLE_2)) {
 					soldierId = 2;
-				} else if (soldierType.equals(MakeAGame.ROLE_3)) {
+				} else if (soldierType.equals(MegaRevenge.ROLE_3)) {
 					soldierId = 3;
-				} else if (soldierType.equals(MakeAGame.ROLE_4)) {
+				} else if (soldierType.equals(MegaRevenge.ROLE_4)) {
 					soldierId = 4;
 				}
 				player[params.getInt("player")].click(soldierId);
@@ -185,7 +185,7 @@ public class GameModel implements Model {
 //			});
 
 			for (Role r : roles) {
-				if (!r.m.id.equals(MakeAGame.CASTLE)) {
+				if (!r.m.id.equals(MegaRevenge.CASTLE)) {
 					hold.soldier.add(r.hold());
 				} else {
 					int id = r.m.group;
@@ -220,11 +220,11 @@ public class GameModel implements Model {
 			castleLevel = 1;
 			ai = false;
 			sendCards = new SendCard[] {
-					new SendCard(MakeAGame.CASTLE, 150, 1000),
-					new SendCard(MakeAGame.ROLE_1, 100, 3000),
-					new SendCard(MakeAGame.ROLE_2, 250, 6000),
-					new SendCard(MakeAGame.ROLE_3, 300, 12000),
-					new SendCard(MakeAGame.ROLE_4),
+					new SendCard(MegaRevenge.CASTLE, 150, 1000),
+					new SendCard(MegaRevenge.ROLE_1, 100, 3000),
+					new SendCard(MegaRevenge.ROLE_2, 250, 6000),
+					new SendCard(MegaRevenge.ROLE_3, 300, 12000),
+					new SendCard(MegaRevenge.ROLE_4),
 			};
 			skillCDState = new State(new long[][] { { State.BLOCK, skillCDTime }, { State.ALLOW, State.BLOCK } });
 		}
@@ -236,47 +236,47 @@ public class GameModel implements Model {
 			{
 			case 1:
 				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 250, 1000),
-						new SendCard(MakeAGame.ROLE_1, 160, 3500),
-						new SendCard(MakeAGame.ROLE_2),
-						new SendCard(MakeAGame.ROLE_3),
-						new SendCard(MakeAGame.ROLE_4),
+						new SendCard(MegaRevenge.CASTLE, 250, 1000),
+						new SendCard(MegaRevenge.ROLE_1, 160, 3500),
+						new SendCard(MegaRevenge.ROLE_2),
+						new SendCard(MegaRevenge.ROLE_3),
+						new SendCard(MegaRevenge.ROLE_4),
 				};
 				break;
 			case 2:
 				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 200, 1000),
-						new SendCard(MakeAGame.ROLE_1, 140, 3500),
-						new SendCard(MakeAGame.ROLE_2, 300, 7000),
-						new SendCard(MakeAGame.ROLE_3),
-						new SendCard(MakeAGame.ROLE_4),
+						new SendCard(MegaRevenge.CASTLE, 200, 1000),
+						new SendCard(MegaRevenge.ROLE_1, 140, 3500),
+						new SendCard(MegaRevenge.ROLE_2, 300, 7000),
+						new SendCard(MegaRevenge.ROLE_3),
+						new SendCard(MegaRevenge.ROLE_4),
 				};
 				break;
 			case 3:
 				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 200, 1000),
-						new SendCard(MakeAGame.ROLE_1, 130, 3500),
-						new SendCard(MakeAGame.ROLE_2, 280, 7000),
-						new SendCard(MakeAGame.ROLE_3),
-						new SendCard(MakeAGame.ROLE_4),
+						new SendCard(MegaRevenge.CASTLE, 200, 1000),
+						new SendCard(MegaRevenge.ROLE_1, 130, 3500),
+						new SendCard(MegaRevenge.ROLE_2, 280, 7000),
+						new SendCard(MegaRevenge.ROLE_3),
+						new SendCard(MegaRevenge.ROLE_4),
 				};
 				break;
 			case 4:
 				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 200, 1000),
-						new SendCard(MakeAGame.ROLE_1, 130, 3500),
-						new SendCard(MakeAGame.ROLE_2, 280, 7000),
-						new SendCard(MakeAGame.ROLE_3, 350, 13000),
-						new SendCard(MakeAGame.ROLE_4),
+						new SendCard(MegaRevenge.CASTLE, 200, 1000),
+						new SendCard(MegaRevenge.ROLE_1, 130, 3500),
+						new SendCard(MegaRevenge.ROLE_2, 280, 7000),
+						new SendCard(MegaRevenge.ROLE_3, 350, 13000),
+						new SendCard(MegaRevenge.ROLE_4),
 				};
 				break;
 			case 5:
 				sendCards = new SendCard[] {
-						new SendCard(MakeAGame.CASTLE, 200, 1000),
-						new SendCard(MakeAGame.ROLE_1, 120, 3500),
-						new SendCard(MakeAGame.ROLE_2, 270, 7000),
-						new SendCard(MakeAGame.ROLE_3, 330, 13000),
-						new SendCard(MakeAGame.ROLE_4),
+						new SendCard(MegaRevenge.CASTLE, 200, 1000),
+						new SendCard(MegaRevenge.ROLE_1, 120, 3500),
+						new SendCard(MegaRevenge.ROLE_2, 270, 7000),
+						new SendCard(MegaRevenge.ROLE_3, 330, 13000),
+						new SendCard(MegaRevenge.ROLE_4),
 				};
 				break;
 			}
@@ -360,7 +360,7 @@ public class GameModel implements Model {
 			if (canClick(player)) {
 				if (state.enter(1)) {
 					player.totalMoney -= costMoney;
-					if (type.equals(MakeAGame.CASTLE)) {
+					if (type.equals(MegaRevenge.CASTLE)) {
 						costMoney *= 2;
 						player.castleLevel++;
 					} else {

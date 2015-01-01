@@ -1,7 +1,6 @@
 package com.makeagame.core.component;
 
 public class Position {
-
 	public int x;
 	public int y;
 
@@ -9,4 +8,6 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
+
+	class Pdosition {}
 }

@@ -59,6 +59,17 @@ public class PuzzleFrog {
 //				resource.bind("ball6", new Resource().image("image/pink.png"));
 //				resource.bind("ball7", new Resource().image("image/red.png"));
 //				resource.bind("boom", new Resource().image("image/boom3.png"));
+				
+				// or
+				resource.bindImage("ball", "data/automove.txt");
+				resource.bindImage("ball1", "image/black.png");
+				resource.bindImage("ball2", "image/blue.png");
+				resource.bindImage("ball3", "image/grey.png");
+				resource.bindImage("ball4", "image/green.png");
+				resource.bindImage("ball5", "image/orange.png");
+				resource.bindImage("ball6", "image/pink.png");
+				resource.bindImage("ball7", "image/red.png");
+				resource.bindImage("boom", "image/boom3.png");
 			}
 		});
 	}
