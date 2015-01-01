@@ -1,5 +1,5 @@
 package com.makeagame.core.model;
 
 public abstract class Action {
-	public abstract void execute();
+    public abstract void execute();
 }

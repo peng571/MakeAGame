@@ -5,11 +5,11 @@ import org.json.JSONObject;
 
 public interface Model {
 
-	// §ïÅÜ¤º³¡¦æ¬°
-	void process(int command, JSONObject json) throws JSONException;
+    // æ”¹è®Šå…§éƒ¨è¡Œç‚º
+    void process(int command, JSONObject json) throws JSONException;
 
-	// §¹¾ã¥æ¥X¤º³¡
-	String hold();
+    // å®Œæ•´äº¤å‡ºå…§éƒ¨
+    String hold();
 
-	String info();
+    String info();
 }

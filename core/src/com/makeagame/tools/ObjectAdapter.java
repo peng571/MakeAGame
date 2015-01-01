@@ -6,28 +6,28 @@ import com.makeagame.core.view.RenderEvent;
 
 public abstract class ObjectAdapter<T> {
 
-	List<T> list;
-	SimpleLayout layout;
+    List<T> list;
+    SimpleLayout layout;
 
-	public ObjectAdapter(List<T> list) {
-		this();
-		this.list = list;
-	}
+    public ObjectAdapter(List<T> list) {
+        this();
+        this.list = list;
+    }
 
-	public ObjectAdapter() {
-		this.layout = createView();
-	}
+    public ObjectAdapter() {
+        this.layout = createView();
+    }
 
-	public void setList(List<T> list) {
-		this.list = list;
-	}
+    public void setList(List<T> list) {
+        this.list = list;
+    }
 
-	public abstract SimpleLayout createView();
+    public abstract SimpleLayout createView();
 
-	public abstract void fillItem(T item);
+    public abstract void fillItem(T item);
 
-	public RenderEvent[] render() {
-		return layout.render();
-	}
+    public RenderEvent[] render() {
+        return layout.render();
+    }
 
 }

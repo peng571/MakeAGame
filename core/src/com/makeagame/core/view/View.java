@@ -6,11 +6,11 @@ import org.json.JSONException;
 
 public interface View {
 
-	// ±µ¦¬¥~³¡«ü¥O
-	public abstract void signal(ArrayList<SignalEvent> s) throws JSONException;
+    // æ¥æ”¶å¤–éƒ¨æŒ‡ä»¤
+    public abstract void signal(ArrayList<SignalEvent> s) throws JSONException;
 
-	// °e¥XÃ¸¹Ï«ü¥O
-	public abstract ArrayList<RenderEvent> render(String list);
-	
-	public abstract String info();
+    // é€å‡ºç¹ªåœ–æŒ‡ä»¤
+    public abstract ArrayList<RenderEvent> render(String list);
+    
+    public abstract String info();
 }

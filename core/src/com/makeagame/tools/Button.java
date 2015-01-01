@@ -5,267 +5,267 @@ import java.util.ArrayList;
 import com.makeagame.core.view.SignalEvent;
 
 public class Button {// implements View {
-/**
- * ¥i¯àªºª¬ºA:
- * ©w©Êª¬ºA:
- * Disable disable ®É«ö¶s¤£¯àÄ²µo, ¥B«ö¶sÅã¥Ü¦Ç¦â
- * Activate
- * Inactivate InActivate ®É«ö¶s¤£¯àÄ²µo, ¦Ó¥BÅã¥Ü¬°·Ç³Æ¤¤
- * Invisible InVisible ®É«ö¶s¯àÄ²µo, ¥B¤£Åã¥Ü
- * Hovered ¥Nªí·Æ¹«(«ü¼Ð)¦b·PÀ³°Ï¤º®É(¦æ°Ê¥­¥x¤WµL®Ä)
- * Pushed ¥Nªí³Q«öµÛ®É
- */
-	public static final int Invisible = 0;
-	public static final int Visible = 1;
-	public static final int Disable = 0;
-	public static final int Enable = 1;
-	public static final int Active = 2;
-	public static final int Inactive = 3;
-	public static final int Static = 0;
-//	public static final int Hovered = 1;
-	public static final int Pushed = 1;
-	
-	// ¶i«×±ø, ·í¹F¨ì 1.0 ®É¶i¤JActive, ¤£¨ì®É°h¦^Inactive
-	static double progress = 1.0;
-	public State visible_state;
-	public State enable_state;
-	public State action_state;
+    /**
+     * å¯èƒ½çš„ç‹€æ…‹:
+     * å®šæ€§ç‹€æ…‹:
+     * Disable disable æ™‚æŒ‰éˆ•ä¸èƒ½è§¸ç™¼, ä¸”æŒ‰éˆ•é¡¯ç¤ºç°è‰²
+     * Activate
+     * Inactivate InActivate æ™‚æŒ‰éˆ•ä¸èƒ½è§¸ç™¼, è€Œä¸”é¡¯ç¤ºç‚ºæº–å‚™ä¸­
+     * Invisible InVisible æ™‚æŒ‰éˆ•èƒ½è§¸ç™¼, ä¸”ä¸é¡¯ç¤º
+     * Hovered ä»£è¡¨æ»‘é¼ (æŒ‡æ¨™)åœ¨æ„Ÿæ‡‰å€å…§æ™‚(è¡Œå‹•å¹³å°ä¸Šç„¡æ•ˆ)
+     * Pushed ä»£è¡¨è¢«æŒ‰è‘—æ™‚
+     */
+    public static final int Invisible = 0;
+    public static final int Visible = 1;
+    public static final int Disable = 0;
+    public static final int Enable = 1;
+    public static final int Active = 2;
+    public static final int Inactive = 3;
+    public static final int Static = 0;
+//    public static final int Hovered = 1;
+    public static final int Pushed = 1;
+    
+    // é€²åº¦æ¢, ç•¶é”åˆ° 1.0 æ™‚é€²å…¥Active, ä¸åˆ°æ™‚é€€å›žInactive
+    static double progress = 1.0;
+    public State visible_state;
+    public State enable_state;
+    public State action_state;
 
-	public Button()
-	{
-		// mobile do not have Hovered
-		action_state = new State(new long[][] {
-				// Static Pushed
-				{ State.BLOCK, State.ALLOW },
-				{ State.ALLOW, State.BLOCK }
-		});
-//		action_state = new State(new long[][] {
-//				// Static Hovered Pushed
-//				{ State.BLOCK, State.ALLOW, State.BLOCK },
-//				{ State.ALLOW, State.BLOCK, State.ALLOW },
-//				{ State.BLOCK, State.ALLOW, State.BLOCK }
-//		});
-		action_state.reset(Static);
-		visible_state = new State(new long[][] {
-				// Invisible Visible
-				{ State.BLOCK, State.ALLOW },
-				{ State.ALLOW, State.BLOCK }
-		});
-		visible_state.reset(Visible);
-		// ¥u¯à¥ÑInactive->Active
-		// Enable ¬O¹L´çª¬ºA
-		enable_state = new State(new long[][] {
-				// Disable Enable Active Inactive
-				{ State.BLOCK, State.ALLOW, State.BLOCK, State.BLOCK },
-				{ State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
-				{ State.ALLOW, State.BLOCK, State.BLOCK, State.ALLOW },
-				{ State.ALLOW, State.BLOCK, State.ALLOW, State.BLOCK }
-		});
-		enable_state.reset(Active);
-	}
+    public Button()
+    {
+        // mobile do not have Hovered
+        action_state = new State(new long[][] {
+                // Static Pushed
+                { State.BLOCK, State.ALLOW },
+                { State.ALLOW, State.BLOCK }
+        });
+//        action_state = new State(new long[][] {
+//                // Static Hovered Pushed
+//                { State.BLOCK, State.ALLOW, State.BLOCK },
+//                { State.ALLOW, State.BLOCK, State.ALLOW },
+//                { State.BLOCK, State.ALLOW, State.BLOCK }
+//        });
+        action_state.reset(Static);
+        visible_state = new State(new long[][] {
+                // Invisible Visible
+                { State.BLOCK, State.ALLOW },
+                { State.ALLOW, State.BLOCK }
+        });
+        visible_state.reset(Visible);
+        // åªèƒ½ç”±Inactive->Active
+        // Enable æ˜¯éŽæ¸¡ç‹€æ…‹
+        enable_state = new State(new long[][] {
+                // Disable Enable Active Inactive
+                { State.BLOCK, State.ALLOW, State.BLOCK, State.BLOCK },
+                { State.ALLOW, State.BLOCK, State.ALLOW, State.ALLOW },
+                { State.ALLOW, State.BLOCK, State.BLOCK, State.ALLOW },
+                { State.ALLOW, State.BLOCK, State.ALLOW, State.BLOCK }
+        });
+        enable_state.reset(Active);
+    }
 
-	int x, y, w, h;
+    int x, y, w, h;
 
-	public void setRectArea(int x, int y, int w, int h) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-	}
+    public void setRectArea(int x, int y, int w, int h) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
 
-	public void setEnable(boolean bool) {
-		if (bool) {
-			enable_state.enter(Enable);
-		} else {
-			enable_state.enter(Disable);
-		}
-	}
+    public void setEnable(boolean bool) {
+        if (bool) {
+            enable_state.enter(Enable);
+        } else {
+            enable_state.enter(Disable);
+        }
+    }
 
-	public void setVisible(boolean bool) {
-		if (bool) {
-			visible_state.enter(Visible);
-		} else {
-			visible_state.enter(Invisible);
-		}
-	}
+    public void setVisible(boolean bool) {
+        if (bool) {
+            visible_state.enter(Visible);
+        } else {
+            visible_state.enter(Invisible);
+        }
+    }
 
-	public boolean isInArea(int _x, int _y) {
-		if (_x > x && _x < x + w && _y > y && _y < y + h) {
-			return true;
-		}
-		return false;
-	}
+    public boolean isInArea(int _x, int _y) {
+        if (_x > x && _x < x + w && _y > y && _y < y + h) {
+            return true;
+        }
+        return false;
+    }
 
-	public void OnMouseIn() {
-	}
+    public void OnMouseIn() {
+    }
 
-	public void OnMouseOut() {
-	}
+    public void OnMouseOut() {
+    }
 
-	public void OnMouseDown() {
-	}
+    public void OnMouseDown() {
+    }
 
-	public void OnMouseUp() {
-	}
+    public void OnMouseUp() {
+    }
 
-	// @Override
-	public void signal(ArrayList<SignalEvent> signalList) {
-		if (enable_state.currentStat() != Active) {
-			// Engine.logI("es: " + Integer.toString(enable_state.currentStat()));
-			action_state.reset(Static);
-			return;
-		}
-		for (SignalEvent s : signalList) {
-			if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
-				// Engine.logI(Integer.toString(s.signal.x));
-				if (isInArea(s.signal.x, s.signal.y)) {
-					if (s.action == SignalEvent.ACTION_MOVE) {
-//						if (action_state.enter(Hovered)) {
-//							OnMouseIn();
-//						}
-					} else if (s.action == SignalEvent.ACTION_DOWN) {
-						if (action_state.enter(Pushed)) {
-							OnMouseDown();
-						}
-					} else if (s.action == SignalEvent.ACTION_UP) {
-//						if (action_state.enter(Hovered)) {
-//							OnMouseUp();
-//						}
-					}
-				} else {
-					if (action_state.enter(Static)) {
-						OnMouseOut();
-					}
-				}
-			}
-		}
-	}
+    // @Override
+    public void signal(ArrayList<SignalEvent> signalList) {
+        if (enable_state.currentStat() != Active) {
+            // Engine.logI("es: " + Integer.toString(enable_state.currentStat()));
+            action_state.reset(Static);
+            return;
+        }
+        for (SignalEvent s : signalList) {
+            if (s.type == SignalEvent.MOUSE_EVENT || s.type == SignalEvent.TOUCH_EVENT) {
+                // Engine.logI(Integer.toString(s.signal.x));
+                if (isInArea(s.signal.x, s.signal.y)) {
+                    if (s.action == SignalEvent.ACTION_MOVE) {
+//                        if (action_state.enter(Hovered)) {
+//                            OnMouseIn();
+//                        }
+                    } else if (s.action == SignalEvent.ACTION_DOWN) {
+                        if (action_state.enter(Pushed)) {
+                            OnMouseDown();
+                        }
+                    } else if (s.action == SignalEvent.ACTION_UP) {
+//                        if (action_state.enter(Hovered)) {
+//                            OnMouseUp();
+//                        }
+                    }
+                } else {
+                    if (action_state.enter(Static)) {
+                        OnMouseOut();
+                    }
+                }
+            }
+        }
+    }
 
-	// @Override
-	public String info() {
-		return "button view";
-	}
+    // @Override
+    public String info() {
+        return "button view";
+    }
 
-	SimpleLayout spDisable;
-	SimpleLayout spInactive;
-	SimpleLayout spStatic;
-	SimpleLayout spHovered;
-	SimpleLayout spPushed;
-	KeyTable ktDisable;
-	KeyTable ktInactive;
-	KeyTable ktStatic;
-	KeyTable ktHovered;
-	KeyTable ktPushed;
+    SimpleLayout spDisable;
+    SimpleLayout spInactive;
+    SimpleLayout spStatic;
+    SimpleLayout spHovered;
+    SimpleLayout spPushed;
+    KeyTable ktDisable;
+    KeyTable ktInactive;
+    KeyTable ktStatic;
+    KeyTable ktHovered;
+    KeyTable ktPushed;
 
-	public void setDisableSprite(SimpleLayout sprite) {
-		spDisable = sprite;
-	}
+    public void setDisableSprite(SimpleLayout sprite) {
+        spDisable = sprite;
+    }
 
-	public void setDisableAnimation(KeyTable keytable) {
-		ktDisable = keytable;
-	}
+    public void setDisableAnimation(KeyTable keytable) {
+        ktDisable = keytable;
+    }
 
-	public void setInactiveSprite(SimpleLayout sprite) {
-		spInactive = sprite;
-	}
+    public void setInactiveSprite(SimpleLayout sprite) {
+        spInactive = sprite;
+    }
 
-	public void setInactiveAnimation(KeyTable keytable) {
-		ktInactive = keytable;
-	}
+    public void setInactiveAnimation(KeyTable keytable) {
+        ktInactive = keytable;
+    }
 
-	public void setStaticSprite(SimpleLayout sprite) {
-		spStatic = sprite;
-	}
+    public void setStaticSprite(SimpleLayout sprite) {
+        spStatic = sprite;
+    }
 
-	public void setStaticAnimation(KeyTable keytable) {
-		ktStatic = keytable;
-	}
+    public void setStaticAnimation(KeyTable keytable) {
+        ktStatic = keytable;
+    }
 
-	public void setHoveredSprite(SimpleLayout sprite) {
-		spHovered = sprite;
-	}
+    public void setHoveredSprite(SimpleLayout sprite) {
+        spHovered = sprite;
+    }
 
-	public void setHoveredAnimation(KeyTable keytable) {
-		ktHovered = keytable;
-	}
+    public void setHoveredAnimation(KeyTable keytable) {
+        ktHovered = keytable;
+    }
 
-	public void setPushedSprite(SimpleLayout sprite) {
-		spPushed = sprite;
-	}
+    public void setPushedSprite(SimpleLayout sprite) {
+        spPushed = sprite;
+    }
 
-	public void setPushedAnimation(KeyTable keytable) {
-		ktPushed = keytable;
-	}
+    public void setPushedAnimation(KeyTable keytable) {
+        ktPushed = keytable;
+    }
 
-	public void setActiveSprite(SimpleLayout sprite) {
-		spStatic = sprite;
-		spHovered = sprite;
-		spPushed = sprite;
-	}
+    public void setActiveSprite(SimpleLayout sprite) {
+        spStatic = sprite;
+        spHovered = sprite;
+        spPushed = sprite;
+    }
 
-	public void setActiveAnimation(KeyTable keytable) {
-		ktStatic = keytable;
-		ktHovered = keytable;
-		ktPushed = keytable;
-	}
+    public void setActiveAnimation(KeyTable keytable) {
+        ktStatic = keytable;
+        ktHovered = keytable;
+        ktPushed = keytable;
+    }
 
-	// @Override
-	// public ArrayList<RenderEvent> render(ArrayList<String> build) {
-	public void apply(SimpleLayout sprite) {
-		/*
-		 * if (progress >= 1.0) {
-		 * enable_state.enter(Active);
-		 * } else {
-		 * enable_state.enter(Inactive);
-		 * }
-		 */
-		// ¦pªG invisible«h¤£Åã¥Ü
-		// TODO: ¤§«á¦b°µ
-		// ArrayList<RenderEvent> renderlist = new ArrayList<RenderEvent>();
-		if (visible_state.currentStat() == Invisible) {
-			return;
-		}
-		switch (enable_state.currentStat())
-		{
-		case Disable:
-			if (spDisable != null) { sprite.copyFrom(spDisable); }
-			if (ktDisable != null) {
-				sprite.apply(ktDisable.get(enable_state.elapsed()));
-			}
-			break;
-		case Inactive:
-			if (spInactive != null) { sprite.copyFrom(spInactive); }
-			if (ktInactive != null) {
-				sprite.apply(ktInactive.get(enable_state.elapsed()));
-			}
-			break;
-		case Active:
-			switch (action_state.currentStat())
-			{
-			case Static:
-				if (spStatic != null) { sprite.copyFrom(spStatic); }
-				//Engine.logI("stat: " + Long.toString(action_state.elapsed()));
-				break;
-				// mobile do not have Hovered
-//			case Hovered:
-//				if (spHovered != null) { sprite.copyFrom(spHovered); }
-//				break;
-			case Pushed:
-				if (spPushed != null) { sprite.copyFrom(spPushed); }
-				break;
-			}
-			if (ktStatic != null) {
-				sprite.apply(ktStatic.get(action_state.elapsed(Static)));
-			}
-			// mobile do not have Hovered
-//			if (ktHovered != null) {
-//				sprite.apply(ktHovered.get(action_state.elapsed(Hovered)));
-//			}
-			if (ktPushed != null) {
-				sprite.apply(ktPushed.get(action_state.elapsed(Pushed)));
-			}
-			break;
-		}
-		
-	}
+    // @Override
+    // public ArrayList<RenderEvent> render(ArrayList<String> build) {
+    public void apply(SimpleLayout sprite) {
+        /*
+         * if (progress >= 1.0) {
+         * enable_state.enter(Active);
+         * } else {
+         * enable_state.enter(Inactive);
+         * }
+         */
+        // ï¿½pï¿½G invisibleï¿½hï¿½ï¿½ï¿½ï¿½ï¿½
+        // TODO: ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½
+        // ArrayList<RenderEvent> renderlist = new ArrayList<RenderEvent>();
+        if (visible_state.currentStat() == Invisible) {
+            return;
+        }
+        switch (enable_state.currentStat())
+        {
+        case Disable:
+            if (spDisable != null) { sprite.copyFrom(spDisable); }
+            if (ktDisable != null) {
+                sprite.apply(ktDisable.get(enable_state.elapsed()));
+            }
+            break;
+        case Inactive:
+            if (spInactive != null) { sprite.copyFrom(spInactive); }
+            if (ktInactive != null) {
+                sprite.apply(ktInactive.get(enable_state.elapsed()));
+            }
+            break;
+        case Active:
+            switch (action_state.currentStat())
+            {
+            case Static:
+                if (spStatic != null) { sprite.copyFrom(spStatic); }
+                //Engine.logI("stat: " + Long.toString(action_state.elapsed()));
+                break;
+                // mobile do not have Hovered
+//            case Hovered:
+//                if (spHovered != null) { sprite.copyFrom(spHovered); }
+//                break;
+            case Pushed:
+                if (spPushed != null) { sprite.copyFrom(spPushed); }
+                break;
+            }
+            if (ktStatic != null) {
+                sprite.apply(ktStatic.get(action_state.elapsed(Static)));
+            }
+            // mobile do not have Hovered
+//            if (ktHovered != null) {
+//                sprite.apply(ktHovered.get(action_state.elapsed(Hovered)));
+//            }
+            if (ktPushed != null) {
+                sprite.apply(ktPushed.get(action_state.elapsed(Pushed)));
+            }
+            break;
+        }
+        
+    }
 }
