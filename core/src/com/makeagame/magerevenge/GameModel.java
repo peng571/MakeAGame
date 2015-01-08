@@ -296,7 +296,6 @@ public class GameModel implements Model {
         }
 
         public void ai() {
-            // TODO �[�J�q�����j�M (�j�q�L��)
             for (SendCard card : sendCards) {
                 if (card.canClick(this)) {
                     card.send(this);

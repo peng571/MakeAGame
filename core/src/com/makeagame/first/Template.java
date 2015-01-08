@@ -1,4 +1,4 @@
-package com.makeagame.firstgame;
+package com.makeagame.first;
 
 import java.util.ArrayList;
 
