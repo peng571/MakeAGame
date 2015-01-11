@@ -3,7 +3,7 @@ package com.makeagame.first.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.makeagame.core.Bootstrap;
-import com.makeagame.first.MakeAGame;
+import com.makeagame.magerevenge.MakeAGame;
 
 public class DesktopLauncher {
 	public static void main(String[] arg) {

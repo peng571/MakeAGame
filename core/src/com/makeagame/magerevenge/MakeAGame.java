@@ -1,4 +1,4 @@
-package com.makeagame.first;
+package com.makeagame.magerevenge;
 //
 //import java.util.ArrayList;
 //
@@ -116,8 +116,6 @@ import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.View;
-import com.makeagame.magerevenge.GameModel;
-import com.makeagame.magerevenge.GameView;
 
 public class MakeAGame {
 
