@@ -106,16 +106,6 @@ public class Engine extends ApplicationAdapter {
         }
         signalList.clear();
 
-        // time = System.currentTimeMillis();
-        // count = 0;
-        // batch.begin();
-        // while (System.currentTimeMillis() - time <= 1000) {
-        // batch.draw(texture, 0, 0, 0, 0, 128, 128);
-        // count++;
-        // }
-        // batch.end();
-        // System.out.println("draws " + count + " times");
-
         logD("batch begine time " + System.currentTimeMillis());
         batch.begin();
         // batch.enableBlending();
@@ -159,8 +149,6 @@ public class Engine extends ApplicationAdapter {
                 int srcY = dim[1];
                 int srcW = dim[2];
                 int srcH = dim[3];
-//                srcW = 16;
-//                srcH = 16;
 
                 // Engine.logI("src: (" + new Integer(srcX).toString() + ","
                 // + new Integer(srcY).toString() + ","
@@ -171,7 +159,6 @@ public class Engine extends ApplicationAdapter {
                 float x = e.x;
                 float y = Bootstrap.screamHeight() - e.y - srcH;
                 batch.draw(texture, x, y, (float) srcW, (float) srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);
-                // batch.draw(texture, x, y);
                 // }
                 break;
             case RenderEvent.LABEL:

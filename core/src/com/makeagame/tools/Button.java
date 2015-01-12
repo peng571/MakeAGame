@@ -3,6 +3,7 @@ package com.makeagame.tools;
 import java.util.ArrayList;
 
 import com.makeagame.core.view.SignalEvent;
+import com.makeagame.core.view.SignalEvent.Signal;
 
 public class Button {// implements View {
     /**
@@ -22,7 +23,7 @@ public class Button {// implements View {
     public static final int Active = 2;
     public static final int Inactive = 3;
     public static final int Static = 0;
-//    public static final int Hovered = 1;
+    public static final int Hovered = 1;
     public static final int Pushed = 1;
     
     // 進度條, 當達到 1.0 時進入Active, 不到時退回Inactive
@@ -34,17 +35,17 @@ public class Button {// implements View {
     public Button()
     {
         // mobile do not have Hovered
-        action_state = new State(new long[][] {
-                // Static Pushed
-                { State.BLOCK, State.ALLOW },
-                { State.ALLOW, State.BLOCK }
-        });
 //        action_state = new State(new long[][] {
-//                // Static Hovered Pushed
-//                { State.BLOCK, State.ALLOW, State.BLOCK },
-//                { State.ALLOW, State.BLOCK, State.ALLOW },
-//                { State.BLOCK, State.ALLOW, State.BLOCK }
+//                // Static Pushed
+//                { State.BLOCK, State.ALLOW },
+//                { State.ALLOW, State.BLOCK }
 //        });
+        action_state = new State(new long[][] {
+                // Static Hovered Pushed
+                { State.BLOCK, State.ALLOW, State.ALLOW },
+                { State.ALLOW, State.BLOCK, State.ALLOW },
+                { State.BLOCK, State.ALLOW, State.BLOCK }
+        });
         action_state.reset(Static);
         visible_state = new State(new long[][] {
                 // Invisible Visible
@@ -96,16 +97,20 @@ public class Button {// implements View {
         return false;
     }
 
-    public void OnMouseIn() {
+    public void OnMouseIn(Signal s) {
+     // Override to add method
     }
 
-    public void OnMouseOut() {
+    public void OnMouseOut(Signal s) {
+     // Override to add method
     }
 
-    public void OnMouseDown() {
+    public void OnMouseDown(Signal s) {
+     // Override to add method
     }
 
-    public void OnMouseUp() {
+    public void OnMouseUp(Signal s) {
+     // Override to add method
     }
 
     // @Override
@@ -121,20 +126,20 @@ public class Button {// implements View {
                 if (isInArea(s.signal.x, s.signal.y)) {
                     if (s.action == SignalEvent.ACTION_MOVE) {
 //                        if (action_state.enter(Hovered)) {
-//                            OnMouseIn();
+                            OnMouseIn(s.signal);
 //                        }
                     } else if (s.action == SignalEvent.ACTION_DOWN) {
                         if (action_state.enter(Pushed)) {
-                            OnMouseDown();
+                            OnMouseDown(s.signal);
                         }
                     } else if (s.action == SignalEvent.ACTION_UP) {
 //                        if (action_state.enter(Hovered)) {
-//                            OnMouseUp();
+                            OnMouseUp(s.signal);
 //                        }
                     }
                 } else {
                     if (action_state.enter(Static)) {
-                        OnMouseOut();
+                        OnMouseOut(s.signal);
                     }
                 }
             }
@@ -219,8 +224,8 @@ public class Button {// implements View {
          * enable_state.enter(Inactive);
          * }
          */
-        // �p�G invisible�h�����
-        // TODO: ����b��
+        // 如果 invisible則不顯示
+        // TODO: 之後在做
         // ArrayList<RenderEvent> renderlist = new ArrayList<RenderEvent>();
         if (visible_state.currentStat() == Invisible) {
             return;

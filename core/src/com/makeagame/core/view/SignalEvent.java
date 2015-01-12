@@ -2,14 +2,14 @@ package com.makeagame.core.view;
 
 public class SignalEvent {
 
-    public final static int MOUSE_EVENT = 0x01;
-    public final static int KEY_EVENT = 0x02;
-    public final static int TOUCH_EVENT = 0x03;
+    public final static int MOUSE_EVENT = 1;
+    public final static int KEY_EVENT = 2;
+    public final static int TOUCH_EVENT = 3;
 
-    public final static int ACTION_UP = 0x01;
-    public final static int ACTION_DOWN = 0x02;
-    public final static int ACTION_DRAG = 0x03;
-    public final static int ACTION_MOVE = 0x04;
+    public final static int ACTION_UP = 11;
+    public final static int ACTION_DOWN = 12;
+    public final static int ACTION_DRAG = 13;
+    public final static int ACTION_MOVE = 14;
 
     public Signal signal;
     public int type;

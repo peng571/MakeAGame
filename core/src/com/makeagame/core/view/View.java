@@ -12,5 +12,4 @@ public interface View {
     // 送出繪圖指令
     public abstract ArrayList<RenderEvent> render(String list);
     
-    public abstract String info();
 }

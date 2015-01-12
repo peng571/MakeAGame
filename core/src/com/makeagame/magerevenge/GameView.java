@@ -306,9 +306,4 @@ public class GameView implements View {
         return list;
     }
 
-    @Override
-    public String info() {
-        return "main view";
-    }
-
 }

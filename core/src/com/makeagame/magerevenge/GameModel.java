@@ -200,10 +200,6 @@ public class GameModel implements Model {
         return new Gson().toJson(hold);
     }
 
-    @Override
-    public String info() {
-        return "main model";
-    }
 
     class Player {
         int group;

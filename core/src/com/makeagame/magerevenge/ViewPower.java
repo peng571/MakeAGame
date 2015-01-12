@@ -4,13 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
+import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
 import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
-import com.makeagame.tools.SimpleLayout;
-import com.makeagame.tools.Sprite;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
+import com.makeagame.tools.SimpleLayout;
+import com.makeagame.tools.Sprite;
 
 public class ViewPower extends SimpleLayout {
 //    KeyTable keyTable;
@@ -75,7 +76,7 @@ public class ViewPower extends SimpleLayout {
         {
             button = new Button() {
                 @Override
-                public void OnMouseDown() {
+                public void OnMouseDown(Signal s ) {
                     ViewPower.this.usePower();
                 }
             };
@@ -93,7 +94,7 @@ public class ViewPower extends SimpleLayout {
         
         btn_prev = new Button() {
             @Override
-            public void OnMouseDown() {
+            public void OnMouseDown(Signal s) {
                 ViewPower.this.prevPower();
             }
         };
@@ -108,7 +109,7 @@ public class ViewPower extends SimpleLayout {
         
         btn_next = new Button() {
             @Override
-            public void OnMouseDown() {
+            public void OnMouseDown(Signal s) {
                 ViewPower.this.nextPower();
             }
         };

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
 import com.makeagame.core.view.SignalEvent;
+import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
 import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
@@ -46,7 +47,7 @@ public class ViewCardTable extends SimpleLayout {
             
             button = new Button() {
                 @Override
-                public void OnMouseDown() { 
+                public void OnMouseDown(Signal s) { 
                     ViewCardTable.this.sendSoldiers(selfIndex); 
                 }
             };

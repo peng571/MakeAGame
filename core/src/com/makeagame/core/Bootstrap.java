@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.makeagame.core.model.Model;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.View;
-import com.makeagame.magerevenge.GameModel;
-import com.makeagame.magerevenge.GameView;
 
 public abstract class Bootstrap {
 
