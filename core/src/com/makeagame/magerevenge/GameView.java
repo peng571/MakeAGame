@@ -34,22 +34,22 @@ public class GameView implements View {
         }
 
         @Override
-        public RenderEvent[] renderSelf(int x, int y) {
+        public ArrayList<RenderEvent> renderSelf(int x, int y) {
             beforeRender();
-            // ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-            RenderEvent[] list = new RenderEvent[output.length()];
+             ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
+//            RenderEvent[] list = new RenderEvent[output.length()];
             int offset = -output.length() * 12;
             for (int i = 0; i < output.length(); i++) {
                 int idx = output.codePointAt(i) - 48;
                 offset += 12;
-                list[i] = new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
-                        .XY(x + offset, y)
-                        .src(idx * 12, 0, 12, 24);
+//                list[i] = new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
+//                        .XY(x + offset, y)
+//                        .src(idx * 12, 0, 12, 24);
 
-                // list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
-                // .XY(x + offset, y)
-                // .src(idx * 12, 0, 12, 24)
-                // );
+                 list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
+                 .XY(x + offset, y)
+                 .src(idx * 12, 0, 12, 24)
+                 );
             }
             return list;
         }
@@ -298,11 +298,7 @@ public class GameView implements View {
 
         currentScreen.reslove(0, 0);
         list.clear();
-        // list.addAll(currentScreen.render());
-        RenderEvent[] rlist = currentScreen.render();
-        for (RenderEvent re : rlist) {
-            list.add(re);
-        }
+        list.addAll(currentScreen.render());
         return list;
     }
 

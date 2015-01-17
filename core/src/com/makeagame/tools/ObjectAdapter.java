@@ -1,5 +1,6 @@
 package com.makeagame.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.makeagame.core.view.RenderEvent;
@@ -26,7 +27,7 @@ public abstract class ObjectAdapter<T> {
 
     public abstract void fillItem(T item);
 
-    public RenderEvent[] render() {
+    public ArrayList<RenderEvent> render() {
         return layout.render();
     }
 

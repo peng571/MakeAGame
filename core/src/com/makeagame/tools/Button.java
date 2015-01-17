@@ -18,13 +18,16 @@ public class Button {// implements View {
      */
     public static final int Invisible = 0;
     public static final int Visible = 1;
+    
     public static final int Disable = 0;
     public static final int Enable = 1;
     public static final int Active = 2;
     public static final int Inactive = 3;
+    
     public static final int Static = 0;
     public static final int Hovered = 1;
-    public static final int Pushed = 1;
+    public static final int Pushed = 2;
+    
     
     // 進度條, 當達到 1.0 時進入Active, 不到時退回Inactive
     static double progress = 1.0;
@@ -98,19 +101,23 @@ public class Button {// implements View {
     }
 
     public void OnMouseIn(Signal s) {
+        System.out.println("OnMouseIn");
      // Override to add method
     }
 
     public void OnMouseOut(Signal s) {
      // Override to add method
+        System.out.println("OnMouseOut");
     }
 
     public void OnMouseDown(Signal s) {
      // Override to add method
+        System.out.println("OnMouseDown");
     }
 
     public void OnMouseUp(Signal s) {
      // Override to add method
+        System.out.println("OnMouseUp");
     }
 
     // @Override
@@ -125,17 +132,17 @@ public class Button {// implements View {
                 // Engine.logI(Integer.toString(s.signal.x));
                 if (isInArea(s.signal.x, s.signal.y)) {
                     if (s.action == SignalEvent.ACTION_MOVE) {
-//                        if (action_state.enter(Hovered)) {
+                        if (action_state.enter(Hovered)) {
                             OnMouseIn(s.signal);
-//                        }
+                        }
                     } else if (s.action == SignalEvent.ACTION_DOWN) {
                         if (action_state.enter(Pushed)) {
                             OnMouseDown(s.signal);
                         }
                     } else if (s.action == SignalEvent.ACTION_UP) {
-//                        if (action_state.enter(Hovered)) {
+                        if (action_state.enter(Hovered)) {
                             OnMouseUp(s.signal);
-//                        }
+                        }
                     }
                 } else {
                     if (action_state.enter(Static)) {
@@ -252,9 +259,9 @@ public class Button {// implements View {
                 //Engine.logI("stat: " + Long.toString(action_state.elapsed()));
                 break;
                 // mobile do not have Hovered
-//            case Hovered:
-//                if (spHovered != null) { sprite.copyFrom(spHovered); }
-//                break;
+            case Hovered:
+                if (spHovered != null) { sprite.copyFrom(spHovered); }
+                break;
             case Pushed:
                 if (spPushed != null) { sprite.copyFrom(spPushed); }
                 break;
@@ -263,9 +270,9 @@ public class Button {// implements View {
                 sprite.apply(ktStatic.get(action_state.elapsed(Static)));
             }
             // mobile do not have Hovered
-//            if (ktHovered != null) {
-//                sprite.apply(ktHovered.get(action_state.elapsed(Hovered)));
-//            }
+            if (ktHovered != null) {
+                sprite.apply(ktHovered.get(action_state.elapsed(Hovered)));
+            }
             if (ktPushed != null) {
                 sprite.apply(ktPushed.get(action_state.elapsed(Pushed)));
             }

@@ -166,6 +166,7 @@ public class ViewCardTable extends SimpleLayout {
             e.printStackTrace();
         }
     }
+    
     void signal(ArrayList<SignalEvent> signalList) {
         for (int i=0; i<5; i++) {
             send_buttons[i].button.signal(signalList);
