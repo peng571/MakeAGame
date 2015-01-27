@@ -21,9 +21,9 @@ public class ViewField extends SimpleLayout {
 
     public ViewField() {
         super();
-        xy(0, 340);
-        castle_L = new SimpleLayout(new Sprite("castle_al").center(160, 240)).xy(80, 0);
-        castle_R = new SimpleLayout(new Sprite("castle_op").center(96, 240)).xy(880, 0);
+        XY(0, 340);
+        castle_L = new SimpleLayout(new Sprite("castle_al").center(160, 240)).XY(80, 0);
+        castle_R = new SimpleLayout(new Sprite("castle_op").center(96, 240)).XY(880, 0);
         roleLayer = new SimpleLayout();
         addChild(castle_L);
         addChild(castle_R);
@@ -119,7 +119,7 @@ public class ViewField extends SimpleLayout {
             if (r.stateRecord == 4) {
                 role.visible = false;
             }
-            role.xy(r.pos.x, r.pos.y);
+            role.XY(r.pos.x, r.pos.y);
             role.bar.percent = r.hpp;
             role = null;
             count++;
@@ -140,7 +140,7 @@ public class ViewField extends SimpleLayout {
 
         public RoleView() {
             super();
-            addChild(new SimpleLayout(new Sprite("role_hp")).xy(0, -100));
+            addChild(new SimpleLayout(new Sprite("role_hp")).XY(0, -100));
             bar = new Bar();
             bar.setBar(Direction.ROW, 32);
             sprite = new Sprite("role_walk1").center(60, 125);

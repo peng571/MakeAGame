@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.makeagame.core.Controler;
 import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button;
+import com.makeagame.tools.Button2;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
@@ -17,9 +17,9 @@ public class ViewPower extends SimpleLayout {
 //    KeyTable keyTable;
 
     Bar bar;
-    Button button;
-    Button btn_prev;
-    Button btn_next;
+    Button2 button;
+    Button2 btn_prev;
+    Button2 btn_next;
     
     SimpleLayout layout_ring;
     SimpleLayout layout_icon;
@@ -57,7 +57,7 @@ public class ViewPower extends SimpleLayout {
         super();
         
         selectPower = "a";
-        xy(24, -53);
+        XY(24, -53);
         /*
         keyTable = new KeyTable(new Frame[] {
                 new Frame(0, new Key[] {
@@ -74,7 +74,7 @@ public class ViewPower extends SimpleLayout {
         bar.setBar(Bar.Direction.COLUMN_REVERSE, 180);
 
         {
-            button = new Button() {
+            button = new Button2() {
                 @Override
                 public void OnMouseDown(Signal s ) {
                     ViewPower.this.usePower();
@@ -92,13 +92,13 @@ public class ViewPower extends SimpleLayout {
         
         
         
-        btn_prev = new Button() {
+        btn_prev = new Button2() {
             @Override
             public void OnMouseDown(Signal s) {
                 ViewPower.this.prevPower();
             }
         };
-        layout_prev = new SimpleLayout(new Sprite("power_prev")).xy(-7, 11);
+        layout_prev = new SimpleLayout(new Sprite("power_prev")).XY(-7, 11);
         {
             SimpleLayout pushed = layout_prev.copy();
             pushed.sprite.red = 0.5f;
@@ -107,13 +107,13 @@ public class ViewPower extends SimpleLayout {
         }
         addChild(layout_prev);
         
-        btn_next = new Button() {
+        btn_next = new Button2() {
             @Override
             public void OnMouseDown(Signal s) {
                 ViewPower.this.nextPower();
             }
         };
-        layout_next = new SimpleLayout(new Sprite("power_next")).xy(136, 126);
+        layout_next = new SimpleLayout(new Sprite("power_next")).XY(136, 126);
         {
             SimpleLayout pushed = layout_next.copy();
             pushed.sprite.red = 0.5f;
@@ -130,19 +130,19 @@ public class ViewPower extends SimpleLayout {
     @Override
     public void beforeReslove() {
         super.beforeReslove();
-        button.setRectArea(realX, realY, 160, 160);
+        button.RectArea(realX, realY, 160, 160);
         button.apply(layout_ring);
         
-        btn_prev.setRectArea(layout_prev.realX, layout_prev.realY, 48, 48);
+        btn_prev.RectArea(layout_prev.realX, layout_prev.realY, 48, 48);
         btn_prev.apply(layout_prev);
         
-        btn_next.setRectArea(layout_next.realX, layout_next.realY, 48, 48);
+        btn_next.RectArea(layout_next.realX, layout_next.realY, 48, 48);
         btn_next.apply(layout_next);
         
         if (bar.percent >= 1.0) {
-            button.enable_state.enter(Button.Active);
+            button.enable_state.enter(Button2.Active);
         } else {
-            button.enable_state.enter(Button.Inactive);
+            button.enable_state.enter(Button2.Inactive);
         }
     }
     
@@ -154,7 +154,7 @@ public class ViewPower extends SimpleLayout {
         bar.apply(layout_ring.children.get(1).sprite);
         layout_ring.children.get(1).sprite.apply(ktUse.get(powerApplyTime));
         layout_ring.children.get(0).sprite.apply(
-                ktReady2.get(button.action_state.elapsed(Button.Static)));
+                ktReady2.get(button.action_state.elapsed(Button2.Static)));
     }
     
     

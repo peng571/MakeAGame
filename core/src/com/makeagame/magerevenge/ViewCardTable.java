@@ -9,7 +9,7 @@ import com.makeagame.core.Controler;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button;
+import com.makeagame.tools.Button2;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
@@ -26,7 +26,7 @@ public class ViewCardTable extends SimpleLayout {
         SimpleLayout icon_bar;
         
         Bar bar;
-        Button button;
+        Button2 button;
         final int selfIndex;
         String type;
         
@@ -45,7 +45,7 @@ public class ViewCardTable extends SimpleLayout {
             bar.setBar(Bar.Direction.COLUMN_REVERSE, 144);
             bar.percent = 1.0f;
             
-            button = new Button() {
+            button = new Button2() {
                 @Override
                 public void OnMouseDown(Signal s) { 
                     ViewCardTable.this.sendSoldiers(selfIndex); 
@@ -112,15 +112,15 @@ public class ViewCardTable extends SimpleLayout {
         
         @Override
         public void beforeRender() {
-            button.setRectArea(realX-10, realY-10, 117, 144);
+            button.RectArea(realX-10, realY-10, 117, 144);
             
             bar.percent -= 0.005;
             bar.apply(icon_bar.sprite);
             
             if (bar.percent <= 0.0) {
-                button.enable_state.enter(Button.Active);
+                button.enable_state.enter(Button2.Active);
             } else {
-                button.enable_state.enter(Button.Inactive);
+                button.enable_state.enter(Button2.Inactive);
             }
         }
         
@@ -132,7 +132,7 @@ public class ViewCardTable extends SimpleLayout {
     
     public ViewCardTable() {
         super();
-        xy(349, -13);
+        XY(349, -13);
         
         typeList = new String[] {
                 MegaRevenge.CASTLE,
@@ -145,7 +145,7 @@ public class ViewCardTable extends SimpleLayout {
         
         for (int i=0; i<5; i++) {
             send_buttons[i] = new ViewSendButton(i, typeList[i]);
-            send_buttons[i].xy(117*i, 0);
+            send_buttons[i].XY(117*i, 0);
             this.addChild(send_buttons[i]);
         }
     }
@@ -167,7 +167,7 @@ public class ViewCardTable extends SimpleLayout {
         }
     }
     
-    void signal(ArrayList<SignalEvent> signalList) {
+    public void signal(ArrayList<SignalEvent> signalList) {
         for (int i=0; i<5; i++) {
             send_buttons[i].button.signal(signalList);
         }

@@ -34,9 +34,8 @@ public class GameView implements View {
         }
 
         @Override
-        public ArrayList<RenderEvent> renderSelf(int x, int y) {
+        public ArrayList<RenderEvent> renderSelf(ArrayList<RenderEvent> list, int x, int y) {
             beforeRender();
-             ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 //            RenderEvent[] list = new RenderEvent[output.length()];
             int offset = -output.length() * 12;
             for (int i = 0; i < output.length(); i++) {
@@ -83,30 +82,30 @@ public class GameView implements View {
         ViewNumber res3_number;
 
         public ViewResTable() {
-            xy(206, 0);
-            fund_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(110, 11);
+            XY(206, 0);
+            fund_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(110, 11);
             fund_number.setNumber(789456);
 
-            res1_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(63, 11);
+            res1_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(63, 11);
             res1_number.setNumber(12);
 
-            res2_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(63, 11);
+            res2_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(63, 11);
             res2_number.setNumber(0);
 
-            res3_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).xy(63, 11);
+            res3_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(63, 11);
             res3_number.setNumber(1);
 
-            fund = new SimpleLayout(new Sprite("fund_bg")).xy(0, -22)
-                    .addChild(new SimpleLayout(new Sprite("fund_icon").xy(4, 0)))
+            fund = new SimpleLayout(new Sprite("fund_bg")).XY(0, -22)
+                    .addChild(new SimpleLayout(new Sprite("fund_icon").XY(4, 0)))
                     .addChild(fund_number);
-            res1 = new SimpleLayout(new Sprite("res_bg")).xy(0, 15)
-                    .addChild(new SimpleLayout(new Sprite("res1_icon").xy(4, 0)))
+            res1 = new SimpleLayout(new Sprite("res_bg")).XY(0, 15)
+                    .addChild(new SimpleLayout(new Sprite("res1_icon").XY(4, 0)))
                     .addChild(res1_number);
-            res2 = new SimpleLayout(new Sprite("res_bg")).xy(0, 51)
-                    .addChild(new SimpleLayout(new Sprite("res2_icon").xy(3, 0)))
+            res2 = new SimpleLayout(new Sprite("res_bg")).XY(0, 51)
+                    .addChild(new SimpleLayout(new Sprite("res2_icon").XY(3, 0)))
                     .addChild(res2_number);
-            res3 = new SimpleLayout(new Sprite("res_bg")).xy(0, 87)
-                    .addChild(new SimpleLayout(new Sprite("res3_icon").xy(4, 0)))
+            res3 = new SimpleLayout(new Sprite("res_bg")).XY(0, 87)
+                    .addChild(new SimpleLayout(new Sprite("res3_icon").XY(4, 0)))
                     .addChild(res3_number);
 
             addChild(fund);
@@ -137,11 +136,11 @@ public class GameView implements View {
         Bar bar0, bar1;
 
         public ViewTopBoard() {
-            xy(0, 0);
-            top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).xy(480, 0);
-            pause = new SimpleLayout(new Sprite("pause").center(24, 0)).xy(0, 40);
-            hp0 = new SimpleLayout(new Sprite("base_hp")).xy(-230, 28);
-            hp1 = new SimpleLayout(new Sprite("base_hp")).xy(75, 28);
+            XY(0, 0);
+            top_board = new SimpleLayout(new Sprite("top_board").center(480, 0)).XY(480, 0);
+            pause = new SimpleLayout(new Sprite("pause").center(24, 0)).XY(0, 40);
+            hp0 = new SimpleLayout(new Sprite("base_hp")).XY(-230, 28);
+            hp1 = new SimpleLayout(new Sprite("base_hp")).XY(75, 28);
 
             addChild(top_board
                     .addChild(hp0)
@@ -212,12 +211,12 @@ public class GameView implements View {
         ViewCardTable card_table;
 
         public ViewBattleScene() {
-            xy(0, 0);
+            XY(0, 0);
             background = new SimpleLayout(new Sprite("background1"));
             field = new ViewField();
             top_board = new ViewTopBoard();
 
-            bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).xy(0, 408);
+            bottom_board = new SimpleLayout(new Sprite("bottom_board").center(0, 60)).XY(0, 408);
             power_ring = new ViewPower();
             res_table = new ViewResTable();
             card_table = new ViewCardTable();
@@ -291,14 +290,13 @@ public class GameView implements View {
     ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
 
     @Override
-    public ArrayList<RenderEvent> render(String build) {
+    public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list, String build) {
 
         Hold data = new Gson().fromJson(build, Hold.class);
         battle_scene.model(data);
 
         currentScreen.reslove(0, 0);
-        list.clear();
-        list.addAll(currentScreen.render());
+        currentScreen.render(list);
         return list;
     }
 

@@ -29,7 +29,7 @@ public class Engine extends ApplicationAdapter {
     Bootstrap bootstrap;
 
     ArrayList<SignalEvent> signalList = new ArrayList<SignalEvent>();
-    ArrayList<RenderEvent> renderList;
+    ArrayList<RenderEvent> renderList = new ArrayList<RenderEvent>();
 
     public Engine(Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
@@ -46,8 +46,6 @@ public class Engine extends ApplicationAdapter {
         Controler.get().register( bootstrap.setMainModel(), bootstrap.setMainView());
         gameLable = new BitmapFont();
         gameLable.setColor(new Color(1, 0, 0, 1));
-
-        texture = new Texture("mr3/role.png");
     }
 
     Texture texture;
@@ -80,8 +78,7 @@ public class Engine extends ApplicationAdapter {
             }
 
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                logI("touch " + screenX + " " + screenY);
-
+                logD("touch " + screenX + " " + screenY);
                 signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DOWN, new int[] { button, screenX, screenY }));
                 return super.touchDown(screenX, screenY, pointer, button);
             }
@@ -109,7 +106,7 @@ public class Engine extends ApplicationAdapter {
         logD("batch begine time " + System.currentTimeMillis());
         batch.begin();
         // batch.enableBlending();
-        renderList =     Controler.get().mainView.render(Controler.get().build());
+        renderList =  Controler.get().mainView.render(renderList, Controler.get().build());
         // Engine.logI("srcH: " + new Integer(renderList.size()).toString());
 
         for (RenderEvent e : renderList) {
@@ -149,6 +146,8 @@ public class Engine extends ApplicationAdapter {
                 int srcY = dim[1];
                 int srcW = dim[2];
                 int srcH = dim[3];
+//                srcW = 16;
+//                srcH = 16;
 
                 // Engine.logI("src: (" + new Integer(srcX).toString() + ","
                 // + new Integer(srcY).toString() + ","
@@ -159,6 +158,7 @@ public class Engine extends ApplicationAdapter {
                 float x = e.x;
                 float y = Bootstrap.screamHeight() - e.y - srcH;
                 batch.draw(texture, x, y, (float) srcW, (float) srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);
+                // batch.draw(texture, x, y);
                 // }
                 break;
             case RenderEvent.LABEL:
@@ -170,9 +170,8 @@ public class Engine extends ApplicationAdapter {
                 break;
             }
         }
-        renderList.clear();
-        renderList = null;
         batch.end();
+        renderList.clear();
         logD("batch end time " + System.currentTimeMillis());
         try {
             Thread.sleep((long) (1000 / Bootstrap.FPS - Gdx.graphics.getDeltaTime()));
