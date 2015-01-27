@@ -1,6 +1,8 @@
 package com.makeagame.tools;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -166,7 +168,6 @@ public class SimpleLayout {
         beforeReslove();
         realX = fixedX + animX + offx;
         realY = fixedY + animY + offy;
-        System.out.println("reslove " + realX + ", " + realY);
         if (children != null) {
             for (SimpleLayout c : children) {
                 c.reslove(realX, realY);
@@ -175,17 +176,18 @@ public class SimpleLayout {
     }
     
     
-    
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list) {
-        reslove(0, 0);
+        
+        // TODO reslove 有BUG @@
+        //reslove(0, 0);
         
         renderSelf(list, realX, realY);
         
         if (children != null) {
-            for (int i=0; i<children.size(); i++) {
-               if (children.get(i).visible) {
-                   children.get(i).render(list);
-               } 
+            for (SimpleLayout c : children) {
+                if (c.visible) {
+                   c.render(list);
+               }
             }
         }
         

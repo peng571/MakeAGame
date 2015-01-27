@@ -6,10 +6,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
+import com.makeagame.core.action.Action;
+import com.makeagame.core.action.EventListener;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button2;
+import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
@@ -26,7 +28,7 @@ public class ViewCardTable extends SimpleLayout {
         SimpleLayout icon_bar;
         
         Bar bar;
-        Button2 button;
+        Button button;
         final int selfIndex;
         String type;
         
@@ -45,9 +47,10 @@ public class ViewCardTable extends SimpleLayout {
             bar.setBar(Bar.Direction.COLUMN_REVERSE, 144);
             bar.percent = 1.0f;
             
-            button = new Button2() {
+            button = new Button(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
+            button.onClickAction = new Action(){
                 @Override
-                public void OnMouseDown(Signal s) { 
+                public void execute() { 
                     ViewCardTable.this.sendSoldiers(selfIndex); 
                 }
             };
@@ -118,9 +121,9 @@ public class ViewCardTable extends SimpleLayout {
             bar.apply(icon_bar.sprite);
             
             if (bar.percent <= 0.0) {
-                button.enable_state.enter(Button2.Active);
+                button.listener.enable_state.enter(EventListener.Active);
             } else {
-                button.enable_state.enter(Button2.Inactive);
+                button.listener.enable_state.enter(EventListener.Inactive);
             }
         }
         

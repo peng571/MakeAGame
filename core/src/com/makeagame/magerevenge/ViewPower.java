@@ -4,9 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
+import com.makeagame.core.action.Action;
+import com.makeagame.core.action.EventListener;
 import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button2;
+import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
@@ -17,9 +19,9 @@ public class ViewPower extends SimpleLayout {
 //    KeyTable keyTable;
 
     Bar bar;
-    Button2 button;
-    Button2 btn_prev;
-    Button2 btn_next;
+    Button button;
+    Button btn_prev;
+    Button btn_next;
     
     SimpleLayout layout_ring;
     SimpleLayout layout_icon;
@@ -74,9 +76,10 @@ public class ViewPower extends SimpleLayout {
         bar.setBar(Bar.Direction.COLUMN_REVERSE, 180);
 
         {
-            button = new Button2() {
+            button = new Button(new Sprite("power_ring"));
+            button.onClickAction = new Action(){
                 @Override
-                public void OnMouseDown(Signal s ) {
+                public void execute() {
                     ViewPower.this.usePower();
                 }
             };
@@ -92,9 +95,10 @@ public class ViewPower extends SimpleLayout {
         
         
         
-        btn_prev = new Button2() {
+        btn_prev = new Button(new Sprite("power_prev"));
+        btn_prev.onClickAction = new Action(){
             @Override
-            public void OnMouseDown(Signal s) {
+            public void execute() {
                 ViewPower.this.prevPower();
             }
         };
@@ -107,9 +111,10 @@ public class ViewPower extends SimpleLayout {
         }
         addChild(layout_prev);
         
-        btn_next = new Button2() {
+        btn_next = new Button(new Sprite("power_next"));
+        btn_next.onClickAction = new Action(){
             @Override
-            public void OnMouseDown(Signal s) {
+            public void execute() {
                 ViewPower.this.nextPower();
             }
         };
@@ -140,9 +145,9 @@ public class ViewPower extends SimpleLayout {
         btn_next.apply(layout_next);
         
         if (bar.percent >= 1.0) {
-            button.enable_state.enter(Button2.Active);
+            button.listener.enable_state.enter(EventListener.Active);
         } else {
-            button.enable_state.enter(Button2.Inactive);
+            button.listener.enable_state.enter(EventListener.Inactive);
         }
     }
     
@@ -154,7 +159,7 @@ public class ViewPower extends SimpleLayout {
         bar.apply(layout_ring.children.get(1).sprite);
         layout_ring.children.get(1).sprite.apply(ktUse.get(powerApplyTime));
         layout_ring.children.get(0).sprite.apply(
-                ktReady2.get(button.action_state.elapsed(Button2.Static)));
+                ktReady2.get(button.listener.action_state.elapsed(EventListener.Static)));
     }
     
     
