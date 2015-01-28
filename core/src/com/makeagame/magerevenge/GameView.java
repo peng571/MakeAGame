@@ -6,7 +6,7 @@ import org.json.JSONException;
 
 import com.google.gson.Gson;
 import com.makeagame.core.Controler;
-import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.view.NumberView;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.KeyEvent;
@@ -19,80 +19,28 @@ import com.makeagame.tools.Sprite;
 
 public class GameView implements View {
 
-    class ViewNumber extends SimpleLayout {
-        int number;
-        String output;
-
-        public ViewNumber(Sprite sprite) {
-            super(sprite);
-            output = new String();
-        }
-
-        public void setNumber(int num) {
-            number = num;
-            output = Integer.toString(number);
-        }
-
-        @Override
-        public ArrayList<RenderEvent> renderSelf(ArrayList<RenderEvent> list, int x, int y) {
-            beforeRender();
-//            RenderEvent[] list = new RenderEvent[output.length()];
-            int offset = -output.length() * 12;
-            for (int i = 0; i < output.length(); i++) {
-                int idx = output.codePointAt(i) - 48;
-                offset += 12;
-//                list[i] = new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
-//                        .XY(x + offset, y)
-//                        .src(idx * 12, 0, 12, 24);
-
-                 list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
-                 .XY(x + offset, y)
-                 .src(idx * 12, 0, 12, 24)
-                 );
-            }
-            return list;
-        }
-
-        /*
-         * public ArrayList<RenderEvent> renderSelf(int x, int y) {
-         * beforeRender();
-         * ArrayList<RenderEvent> list = new ArrayList<RenderEvent>();
-         * int offset = -output.length()*12;
-         * for (int i=0; i < output.length(); i++) {
-         * int idx = output.codePointAt(i) - 48;
-         * offset += 12;
-         * list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
-         * .XY(x + offset, y)
-         * .src(idx * 12, 0, 12, 24)
-         * );
-         * }
-         * return list;
-         * }
-         */
-    }
-
     class ViewResTable extends SimpleLayout {
         SimpleLayout fund;
         SimpleLayout res1;
         SimpleLayout res2;
         SimpleLayout res3;
-        ViewNumber fund_number;
-        ViewNumber res1_number;
-        ViewNumber res2_number;
-        ViewNumber res3_number;
+        NumberView fund_number;
+        NumberView res1_number;
+        NumberView res2_number;
+        NumberView res3_number;
 
         public ViewResTable() {
             XY(206, 0);
-            fund_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(110, 11);
+            fund_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(110, 11);
             fund_number.setNumber(789456);
 
-            res1_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(63, 11);
+            res1_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(63, 11);
             res1_number.setNumber(12);
 
-            res2_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(63, 11);
+            res2_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(63, 11);
             res2_number.setNumber(0);
 
-            res3_number = (ViewNumber) new ViewNumber(new Sprite("font_number_withe")).XY(63, 11);
+            res3_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(63, 11);
             res3_number.setNumber(1);
 
             fund = new SimpleLayout(new Sprite("fund_bg")).XY(0, -22)
