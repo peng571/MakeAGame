@@ -4,29 +4,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
-import com.makeagame.core.action.Action;
-import com.makeagame.core.action.EventListener;
-import com.makeagame.core.view.SignalEvent.Signal;
+import com.makeagame.core.model.Action;
+import com.makeagame.core.model.EventListener;
+import com.makeagame.core.view.BaseViewComponent;
+import com.makeagame.core.view.BaseViewLayout;
+import com.makeagame.core.view.Button;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
-import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
-public class ViewPower extends SimpleLayout {
+public class ViewPower extends BaseViewLayout {
 //    KeyTable keyTable;
 
     Bar bar;
+    
     Button button;
     Button btn_prev;
     Button btn_next;
     
-    SimpleLayout layout_ring;
-    SimpleLayout layout_icon;
-    SimpleLayout layout_prev;
-    SimpleLayout layout_next;
+    BaseViewLayout layout_ring;
+    
+    BaseViewComponent layout_icon;
+    BaseViewComponent layout_prev;
+    BaseViewComponent layout_next;
     
     String selectPower;
     
@@ -83,12 +85,12 @@ public class ViewPower extends SimpleLayout {
                     ViewPower.this.usePower();
                 }
             };
-            layout_ring = new SimpleLayout()
-                    .addChild(new SimpleLayout(new Sprite("power_ring_inactive")))
-                    .addChild(new SimpleLayout(new Sprite("power_ring")));
+            layout_ring = new BaseViewLayout()
+                    .addChild(new BaseViewComponent(new Sprite("power_ring_inactive")))
+                    .addChild(new BaseViewComponent(new Sprite("power_ring")));
             
             addChild(layout_ring);
-            button.setInactiveSprite(layout_ring.copy());
+            button.setInactiveSprite(layout_ring.sprite);
             button.setActiveAnimation(ktReady);
         }
         
@@ -102,12 +104,12 @@ public class ViewPower extends SimpleLayout {
                 ViewPower.this.prevPower();
             }
         };
-        layout_prev = new SimpleLayout(new Sprite("power_prev")).XY(-7, 11);
+        layout_prev = new BaseViewComponent(new Sprite("power_prev")).XY(-7, 11);
         {
-            SimpleLayout pushed = layout_prev.copy();
+            BaseViewComponent pushed = layout_prev.copy();
             pushed.sprite.red = 0.5f;
-            btn_prev.setActiveSprite(layout_prev.copy());
-            btn_prev.setPushedSprite(pushed);
+            btn_prev.setActiveSprite(layout_prev.sprite);
+            btn_prev.setPushedSprite(pushed.sprite);
         }
         addChild(layout_prev);
         
@@ -118,16 +120,16 @@ public class ViewPower extends SimpleLayout {
                 ViewPower.this.nextPower();
             }
         };
-        layout_next = new SimpleLayout(new Sprite("power_next")).XY(136, 126);
+        layout_next = new BaseViewComponent(new Sprite("power_next")).XY(136, 126);
         {
-            SimpleLayout pushed = layout_next.copy();
+            BaseViewComponent pushed = layout_next.copy();
             pushed.sprite.red = 0.5f;
-            btn_next.setActiveSprite(layout_next.copy());
-            btn_next.setPushedSprite(pushed);
+            btn_next.setActiveSprite(layout_next.sprite);
+            btn_next.setPushedSprite(pushed.sprite);
         }
         addChild(layout_next);
         
-        layout_icon = new SimpleLayout(new Sprite("power_a"));
+        layout_icon = new BaseViewComponent(new Sprite("power_a"));
         addChild(layout_icon);
         
     }
@@ -135,14 +137,14 @@ public class ViewPower extends SimpleLayout {
     @Override
     public void beforeReslove() {
         super.beforeReslove();
-        button.RectArea(realX, realY, 160, 160);
-        button.apply(layout_ring);
+        button.XY(realX, realY, 160, 160);
+        button.apply(layout_ring.sprite);
         
-        btn_prev.RectArea(layout_prev.realX, layout_prev.realY, 48, 48);
-        btn_prev.apply(layout_prev);
+        btn_prev.XY(layout_prev.realX, layout_prev.realY, 48, 48);
+        btn_prev.apply(layout_prev.sprite);
         
-        btn_next.RectArea(layout_next.realX, layout_next.realY, 48, 48);
-        btn_next.apply(layout_next);
+        btn_next.XY(layout_next.realX, layout_next.realY, 48, 48);
+        btn_next.apply(layout_next.sprite);
         
         if (bar.percent >= 1.0) {
             button.listener.enable_state.enter(EventListener.Active);

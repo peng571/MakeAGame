@@ -6,26 +6,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.Controler;
-import com.makeagame.core.action.Action;
-import com.makeagame.core.action.EventListener;
+import com.makeagame.core.model.Action;
+import com.makeagame.core.model.EventListener;
+import com.makeagame.core.view.BaseViewLayout;
+import com.makeagame.core.view.Button;
 import com.makeagame.core.view.SignalEvent;
-import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.Bar;
-import com.makeagame.tools.Button;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
-import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
-public class ViewCardTable extends SimpleLayout {
+public class ViewCardTable extends BaseViewLayout {
     
-    class ViewSendButton extends SimpleLayout {
+    class ViewSendButton extends BaseViewLayout {
         //SimpleLayout back;
         //SimpleLayout front;
         
-        SimpleLayout icon;
-        SimpleLayout icon_bar;
+        BaseViewLayout icon;
+        BaseViewLayout icon_bar;
         
         Bar bar;
         Button button;
@@ -37,10 +36,10 @@ public class ViewCardTable extends SimpleLayout {
             this.selfIndex = idx;
             this.type = type;
             
-            icon = new SimpleLayout();
+            icon = new BaseViewLayout();
             addChild(icon);
             
-            icon_bar = new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
+            icon_bar = new BaseViewLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
             addChild(icon_bar);
             
             bar = new Bar();
@@ -82,15 +81,18 @@ public class ViewCardTable extends SimpleLayout {
                     new Frame(  200 , new Key[] { new Key("1.alpha", new Double(0.0), KeyTable.INT_LOG) }),
             });
             
-            button.setInactiveSprite( new SimpleLayout()
-                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
-                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
-            );
+            button.setInactiveSprite( new Sprite(MegaRevenge.ROLE_1 + "btn_inactive"));
+                    
+//                    new SimpleLayout()
+//                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
+//                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
+//            );
             
-            button.setActiveSprite( new SimpleLayout()
-                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn")))
-                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
-                    );
+            button.setActiveSprite( new Sprite(MegaRevenge.ROLE_1 + "btn"));
+            
+//                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn")))
+//                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
+//                    );
             
             /*
             button.setHoveredSprite( new SimpleLayout()
@@ -110,12 +112,12 @@ public class ViewCardTable extends SimpleLayout {
         @Override
         public void beforeReslove() {
             super.beforeReslove();
-            button.apply(this.icon);
+            button.apply(this.icon.sprite);
         }
         
         @Override
         public void beforeRender() {
-            button.RectArea(realX-10, realY-10, 117, 144);
+            button.XY(realX-10, realY-10, 117, 144);
             
             bar.percent -= 0.005;
             bar.apply(icon_bar.sprite);

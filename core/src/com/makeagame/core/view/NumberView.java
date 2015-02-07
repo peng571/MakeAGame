@@ -2,11 +2,14 @@ package com.makeagame.core.view;
 
 import java.util.ArrayList;
 
-import com.makeagame.core.resource.ResourceManager;
-import com.makeagame.tools.SimpleLayout;
+import com.makeagame.core.resource.Resource2Manager;
 import com.makeagame.tools.Sprite;
 
-public class NumberView extends SimpleLayout {
+/**
+ * 使用圖片顯示的數字圖
+ * 創建時須帶入0~9的連續數字圖檔
+ */
+public class NumberView extends BaseViewComponent {
     
     int number;
     String output;
@@ -31,7 +34,7 @@ public class NumberView extends SimpleLayout {
         for (int i = 0; i < output.length(); i++) {
             int idx = output.codePointAt(i) - '0';
             offset += numberWidth;
-            list.add(new RenderEvent(ResourceManager.get().fetch(this.sprite.image))
+            list.add(new RenderEvent(Resource2Manager.get().fetch(this.sprite.image))
                     .XY(realX + offset, realY)
                     .src(idx * numberWidth, 0, numberWidth, numberWidth*2)
                     );

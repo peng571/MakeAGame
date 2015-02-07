@@ -3,7 +3,7 @@ package com.makeagame.core.view;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.makeagame.core.resource.Resource;
+import com.makeagame.core.resource.Resource2;
 
 public class RenderEvent {
 
@@ -57,9 +57,9 @@ public class RenderEvent {
         this.s = s;
     }
     
-    public Resource res;
+    public Resource2 res;
     
-    public RenderEvent(Resource res) {
+    public RenderEvent(Resource2 res) {
         this();
         Res(res);
         
@@ -111,11 +111,11 @@ public class RenderEvent {
         return this;
     }*/
     
-    public RenderEvent Res(Resource res) {
+    public RenderEvent Res(Resource2 res) {
         this.res = res;
-        if (res.type.equals(Resource.TYPE.IMAGE)) {
+        if (res.type.equals(Resource2.TYPE.IMAGE)) {
             this.type = IMAGE;
-        } else if (res.type.equals(Resource.TYPE.SOUND)) {
+        } else if (res.type.equals(Resource2.TYPE.SOUND)) {
             this.type = SOUND;
         }
         return this;

@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.makeagame.core.component.Position;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.resource.Resource2Manager;
 import com.makeagame.tools.State;
 
 public class GameModel implements Model {
@@ -43,8 +43,8 @@ public class GameModel implements Model {
         screen = "battle";
         player = new Player[] { new Player(0), new Player(1, level) };
         roles = new LinkedList<Role>();
-        roles.add(new Role(ResourceManager.get().read(MegaRevenge.CASTLE + "L"), 0));
-        roles.add(new Role(ResourceManager.get().read(MegaRevenge.CASTLE + "R"), 1));
+        roles.add(new Role(Resource2Manager.get().read(MegaRevenge.CASTLE + "L"), 0));
+        roles.add(new Role(Resource2Manager.get().read(MegaRevenge.CASTLE + "R"), 1));
         moneyGetState = new State(new long[][] { { State.BLOCK, moneyGetTime }, { State.ALLOW, State.BLOCK } });
         start = true;
     }
@@ -359,7 +359,7 @@ public class GameModel implements Model {
                         costMoney *= 2;
                         player.castleLevel++;
                     } else {
-                        roles.add(new Role(ResourceManager.get().read(type), player.group));
+                        roles.add(new Role(Resource2Manager.get().read(type), player.group));
                     }
                     state.enter(0);
                 }

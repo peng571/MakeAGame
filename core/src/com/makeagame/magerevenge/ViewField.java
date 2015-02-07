@@ -2,18 +2,19 @@ package com.makeagame.magerevenge;
 
 import java.util.LinkedList;
 
+import com.makeagame.core.view.BaseViewComponent;
+import com.makeagame.core.view.BaseViewLayout;
 import com.makeagame.tools.Bar;
 import com.makeagame.tools.Bar.Direction;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.KeyTable.Frame;
 import com.makeagame.tools.KeyTable.Key;
-import com.makeagame.tools.SimpleLayout;
 import com.makeagame.tools.Sprite;
 
-public class ViewField extends SimpleLayout {
-    SimpleLayout castle_L;
-    SimpleLayout castle_R;
-    SimpleLayout roleLayer;
+public class ViewField extends BaseViewLayout {
+    BaseViewComponent castle_L;
+    BaseViewComponent castle_R;
+    BaseViewLayout roleLayer;
     LinkedList<RoleView> roles;
     KeyTable[] roleKeyTable;
 
@@ -22,9 +23,9 @@ public class ViewField extends SimpleLayout {
     public ViewField() {
         super();
         XY(0, 340);
-        castle_L = new SimpleLayout(new Sprite("castle_al").center(160, 240)).XY(80, 0);
-        castle_R = new SimpleLayout(new Sprite("castle_op").center(96, 240)).XY(880, 0);
-        roleLayer = new SimpleLayout();
+        castle_L = new BaseViewComponent(new Sprite("castle_al").center(160, 240)).XY(80, 0);
+        castle_R = new BaseViewComponent(new Sprite("castle_op").center(96, 240)).XY(880, 0);
+        roleLayer = new BaseViewLayout();
         addChild(castle_L);
         addChild(castle_R);
         addChild(roleLayer);
@@ -134,13 +135,13 @@ public class ViewField extends SimpleLayout {
 //        }
     }
 
-    class RoleView extends SimpleLayout {
+    class RoleView extends BaseViewLayout {
 
         Bar bar;
 
         public RoleView() {
             super();
-            addChild(new SimpleLayout(new Sprite("role_hp")).XY(0, -100));
+            addChild(new BaseViewComponent(new Sprite("role_hp")).XY(0, -100));
             bar = new Bar();
             bar.setBar(Direction.ROW, 32);
             sprite = new Sprite("role_walk1").center(60, 125);

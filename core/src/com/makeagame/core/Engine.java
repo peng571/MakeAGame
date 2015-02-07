@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.resource.Resource2Manager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.MouseEvent;
@@ -42,7 +42,7 @@ public class Engine extends ApplicationAdapter {
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
         }
         batch = new SpriteBatch();
-        bootstrap.resourceFactory(ResourceManager.get());
+        bootstrap.resourceFactory(Resource2Manager.get());
         Controler.get().register( bootstrap.setMainModel(), bootstrap.setMainView());
         gameLable = new BitmapFont();
         gameLable.setColor(new Color(1, 0, 0, 1));
@@ -130,7 +130,7 @@ public class Engine extends ApplicationAdapter {
                 // batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
                 // draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY)
                 // Texture texture = ResourceManager.get().textureMap.get(e.s);
-                Texture texture = ResourceManager.get().textureMap.get(e.res.path);
+                Texture texture = Resource2Manager.get().textureMap.get(e.res.path);
                 // Engine.logI("x: " + new Float(e.x).toString());
                 // Engine.logI("y: " + new Float(e.y).toString());
 
@@ -165,7 +165,7 @@ public class Engine extends ApplicationAdapter {
                 gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
                 break;
             case RenderEvent.SOUND:
-                Sound sound = ResourceManager.get().soundMap.get(e.res.path);
+                Sound sound = Resource2Manager.get().soundMap.get(e.res.path);
                 sound.play(e.vol);
                 break;
             }

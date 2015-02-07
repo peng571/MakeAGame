@@ -2,7 +2,7 @@ package com.makeagame.core;
 
 import com.badlogic.gdx.graphics.Color;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.resource.Resource2Manager;
 import com.makeagame.core.view.View;
 
 public abstract class Bootstrap {
@@ -21,7 +21,7 @@ public abstract class Bootstrap {
 
     public abstract Model setMainModel();
 
-    public abstract void resourceFactory(ResourceManager resource);
+    public abstract void resourceFactory(Resource2Manager resource);
 
     public static int screamWidth() {
         return (int) (WIDTH * ratio);

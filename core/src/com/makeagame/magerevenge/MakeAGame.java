@@ -114,7 +114,7 @@ package com.makeagame.magerevenge;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.resource.Resource2Manager;
 import com.makeagame.core.view.View;
 
 public class MakeAGame {
@@ -142,7 +142,7 @@ public class MakeAGame {
             }
 
             @Override
-            public void resourceFactory(ResourceManager rm) {
+            public void resourceFactory(Resource2Manager rm) {
                 rm.bindImage("send_icon_soldier1", "mr3/send_icons.png").src(0, 0, 117, 144);
                 rm.bindImage(ROLE_1 + "btn", "mr3/send_icons.png").src(117, 0, 117, 144);
                 rm.bindImage("send_icon_soldier1_inactive", "mr3/send_icons_inactive.png").src(0, 0, 117, 144);
