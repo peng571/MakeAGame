@@ -3,7 +3,8 @@ package com.makeagame.tools;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.makeagame.core.resource.Resource2Manager;
+import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.resource.ResourceSystem;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
 
@@ -217,9 +218,9 @@ public class Sprite {
         
         if (image != "") {
             if (this.render_event_img == null) {
-                this.render_event_img = new RenderEvent(Resource2Manager.get().fetch(image));
+                this.render_event_img = new RenderEvent(ResourceSystem.get().fetch(image));
             } else {
-                this.render_event_img.Res(Resource2Manager.get().fetch(image));
+                this.render_event_img.Res(ResourceSystem.get().fetch(image));
             }
             this.render_event_img
                 .XY(offx + x - centerX, offy + y - centerY)
@@ -231,9 +232,9 @@ public class Sprite {
         }
         if (sound != "" && sound != palyedSound) {
             if (this.render_event_snd == null) {
-                this.render_event_snd = new RenderEvent(Resource2Manager.get().fetch(sound));
+                this.render_event_snd = new RenderEvent(ResourceSystem.get().fetch(sound));
             } else {
-                this.render_event_snd.Res(Resource2Manager.get().fetch(sound));
+                this.render_event_snd.Res(ResourceSystem.get().fetch(sound));
             }
             this.render_event_snd.vol = soundVol;
             snd = this.render_event_snd;

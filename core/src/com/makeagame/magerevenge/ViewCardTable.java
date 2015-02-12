@@ -39,7 +39,7 @@ public class ViewCardTable extends BaseViewLayout {
             icon = new BaseViewLayout();
             addChild(icon);
             
-            icon_bar = new BaseViewLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
+            icon_bar = new BaseViewLayout().withSprite(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
             addChild(icon_bar);
             
             bar = new Bar();
@@ -117,7 +117,7 @@ public class ViewCardTable extends BaseViewLayout {
         
         @Override
         public void beforeRender() {
-            button.XY(realX-10, realY-10, 117, 144);
+            button.withXY(realX-10, realY-10, 117, 144);
             
             bar.percent -= 0.005;
             bar.apply(icon_bar.sprite);
@@ -137,7 +137,7 @@ public class ViewCardTable extends BaseViewLayout {
     
     public ViewCardTable() {
         super();
-        XY(349, -13);
+        withXY(349, -13);
         
         typeList = new String[] {
                 MegaRevenge.CASTLE,
@@ -150,7 +150,7 @@ public class ViewCardTable extends BaseViewLayout {
         
         for (int i=0; i<5; i++) {
             send_buttons[i] = new ViewSendButton(i, typeList[i]);
-            send_buttons[i].XY(117*i, 0);
+            send_buttons[i].withXY(117*i, 0);
             this.addChild(send_buttons[i]);
         }
     }

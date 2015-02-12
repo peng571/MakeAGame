@@ -13,6 +13,6 @@ public class DesktopLauncher {
 		config.title = "Game";
 		// TexturePacker.process(settings, "../images", "../game-android/assets", "game");
 
-		new LwjglApplication(new MakeAGame().getEngine(), config);
+		new LwjglApplication(new MakeAGame().getApplication(), config);
 	}
 }

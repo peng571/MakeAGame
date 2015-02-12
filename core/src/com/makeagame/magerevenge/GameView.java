@@ -32,30 +32,36 @@ public class GameView implements View {
         NumberView res3_number;
 
         public ViewResTable() {
-            XY(206, 0);
-            fund_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(110, 11);
+            withXY(206, 0);
+            fund_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).withXY(110, 11);
             fund_number.setNumber(789456);
 
-            res1_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(63, 11);
+            res1_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).withXY(63, 11);
             res1_number.setNumber(12);
 
-            res2_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(63, 11);
+            res2_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).withXY(63, 11);
             res2_number.setNumber(0);
 
-            res3_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).XY(63, 11);
+            res3_number = (NumberView) new NumberView(new Sprite("font_number_withe"), 12).withXY(63, 11);
             res3_number.setNumber(1);
 
-            fund = new BaseViewLayout(new Sprite("fund_bg")).XY(0, -22)
-                    .addChild(new BaseViewComponent(new Sprite("fund_icon").XY(4, 0)))
+            fund = new BaseViewLayout().withSprite(new Sprite("fund_bg"))
+                                       .withXY(0, -22)
+                    .addChild(new BaseViewComponent().withSprite(new Sprite("fund_icon").XY(4, 0)))
                     .addChild(fund_number);
-            res1 = new BaseViewLayout(new Sprite("res_bg")).XY(0, 15)
-                    .addChild(new BaseViewComponent(new Sprite("res1_icon").XY(4, 0)))
+            
+            res1 = new BaseViewLayout().withSprite(new Sprite("res_bg")).withXY(0, 15)
+                    .addChild(new BaseViewComponent().withSprite(new Sprite("res1_icon").XY(4, 0)))
                     .addChild(res1_number);
-            res2 = new BaseViewLayout(new Sprite("res_bg")).XY(0, 51)
-                    .addChild(new BaseViewComponent(new Sprite("res2_icon").XY(3, 0)))
-                    .addChild(res2_number);
-            res3 = new BaseViewLayout(new Sprite("res_bg")).XY(0, 87)
-                    .addChild(new BaseViewComponent(new Sprite("res3_icon").XY(4, 0)))
+            
+            res2 = new BaseViewLayout().withSprite(new Sprite("res_bg"))
+                                       .withXY(0, 51)
+                   .addChild(new BaseViewComponent().withSprite(new Sprite("res2_icon").XY(3, 0)))
+                   .addChild(res2_number);
+            
+            res3 = new BaseViewLayout().withSprite(new Sprite("res_bg"))
+                                       .withXY(0, 87)
+                    .addChild(new BaseViewComponent().withSprite(new Sprite("res3_icon").XY(4, 0)))
                     .addChild(res3_number);
 
             addChild(fund);
@@ -86,11 +92,11 @@ public class GameView implements View {
         Bar bar0, bar1;
 
         public ViewTopBoard() {
-            XY(0, 0);
-            top_board = new BaseViewLayout(new Sprite("top_board").center(480, 0)).XY(480, 0);
-            pause = new BaseViewComponent(new Sprite("pause").center(24, 0)).XY(0, 40);
-            hp0 = new BaseViewComponent(new Sprite("base_hp")).XY(-230, 28);
-            hp1 = new BaseViewComponent(new Sprite("base_hp")).XY(75, 28);
+            withXY(0, 0);
+            top_board = new BaseViewLayout().withSprite(new Sprite("top_board").center(480, 0)).withXY(480, 0);
+            pause = new BaseViewComponent().withSprite(new Sprite("pause").center(24, 0)).withXY(0, 40);
+            hp0 = new BaseViewComponent().withSprite(new Sprite("base_hp")).withXY(-230, 28);
+            hp1 = new BaseViewComponent().withSprite(new Sprite("base_hp")).withXY(75, 28);
 
             addChild(top_board
                     .addChild(hp0)
@@ -161,12 +167,13 @@ public class GameView implements View {
         ViewCardTable card_table;
 
         public ViewBattleScene() {
-            XY(0, 0);
-            background = new BaseViewLayout(new Sprite("background1"));
+            withXY(0, 0);
+            background = new BaseViewLayout().withSprite(new Sprite("background1"));
             field = new ViewField();
             top_board = new ViewTopBoard();
 
-            bottom_board = new BaseViewLayout(new Sprite("bottom_board").center(0, 60)).XY(0, 408);
+            bottom_board = new BaseViewLayout().withSprite(new Sprite("bottom_board").center(0, 60))
+                                               .withXY(0, 408);
             power_ring = new ViewPower();
             res_table = new ViewResTable();
             card_table = new ViewCardTable();

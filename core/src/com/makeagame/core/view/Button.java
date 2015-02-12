@@ -25,14 +25,11 @@ public class Button extends BaseViewComponent {
     public Action onClickAction;
     public Action onLongClickAction;
 
-    // 暫時不支援空的建構子
-    // public Button() {
-    // super();
-    // }
-
     public Button(Sprite bgS, Sprite s) {
-        super(s);
-
+        super();
+        withSprite(s);
+        withBackground(bgS);
+        
         listener = new EventListener() {
 
             Long clickTime = -1l;
@@ -57,25 +54,25 @@ public class Button extends BaseViewComponent {
             }
         };
 
-        backgroundSprite = bgS;
     }
 
     public Button(Sprite s) {
         this(null, s);
     }
 
+    
     @Override
     @Deprecated  // 不建議使用者使用此方法來設定按鈕位置，改用RectArea
-    public Button XY(int x, int y) {
-        super.XY(x, y);
+    public Button withXY(int x, int y) {
+        super.withXY(x, y);
         this.x = x;
         this.y = y;
         return this;
     }
 
     // 按鈕監聽的範圍，這個一定要設
-    public Button XY(int x, int y, int w, int h) {
-        super.XY(x, y);
+    public Button withXY(int x, int y, int w, int h) {
+        super.withXY(x, y);
         this.x = x;
         this.y = y;
         this.w = w;

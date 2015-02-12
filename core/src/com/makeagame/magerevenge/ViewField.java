@@ -22,9 +22,11 @@ public class ViewField extends BaseViewLayout {
 
     public ViewField() {
         super();
-        XY(0, 340);
-        castle_L = new BaseViewComponent(new Sprite("castle_al").center(160, 240)).XY(80, 0);
-        castle_R = new BaseViewComponent(new Sprite("castle_op").center(96, 240)).XY(880, 0);
+        withXY(0, 340);
+        castle_L = new BaseViewComponent().withSprite(new Sprite("castle_al").center(160, 240))
+                                          .withXY(80, 0);
+        castle_R = new BaseViewComponent().withSprite(new Sprite("castle_op").center(96, 240))
+                                          .withXY(880, 0);
         roleLayer = new BaseViewLayout();
         addChild(castle_L);
         addChild(castle_R);
@@ -120,7 +122,7 @@ public class ViewField extends BaseViewLayout {
             if (r.stateRecord == 4) {
                 role.visible = false;
             }
-            role.XY(r.pos.x, r.pos.y);
+            role.withXY(r.pos.x, r.pos.y);
             role.bar.percent = r.hpp;
             role = null;
             count++;
@@ -141,7 +143,8 @@ public class ViewField extends BaseViewLayout {
 
         public RoleView() {
             super();
-            addChild(new BaseViewComponent(new Sprite("role_hp")).XY(0, -100));
+            addChild(new BaseViewComponent().withSprite(new Sprite("role_hp"))
+                                            .withXY(0, -100));
             bar = new Bar();
             bar.setBar(Direction.ROW, 32);
             sprite = new Sprite("role_walk1").center(60, 125);

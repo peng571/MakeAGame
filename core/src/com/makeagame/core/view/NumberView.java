@@ -2,7 +2,7 @@ package com.makeagame.core.view;
 
 import java.util.ArrayList;
 
-import com.makeagame.core.resource.Resource2Manager;
+import com.makeagame.core.resource.ResourceSystem;
 import com.makeagame.tools.Sprite;
 
 /**
@@ -17,7 +17,8 @@ public class NumberView extends BaseViewComponent {
     int numberWidth = 12;
     
     public NumberView(Sprite sprite, int numberWidth) {
-        super(sprite);
+        super();
+        withSprite(sprite);
         output = new String();
     }
 
@@ -34,7 +35,7 @@ public class NumberView extends BaseViewComponent {
         for (int i = 0; i < output.length(); i++) {
             int idx = output.codePointAt(i) - '0';
             offset += numberWidth;
-            list.add(new RenderEvent(Resource2Manager.get().fetch(this.sprite.image))
+            list.add(new RenderEvent(ResourceSystem.get().fetch(this.sprite.image))
                     .XY(realX + offset, realY)
                     .src(idx * numberWidth, 0, numberWidth, numberWidth*2)
                     );

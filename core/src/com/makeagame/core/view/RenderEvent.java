@@ -3,7 +3,7 @@ package com.makeagame.core.view;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.makeagame.core.resource.Resource2;
+import com.makeagame.core.resource.Resource;
 
 public class RenderEvent {
 
@@ -57,9 +57,9 @@ public class RenderEvent {
         this.s = s;
     }
     
-    public Resource2 res;
+    public Resource res;
     
-    public RenderEvent(Resource2 res) {
+    public RenderEvent(Resource res) {
         this();
         Res(res);
         
@@ -111,13 +111,15 @@ public class RenderEvent {
         return this;
     }*/
     
-    public RenderEvent Res(Resource2 res) {
+    public RenderEvent Res(Resource res) {
         this.res = res;
-        if (res.type.equals(Resource2.TYPE.IMAGE)) {
-            this.type = IMAGE;
-        } else if (res.type.equals(Resource2.TYPE.SOUND)) {
-            this.type = SOUND;
-        }
+        
+        // TODO: find a batter way
+//        if (res.type.equals(Resource.IMAGE)) {
+//            this.type = IMAGE;
+//        } else if (res.type.equals(Resource2.Resource.SOUND)) {
+//            this.type = SOUND;
+//        }
         return this;
     }
     

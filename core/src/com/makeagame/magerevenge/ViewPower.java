@@ -61,7 +61,7 @@ public class ViewPower extends BaseViewLayout {
         super();
         
         selectPower = "a";
-        XY(24, -53);
+        withXY(24, -53);
         /*
         keyTable = new KeyTable(new Frame[] {
                 new Frame(0, new Key[] {
@@ -86,8 +86,8 @@ public class ViewPower extends BaseViewLayout {
                 }
             };
             layout_ring = new BaseViewLayout()
-                    .addChild(new BaseViewComponent(new Sprite("power_ring_inactive")))
-                    .addChild(new BaseViewComponent(new Sprite("power_ring")));
+                    .addChild(new BaseViewComponent().withSprite(new Sprite("power_ring_inactive")))
+                    .addChild(new BaseViewComponent().withSprite(new Sprite("power_ring")));
             
             addChild(layout_ring);
             button.setInactiveSprite(layout_ring.sprite);
@@ -104,7 +104,8 @@ public class ViewPower extends BaseViewLayout {
                 ViewPower.this.prevPower();
             }
         };
-        layout_prev = new BaseViewComponent(new Sprite("power_prev")).XY(-7, 11);
+        layout_prev = new BaseViewComponent().withSprite(new Sprite("power_prev"))
+                                             .withXY(-7, 11);
         {
             BaseViewComponent pushed = layout_prev.copy();
             pushed.sprite.red = 0.5f;
@@ -120,7 +121,8 @@ public class ViewPower extends BaseViewLayout {
                 ViewPower.this.nextPower();
             }
         };
-        layout_next = new BaseViewComponent(new Sprite("power_next")).XY(136, 126);
+        layout_next = new BaseViewComponent().withSprite(new Sprite("power_next"))
+                                             .withXY(136, 126);
         {
             BaseViewComponent pushed = layout_next.copy();
             pushed.sprite.red = 0.5f;
@@ -129,7 +131,7 @@ public class ViewPower extends BaseViewLayout {
         }
         addChild(layout_next);
         
-        layout_icon = new BaseViewComponent(new Sprite("power_a"));
+        layout_icon = new BaseViewComponent().withSprite(new Sprite("power_a"));
         addChild(layout_icon);
         
     }
@@ -137,13 +139,13 @@ public class ViewPower extends BaseViewLayout {
     @Override
     public void beforeReslove() {
         super.beforeReslove();
-        button.XY(realX, realY, 160, 160);
+        button.withXY(realX, realY, 160, 160);
         button.apply(layout_ring.sprite);
         
-        btn_prev.XY(layout_prev.realX, layout_prev.realY, 48, 48);
+        btn_prev.withXY(layout_prev.realX, layout_prev.realY, 48, 48);
         btn_prev.apply(layout_prev.sprite);
         
-        btn_next.XY(layout_next.realX, layout_next.realY, 48, 48);
+        btn_next.withXY(layout_next.realX, layout_next.realY, 48, 48);
         btn_next.apply(layout_next.sprite);
         
         if (bar.percent >= 1.0) {

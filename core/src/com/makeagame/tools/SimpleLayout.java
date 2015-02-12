@@ -47,6 +47,7 @@ public class SimpleLayout {
         return new SimpleLayout().copyFrom(this);
     }
     
+    
     public SimpleLayout copyFrom(SimpleLayout other) {
         this.fixedX = other.fixedX;
         this.fixedY = other.fixedY;
