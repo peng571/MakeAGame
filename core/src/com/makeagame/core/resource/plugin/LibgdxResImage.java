@@ -6,13 +6,14 @@ import com.makeagame.core.resource.InternalResource;
 import com.makeagame.core.resource.type.Type;
 
 @Type(type = "img")
-public class LibgdxImage extends Texture implements InternalResource{
+public class LibgdxResImage extends Texture implements InternalResource{
 
-    public LibgdxImage(){
+    public LibgdxResImage(){
         super("");
     }
     
-    public LibgdxImage(FileHandle file) {
+    public LibgdxResImage(FileHandle file) {
         super(file);
     }
 }
+

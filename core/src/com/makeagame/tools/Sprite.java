@@ -3,7 +3,6 @@ package com.makeagame.tools;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.resource.ResourceSystem;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;

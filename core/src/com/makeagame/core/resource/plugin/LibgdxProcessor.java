@@ -25,6 +25,7 @@ public class LibgdxProcessor implements Loader {
         textureMap = new HashMap<String, Texture>();
         soundMap = new HashMap<String, Sound>();
         attributeMap = new HashMap<String, String>();
+        
     }
     
 
@@ -32,8 +33,8 @@ public class LibgdxProcessor implements Loader {
 
     @Override
     public InternalResource load(String path, InternalResource type) {
-        if(type instanceof LibgdxImage){
-            return new LibgdxImage(Gdx.files.internal(path));
+        if(type instanceof LibgdxResImage){
+            return new LibgdxResImage(Gdx.files.internal(path));
         }
         return null;
     }

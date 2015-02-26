@@ -1,14 +1,23 @@
 package com.makeagame.core.resource;
 
+import groovyjarjarantlr.debug.NewLineEvent;
+
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.makeagame.core.resource.Resource.ResourceState;
-import com.makeagame.core.resource.plugin.LibgdxImage;
+import com.makeagame.core.resource.plugin.LibgdxResImage;
 import com.makeagame.core.resource.process.Finder;
 import com.makeagame.core.resource.process.LoadProcessor;
 import com.makeagame.core.resource.process.Loader;
 import com.makeagame.core.resource.process.MemoryManager;
 
+/**
+ * 負責 Resource 的讀取
+ * 控制所外掛的 Processor 的多序執行
+ */
 public class ResourceSystem{
 
     Provider provider;
@@ -85,8 +94,13 @@ public class ResourceSystem{
         // TODO: 應該不是用 NAMED
         // 還未擁有 Payload 的 Resource
         if(res.getState() == ResourceState.NAMED){
-            String path = find(id);
-            load(res, path, new LibgdxImage());
+            JSONObject attr;
+            try {
+                attr = find(id);
+                load(res, attr);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
       
         
@@ -107,34 +121,43 @@ public class ResourceSystem{
 //            
 //        };
         
-        
-        
-        
-        
         return res;
     }
     
    
     
     // TODO 在另一個 thread 進行
-    private synchronized String find(String id){
+    private synchronized JSONObject find(String id) throws JSONException{
         for(LoadProcessor process : processorList) {
             if(process instanceof Finder){
-                String path = ((Finder) process).findPath(id);
-                if("".equals(path)){
-                    return path;
+                JSONObject attr = ((Finder) process).find(id);
+                if(attr != null){
+                    return attr;
                 }
             }
         }
-        
-        return "";
+        return new JSONObject().put("path", "").put("type", "err");
     }
     
     
-    private synchronized Resource load(Resource res, String path, InternalResource type){
+    // TODO 在另一個 thread 進行
+    private synchronized Resource load(Resource res, JSONObject attribute){
         for(LoadProcessor process : processorList) {
             if(process instanceof Loader){
-                InternalResource payload = ((Loader) process).load(path, type);
+                InternalResource payload = null;
+                Loader loader = ((Loader) process);
+                String type = attribute.optString("type", "err");
+                String path = attribute.optString("path");
+                payload = loader.decode(path, attribute);
+                // 該在這邊判斷類型嗎? 或者交給Decoder處裡?
+//                if("img".equals(type)){
+//                    payload = loader.load(attribute.optString("path"), new LibgdxResImage());
+//                } else if("snd".equals(type)){
+//                    payload = loader.load(attribute.optString("path"), new LibgdxResImage()); // TODO add class LibgdxSound
+//                }else if("atr".equals(type)){
+//                    payload = loader.load(attribute.optString("path"), new LibgdxResImage()); // TODO add class LibgdxText
+//                }
+                
                 if(payload != null){
                     res.setPayload(payload);
                     res.setState(ResourceState.USABLE);

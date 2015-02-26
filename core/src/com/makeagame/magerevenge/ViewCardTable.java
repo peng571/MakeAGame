@@ -39,14 +39,14 @@ public class ViewCardTable extends BaseViewLayout {
             icon = new BaseViewLayout();
             addChild(icon);
             
-            icon_bar = new BaseViewLayout().withSprite(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
+            icon_bar = new BaseViewLayout().withSprite(new Sprite("swordman_btn_inactive2"));
             addChild(icon_bar);
             
             bar = new Bar();
             bar.setBar(Bar.Direction.COLUMN_REVERSE, 144);
             bar.percent = 1.0f;
             
-            button = new Button(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive2"));
+            button = new Button(new Sprite("swordman_btn_inactive2"));
             button.onClickAction = new Action(){
                 @Override
                 public void execute() { 
@@ -81,14 +81,14 @@ public class ViewCardTable extends BaseViewLayout {
                     new Frame(  200 , new Key[] { new Key("1.alpha", new Double(0.0), KeyTable.INT_LOG) }),
             });
             
-            button.setInactiveSprite( new Sprite(MegaRevenge.ROLE_1 + "btn_inactive"));
+            button.setInactiveSprite( new Sprite("swordman_btn_inactive"));
                     
 //                    new SimpleLayout()
 //                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
 //                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
 //            );
             
-            button.setActiveSprite( new Sprite(MegaRevenge.ROLE_1 + "btn"));
+            button.setActiveSprite( new Sprite("swordman_btn"));
             
 //                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn")))
 //                    .addChild(new SimpleLayout(new Sprite(MegaRevenge.ROLE_1 + "btn_inactive")))
@@ -140,11 +140,11 @@ public class ViewCardTable extends BaseViewLayout {
         withXY(349, -13);
         
         typeList = new String[] {
-                MegaRevenge.CASTLE,
-                MegaRevenge.ROLE_1,
-                MegaRevenge.ROLE_2,
-                MegaRevenge.ROLE_3,
-                MegaRevenge.ROLE_4,
+                "castle",
+                "swordman",
+                "warrior",
+                "mage",
+                "shielder",
         };
         send_buttons = new ViewSendButton[5];
         

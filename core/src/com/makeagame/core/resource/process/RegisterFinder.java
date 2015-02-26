@@ -2,6 +2,8 @@ package com.makeagame.core.resource.process;
 
 import java.util.HashMap;
 
+import org.json.JSONObject;
+
 /**
  * 註冊式搜尋器
  * 以程式碼批次註冊 Resource 的 ID 跟 Path
@@ -10,11 +12,17 @@ import java.util.HashMap;
 @Processor(isFinder=true)
 public class RegisterFinder implements Finder {
 
-    HashMap<String, String> map = new HashMap</* ID= */ String, /* Path= */ String>();
+    HashMap<String, JSONObject> map = new HashMap</* ID= */ String,
+                                                                                            /* Attr {path, x, y, w, h, type} = */ JSONObject>();
+    
+    @Override
+    public JSONObject find(String id) {
+        return map.get(id);
+    }
     
     @Override
     public String findPath(String id) {
-        return map.get(id);
+        return find(id).optString("path");
     }
 
     @Override
@@ -22,20 +30,8 @@ public class RegisterFinder implements Finder {
         return map.keySet().toArray(new String[map.size()]);
     }
     
-    public void register(String id, String path){
-        map.put(id, path);
+    public void register(String id, JSONObject attr){
+        map.put(id, attr);
     }
-    
-    
-    
-     
-    
-    
-    
-    
-    
-    
-    
-    
 
 }

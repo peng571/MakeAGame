@@ -1,5 +1,7 @@
 package com.makeagame.core.resource.process;
 
+import org.json.JSONObject;
+
 import com.makeagame.core.resource.InternalResource;
 
 /**
@@ -15,5 +17,7 @@ public interface Loader extends LoadProcessor {
     
     // 該路徑的資源是否能轉型成所指定的 Type (暫時無實作的必要)
     public <T extends InternalResource> boolean match(String path, T type);
+    
+    public <T extends InternalResource>T decode(JSONObject obj);
     
 }
