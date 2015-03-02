@@ -163,7 +163,7 @@ public class ResourceSystem{
                     res.setState(ResourceState.USABLE);
                     return res;
                 }
-            }
+            } 
         }
         return res;
         
