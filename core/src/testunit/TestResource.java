@@ -18,7 +18,7 @@ public class TestResource {
     @Test
     public void test() {
         rs = ResourceSystem.get();
-        rs.addProcessor(new LibgdxProcessor());
+//        rs.addProcessor(new LibgdxProcessor());
         // 模擬 Render 連續呼叫 ResourceSystem.get().fectch(id);
         testThread = new TestThread();
         testThread.start();

@@ -4,12 +4,13 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import com.makeagame.core.resource.Resource;
+
 /**
  * 註冊式搜尋器
  * 以程式碼批次註冊 Resource 的 ID 跟 Path
  * 適合小規模的遊戲使用
  */
-@Processor(isFinder=true)
 public class RegisterFinder implements Finder {
 
     HashMap<String, JSONObject> map = new HashMap</* ID= */ String,
@@ -22,7 +23,11 @@ public class RegisterFinder implements Finder {
     
     @Override
     public String findPath(String id) {
-        return find(id).optString("path");
+        JSONObject res = find(id);
+        if(res == null){
+            return "";
+        }
+        return res.optString("path");
     }
 
     @Override

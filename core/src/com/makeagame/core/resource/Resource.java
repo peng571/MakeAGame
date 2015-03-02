@@ -11,16 +11,16 @@ public class Resource<T extends InternalResource> {
 
     private T payload;
     
-    public static enum ResourceState {
+    public enum ResourceState {
         INVALID, // 無效, 進入此狀態的資源將不被再引擎所管理(也就是說這是個中止狀態)
         NAMED, // 才剛被指定ID
 //        UNLOADED, // 未載入(這個狀態暗示之前有載入成功, 只不過現在被卸載了)
-//        FINDING, // 尋找中
+        FINDING, // 尋找中
 //        LOADING, // 讀取中
-//        DECODING, // 解碼中
-//        NOTFOUND, // 404
+        DECODING, // 解碼中
+        NOTFOUND, // 404
 //        LOADERROR, // 讀取錯誤(通常是IO錯誤)
-//        DECODEERROR, // 解碼錯誤(通常是格式錯誤或是檔案損毀)
+        DECODEERROR, // 解碼錯誤(通常是格式錯誤或是檔案損毀)
         USABLE // 全部流程跑完. 可使用的
     };
 
@@ -44,7 +44,7 @@ public class Resource<T extends InternalResource> {
     public ResourceState getState() {
         return state;
     }
-
+    
     public boolean accessable() {
         return isAccessable; 
     }
@@ -76,7 +76,7 @@ public class Resource<T extends InternalResource> {
         }
     }
 
-    void setState(ResourceState state) {
+    public void setState(ResourceState state) {
         this.state = state;
     }
     

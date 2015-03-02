@@ -1,13 +1,12 @@
 package com.makeagame.core.resource.process;
 
-public @interface Processor {
+import com.makeagame.core.resource.Resource;
 
-    boolean isFinder() default false;
-
-//    boolean isReader() default false;
-
-//    boolean isDecoder() default false;
+public interface Processor {
+ 
+    // 
+    public Resource handleResource(Resource res);
     
-    boolean isLoader() default false;
-    
+    // 若無法處哩，會提交給下一個 processor
+    public boolean canHandle();
 }

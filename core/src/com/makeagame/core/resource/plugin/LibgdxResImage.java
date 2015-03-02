@@ -15,5 +15,9 @@ public class LibgdxResImage extends Texture implements InternalResource{
     public LibgdxResImage(FileHandle file) {
         super(file);
     }
+    
+    public LibgdxResImage(String path){
+        super(path);
+    }
 }
 
