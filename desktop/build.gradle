@@ -4,8 +4,9 @@ sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.makeagame.first.desktop.DesktopLauncher"
-//project.ext.assetsDir = new File("../android/assets");
+project.ext.assetsDir = new File("../android/assets");
 
+/*
 apply from: 'path.gradle'
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -40,7 +41,7 @@ task copy(dependsOn: dist, type: Copy) {
    from './build/libs/desktop-1.0.jar'
    into project.bulidPathDropBox
 }
-
+*/
 
 
 eclipse {
