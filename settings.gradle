@@ -1,1 +1,6 @@
-include 'desktop', 'android', 'html', 'core'
+include 'desktop', 'html', 'core'
+
+if (System.getenv()['ANDROID_HOME']) { 
+    include 'android' 
+} 
+
