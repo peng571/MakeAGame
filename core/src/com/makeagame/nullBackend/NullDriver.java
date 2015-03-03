@@ -1,48 +1,76 @@
-package com.makeagame.core.resource.plugin;
-
+package com.makeagame.nullBackend;
 import java.util.ArrayList;
 
+/*
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.graphics.g2d.BitmapFont;
-//import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+*/
 
-// 不要引用Bootstrap
+// TODO: 不要引用Bootstrap
 import com.makeagame.core.Bootstrap;
+
 import com.makeagame.core.Driver;
 import com.makeagame.core.Engine;
-import com.makeagame.core.resource.InternalResource;
-import com.makeagame.core.resource.ResourceManager;
-import com.makeagame.core.resource.type.Type;
+
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.MouseEvent;
+
+/*
+import com.makeagame.core.resource.InternalResource;
+import com.makeagame.core.resource.ResourceManager;
+import com.makeagame.core.resource.type.Type;
+
+
 import com.makeagame.tools.MathTools;
+*/
 
 
-public class NullDriver extends ApplicationAdapter  implements Driver{
+public class NullDriver  implements Driver{
 
     //SpriteBatch batch;
     //BitmapFont gameLable;
     Engine engine;
     
+    
+    
+    /*  
+     *  測用的功能
+     *
+     */
+    
+    public String renderResult = "";
+    
+    final ArrayList<SignalEvent> _signalList = new ArrayList<SignalEvent>();
+    int mouseX, mouseY;
+    
+    public void simMouse(int screenX, int screenY) {
+        mouseX = screenX;
+        mouseY = screenY;
+        this._signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_MOVE, new int[] { 0, mouseX, mouseY }));
+    }
+    
+    public void simMouseClick() {
+        this._signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DOWN, new int[] { 0, mouseX, mouseY }));
+        this._signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_UP, new int[] { 0, mouseX, mouseY }));
+    }
+    
     @Override
     public void init() {
-        System.out.println("game start");
-        if (Engine.LOG) {
-            Gdx.app.setLogLevel(Application.LOG_DEBUG);
-        }
+        //System.out.println("game start");
+        
         //batch = new SpriteBatch();
         //gameLable = new BitmapFont();
         //gameLable.setColor(new Color(1, 0, 0, 1));    
     }
-
+    
 
     @Override
     public ArrayList<SignalEvent> signal(final ArrayList<SignalEvent> signalList) {
@@ -86,55 +114,43 @@ public class NullDriver extends ApplicationAdapter  implements Driver{
             }
         });
         */
-        signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_UP, new int[] { button, screenX, screenY }));
+        int button = 0;
+        int screenX = 0;
+        int screenY = 1;
         
-        return signalList;
+        
+        return this._signalList;
     }
 
     
     
     @Override
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> renderList) {
-     // Gdx.gl.glClearColor(Bootstrap.BACKGROUND_COLOR.r, Bootstrap.BACKGROUND_COLOR.g, Bootstrap.BACKGROUND_COLOR.b, Bootstrap.BACKGROUND_COLOR.a);
-        // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Engine.logD("batch begine time " + System.currentTimeMillis());
-        batch.begin();
-        // batch.enableBlending();
+        //Engine.logD("batch begine time " + System.currentTimeMillis());
 
+        // clear background
+        renderResult = "";
+        
         for (RenderEvent e : renderList) {
-            // if (e.useBlend) {
-            // batch.enableBlending();
-            // batch.setBlendFunction(e.srcFunc, e.dstFunc);
-            // } else {
-            // batch.disableBlending();
-            // }
-
-            // if (e.useBlend) {
-            // batch.setBlendFunction(e.srcFunc, e.dstFunc);
-            // } else {
-            // batch.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
-            // }
-            batch.setColor(e.color);
-
             switch (e.type) {
             case RenderEvent.IMAGE:
-            
-                // if (e.texture != null) {
-                // batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
-                // draw(Texture texture, float x, float y, float width, float height, int srcX, int srcY, int srcWidth, int srcHeight, boolean flipX, boolean flipY)
-                // Texture texture = ResourceManager.get().textureMap.get(e.s);
-            
-//                Texture texture = ResourceManager.get().textureMap.get(e.res.path);
-            Texture texture = null;
-            try {
-                texture = (Texture) e.res.getPayload();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-            if(texture == null){
-                return renderList;
-            }
+                renderResult += "IMAGE(";
+                renderResult += String.valueOf(e.x);
+                renderResult += ",";
+                renderResult += String.valueOf(e.y);
+                renderResult += ");";
+                
+                /*
+                Texture texture = null;
+                try {
+                    texture = (Texture) e.res.getPayload();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+                if(texture == null){
+                    return renderList;
+                }
             
                 // Engine.logI("x: " + new Float(e.x).toString());
                 // Engine.logI("y: " + new Float(e.y).toString());
@@ -152,22 +168,19 @@ public class NullDriver extends ApplicationAdapter  implements Driver{
                 int srcW = dim[2];
                 int srcH = dim[3];
 
-                // Engine.logI("src: (" + new Integer(srcX).toString() + ","
-                // + new Integer(srcY).toString() + ","
-                // + new Integer(srcW).toString() + ","
-                // + new Integer(srcH).toString());
-
-                // Engine.logI("srcH: " + new Integer(srcH).toString());
                 float x = e.x;
                 float y = Bootstrap.screamHeight() - e.y - srcH;
                 batch.draw(texture, x, y, (float) srcW, (float) srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);
-                // batch.draw(texture, x, y);
-                // }
+                */
                 break;
             case RenderEvent.LABEL:
-                gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
+                //gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
+                renderResult += "LABEL();";
                 break;
-//            case RenderEvent.SOUND:
+            case RenderEvent.SOUND:
+                renderResult += "SOUND();";
+                break;
+                
 //                InternalResource payload = e.res.getPayload();
 //                if(payload instanceof LibgdxResSound){
 //                    Sound sound = payload.get();
@@ -176,27 +189,35 @@ public class NullDriver extends ApplicationAdapter  implements Driver{
 //                break;
             }
         }
-        batch.end();
-        Engine.logD("batch end time " + System.currentTimeMillis());
-        try {
-            Thread.sleep((long) (1000 / Bootstrap.FPS - Gdx.graphics.getDeltaTime()));
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
+        
+        
+        // 威: 之後要決定把等待迴圈移動到特定的地方
+        //try {
+        //    Thread.sleep((long) (1000 / Bootstrap.FPS - Gdx.graphics.getDeltaTime()));
+        //} catch (InterruptedException e1) {
+        //    e1.printStackTrace();
+        //}
+       
+        
         return renderList;        
     }
     
     
-    @Override
-    public void create() {
-        super.create();
-        init();
-    }
+    // 注意: 這裡是 Override libgdx
+    //@Override
+    //public void create() {
+    //    super.create();
+    //    init();
+    //}
     
-    @Override
-    public void render() {
-        engine.mainLoop();
-    }
+    
+    // 注意: 這裡是 Override libgdx
+    //@Override
+    //public void render() {
+    //    engine.mainLoop();
+    //}
+    
+    
 
     @Override
     public Driver setEngine(Engine engine){
@@ -204,9 +225,10 @@ public class NullDriver extends ApplicationAdapter  implements Driver{
         return this;
     }
     
-    public LibgdxDriver getApplication(){
-        return this;
-    }
+    // 注意: 這裡是給 android 專用?
+    //public NullDriver getApplication(){
+    //    return this;
+    //}
 
 }
 

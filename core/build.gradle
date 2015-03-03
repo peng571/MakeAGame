@@ -4,6 +4,7 @@ sourceCompatibility = 1.6
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.test.java.srcDirs = [ "test/" ]
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -11,6 +12,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.json:json:20090211'
     compile 'org.codehaus.groovy:groovy-all:2.3.9'
+    compile 'junit:junit:4.+'
 }
 
 eclipse.project {

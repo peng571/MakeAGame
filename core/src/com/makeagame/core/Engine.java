@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 
-import com.makeagame.core.resource.ResourceManager;
+//import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 
@@ -38,6 +38,7 @@ public class Engine {
     
 
     // 主要迴圈: 所有的使用者操作指令，和繪圖指令都在這邊整合
+    // TODO(威): 改名成 tickOne()
     public void mainLoop() {
         
         signalList = driver.signal(signalList);
