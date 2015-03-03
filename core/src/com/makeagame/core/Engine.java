@@ -21,8 +21,8 @@ public class Engine {
 //    private Bootstrap bootstrap;
     private Driver driver;
 
-    private ArrayList<SignalEvent> signalList = new ArrayList<SignalEvent>();
-    private ArrayList<RenderEvent> renderList = new ArrayList<RenderEvent>();
+    static private ArrayList<SignalEvent> signalList = new ArrayList<SignalEvent>();
+    static private ArrayList<RenderEvent> renderList = new ArrayList<RenderEvent>();
     
     public Engine(Bootstrap bootstrap) {
 //        this.bootstrap = bootstrap;

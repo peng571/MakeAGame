@@ -14,7 +14,7 @@ import com.makeagame.core.resource.Resource;
 public class RegisterFinder implements Finder {
 
     HashMap<String, JSONObject> map = new HashMap</* ID= */ String,
-                                                                                            /* Attr {path, x, y, w, h, type} = */ JSONObject>();
+                                                  /* Attr {path, x, y, w, h, type} = */ JSONObject>();
     
     @Override
     public JSONObject find(String id) {

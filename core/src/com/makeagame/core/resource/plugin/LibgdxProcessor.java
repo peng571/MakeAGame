@@ -16,17 +16,9 @@ public class LibgdxProcessor implements Processor {
     
     public HashMap<String, String> pathMap;
     
-//    public HashMap<String, Texture> textureMap;
-//    public HashMap<String, Sound> soundMap;
-//    public HashMap<String, String> attributeMap;
-
     public LibgdxProcessor(Finder finder){
         this.finder = finder;
         pathMap = new HashMap<String, String>();
-        
-//        textureMap = new HashMap<String, Texture>();
-//        soundMap = new HashMap<String, Sound>();
-//        attributeMap = new HashMap<String, String>();
     }
     
     
@@ -42,7 +34,7 @@ public class LibgdxProcessor implements Processor {
 
 
     @Override
-    public Resource handleResource(Resource res) {
+    public void handleResource(Resource res) {
         
         String id = res.getID();
         JSONObject attr = null;
@@ -69,16 +61,12 @@ public class LibgdxProcessor implements Processor {
                 payload = new LibgdxResText(path);
             }else{
                 res.setState(ResourceState.DECODEERROR);
-                break;
+                return;
             }
             res.setPayload(payload);
             res.setState(ResourceState.USABLE);
         }   
-                
-        return res;
     }
-    
-
 
 }
 

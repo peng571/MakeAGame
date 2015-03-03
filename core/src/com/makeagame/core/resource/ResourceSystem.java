@@ -1,32 +1,28 @@
 package com.makeagame.core.resource;
 
 import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.makeagame.core.resource.Resource.ResourceState;
-import com.makeagame.core.resource.process.MemoryManager;
 import com.makeagame.core.resource.process.Processor;
 
 /**
- * 負責 Resource 的讀取
- * 處裡多序
+ * 使用者用來讀取資源的介面
  */
 public class ResourceSystem{
 
-    Provider provider;
+    private final int MAX_OF_THREAD = 10;
+    private ExecutorService executor;
     
-    MemoryManager manager;
-//    HashMap<String, Resource> map = new HashMap<String, Resource>();
-
-//    // TODO 找找看有沒有更好的做法
-    public ArrayList<Processor> processorList; 
+    private ArrayList<Processor> processorList; 
    
     public static ResourceSystem instance;
 
     private ResourceSystem() {
-//        provider = new Provider();
+        
+        // TODO 尋找是否又更適合的 ThreadPool
+        executor = Executors.newFixedThreadPool(MAX_OF_THREAD);
         
         processorList = new ArrayList<Processor>();
     }
@@ -51,16 +47,6 @@ public class ResourceSystem{
         processorList.clear();
     }
 
-    
-    
-    public void setProvider(Provider provider) {
-        this.provider = provider;
-    }
-
-    public void setMemoryManager(MemoryManager manager) {
-        this.manager = manager;
-    }
-
     public void resetDefault() {
         removeAllProcessor();
     }
@@ -70,101 +56,54 @@ public class ResourceSystem{
         // TODO 設定好系統之後, 要呼叫void startup()用來啟動固定資源系統, 一但啟動之後所有的外掛方法都不能再被使用
     }
 
-    
-    // TODO 用provider作為和使用者的溝通介面用意是????
-    public Provider getProvider() {
-        return provider;
+
+    class FetchThread implements Runnable{
+        
+        Resource res;
+        String id;
+        
+        public FetchThread(Resource res, String id){
+            this.res = res;
+            this.id = id;
+        }
+        
+        
+        // 在newFixedThreadPool中
+        // Runnable的run結束後就會結束自己
+        @Override
+        public void run() {
+            for(Processor process : processorList) {
+                process.handleResource(res);
+                if(res.getState() == ResourceState.USABLE){
+                    break;
+                }
+            }
+        }
     }
     
     
-    // TODO: 多序
     public Resource fetch(String id){
+        Resource res = ResourceManager.get().getResource(id);
         
-        Resource res = ResourceManager.get().get(id);
-       
-        for(Processor process : processorList) {
-            res = process.handleResource(res);
-      }
-        
-//        // TODO: 應該不是用 NAMED
-//        // 還未擁有 Payload 的 Resource
-//        if(res.getState() == ResourceState.NAMED){
-//            JSONObject attr;
-//            try {
-//                attr = find(id);
-//                load(res, attr);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-      
-        
-       
-        
-        // 多序的部分先跳過
-//        Thread fecthThread = new Thread(){
-//
-//            @Override
-//            public synchronized void run(){
-//                String path = find(id);
-//                
-//                // Object ram = read(path);
-//                
-//                // Resource res = decode(ram);
-//                returnRes = decode(path);
-//            }
-//            
-//        };
+        // 還未被尋找過的才重新建立Thread
+        // TODO 但這樣可能還是會有重複建立的問題，要再修改
+        if(res.getState() == ResourceState.NAMED) {
+            res.setState(ResourceState.FINDING);
+            
+            // OOPS: OpenGL不可在不同的執行序存取，改成只把檔案存取的部分由多序執行
+//            Runnable worker = new FetchThread(res, id);  
+//            executor.execute(worker);
+            
+            for(Processor process : processorList) {
+                process.handleResource(res);
+                if(res.getState() == ResourceState.USABLE){
+                    break;
+                }
+            }
+        }  
         
         return res;
     }
     
-   
     
-//    // TODO 在另一個 thread 進行
-//    private synchronized JSONObject find(String id) throws JSONException{
-//        for(LoadProcessor process : processorList) {
-//            if(process instanceof Finder){
-//                JSONObject attr = ((Finder) process).find(id);
-//                if(attr != null){
-//                    return attr;
-//                }
-//            }
-//        }
-//        return new JSONObject().put("path", "").put("type", "err");
-//    }
-//    
-//    
-//    // TODO 在另一個 thread 進行
-//    private synchronized Resource load(Resource res, JSONObject attribute){
-//        for(LoadProcessor process : processorList) {
-//            if(process instanceof Loader){
-//                InternalResource payload = null;
-//                Loader loader = ((Loader) process);
-//                String type = attribute.optString("type", "err");
-//                String path = attribute.optString("path");
-//                payload = loader.decode(path, attribute);
-//                // 該在這邊判斷類型嗎? 或者交給Decoder處裡?
-////                if("img".equals(type)){
-////                    payload = loader.load(attribute.optString("path"), new LibgdxResImage());
-////                } else if("snd".equals(type)){
-////                    payload = loader.load(attribute.optString("path"), new LibgdxResImage()); // TODO add class LibgdxSound
-////                }else if("atr".equals(type)){
-////                    payload = loader.load(attribute.optString("path"), new LibgdxResImage()); // TODO add class LibgdxText
-////                }
-//                
-//                if(payload != null){
-//                    res.setPayload(payload);
-//                    res.setState(ResourceState.USABLE);
-//                    return res;
-//                }
-//            }
-//        }
-//        return res;
-//        
-//    }
-    
-    
-    
-
 }

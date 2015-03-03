@@ -6,6 +6,7 @@ package com.makeagame.core.resource;
  */
 public class StaticResource<T> extends Resource {
 
+    // TODO
     
     public StaticResource(String id) {
         super(id);
@@ -16,6 +17,12 @@ public class StaticResource<T> extends Resource {
     // 只會有兩種狀態 NOTFOUND, USABLE
     public ResourceState getState(){
         return state;
+    }
+
+    @Override
+    public int getType() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

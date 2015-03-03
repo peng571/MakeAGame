@@ -50,8 +50,6 @@ public class MakeAGame {
       registerResource(finder);
       
       LibgdxProcessor processor = new LibgdxProcessor(finder);
-//      rs.addProcessor(finder);
-
       rs.addProcessor(processor);
   }
   
@@ -113,7 +111,7 @@ public class MakeAGame {
   private void registerResource(RegisterFinder finder) {
       try {
           /* IMAGE */
-          finder.register("image", packageData("image/bird.png", 0, 0, 128, 128));
+          finder.register("image", packageData("image/example.png", 0, 0, 322, 467));
 
           /* ATTRIBUTE */
           finder.register("attribute", packageData("data/bird.txt", "atr"));

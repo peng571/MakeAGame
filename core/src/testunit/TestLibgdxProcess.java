@@ -4,10 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.makeagame.core.exception.ResourceNotReadyException;
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.plugin.LibgdxProcessor;
-import com.makeagame.core.resource.plugin.LibgdxResText;
 import com.makeagame.core.resource.process.RegisterFinder;
 
 public class TestLibgdxProcess {
@@ -53,15 +50,15 @@ public class TestLibgdxProcess {
         
         LibgdxProcessor process = new LibgdxProcessor(finder);
 
-        Resource<LibgdxResText> res = new Resource<LibgdxResText>("attribute");
-        process.handleResource(res);
-
-        System.out.println("res ID" + res.getID());
-        try {
-            System.out.println("res context " + res.getPayload().getText());
-        } catch (ResourceNotReadyException e) {
-            e.printStackTrace();
-        }
+//        Resource<LibgdxResText> res = new Resource<LibgdxResText>("attribute");
+//        process.handleResource(res);
+//
+//        System.out.println("res ID" + res.getID());
+//        try {
+//            System.out.println("res context " + res.getPayload().get());
+//        } catch (ResourceNotReadyException e) {
+//            e.printStackTrace();
+//        }
 
     }
     

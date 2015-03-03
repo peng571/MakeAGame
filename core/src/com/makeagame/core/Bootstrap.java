@@ -2,7 +2,6 @@ package com.makeagame.core;
 
 import com.badlogic.gdx.graphics.Color;
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.View;
 
 /**

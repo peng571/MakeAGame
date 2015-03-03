@@ -15,7 +15,7 @@ public class LibgdxResText implements InternalResource {
         }
     }
     
-    public String getText(){
+    public String get(){
         return text;
     }
 }

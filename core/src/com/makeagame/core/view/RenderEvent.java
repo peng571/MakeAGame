@@ -3,6 +3,7 @@ package com.makeagame.core.view;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.makeagame.core.resource.ImageResource;
 import com.makeagame.core.resource.Resource;
 
 public class RenderEvent {
@@ -32,7 +33,7 @@ public class RenderEvent {
     
     public float vol;
     
-    public Texture texture;
+    public static final int UNKNOW = 0;// 未指定類別的資源
     public static final int IMAGE = 0x001;
     public static final int LABEL = 0x002;
     public static final int SOUND = 0x004;
@@ -63,15 +64,7 @@ public class RenderEvent {
         this();
         Res(res);
         
-        /*
-        this.res = res;
-        if (res.type.equals(Resource.TYPE.IMAGE)) {
-            this.type = IMAGE;
-        } else if (res.type.equals(Resource.TYPE.SOUND)) {
-            this.type = SOUND;
-        }
-        
-        
+/*        
         if (res.type.equals(Resource.TYPE.IMAGE)) {
             this.type = IMAGE;
             this.s = res.path;
@@ -112,14 +105,8 @@ public class RenderEvent {
     }*/
     
     public RenderEvent Res(Resource res) {
+        this.type = res.getType();
         this.res = res;
-        
-        // TODO: find a batter way
-//        if (res.type.equals(Resource.IMAGE)) {
-//            this.type = IMAGE;
-//        } else if (res.type.equals(Resource2.Resource.SOUND)) {
-//            this.type = SOUND;
-//        }
         return this;
     }
     
