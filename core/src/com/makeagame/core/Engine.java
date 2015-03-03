@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 
-//import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 

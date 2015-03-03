@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceSystem;
-import com.makeagame.core.resource.plugin.LibgdxProcessor;
 
 public class TestResource {
     ResourceSystem rs;

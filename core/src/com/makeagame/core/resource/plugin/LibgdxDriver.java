@@ -6,8 +6,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,9 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Driver;
 import com.makeagame.core.Engine;
-import com.makeagame.core.resource.InternalResource;
-import com.makeagame.core.resource.ResourceManager;
-import com.makeagame.core.resource.type.Type;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.MouseEvent;
@@ -44,6 +39,8 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
 
     @Override
     public ArrayList<SignalEvent> signal(final ArrayList<SignalEvent> signalList) {
+        
+        // TODO 這應該是一次性的設定，不該在此呼叫
         Gdx.input.setInputProcessor(new InputAdapter() {
 
             @Override
@@ -89,9 +86,6 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
     
     @Override
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> renderList) {
-     // Gdx.gl.glClearColor(Bootstrap.BACKGROUND_COLOR.r, Bootstrap.BACKGROUND_COLOR.g, Bootstrap.BACKGROUND_COLOR.b, Bootstrap.BACKGROUND_COLOR.a);
-        // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         Engine.logD("batch begine time " + System.currentTimeMillis());
         batch.begin();
         // batch.enableBlending();
