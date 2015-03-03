@@ -6,12 +6,16 @@ import com.makeagame.core.resource.InternalResource;
 
 public class LibgdxResText implements InternalResource {
 
-    String  text;
+    private String text;
     
     public LibgdxResText(String path) {
         FileHandle handle = Gdx.files.internal(path);
         if (handle != null && handle.exists()) {
             text = handle.readString();
         }
+    }
+    
+    public String getText(){
+        return text;
     }
 }

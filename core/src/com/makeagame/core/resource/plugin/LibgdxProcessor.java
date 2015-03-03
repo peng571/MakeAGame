@@ -20,8 +20,8 @@ public class LibgdxProcessor implements Processor {
 //    public HashMap<String, Sound> soundMap;
 //    public HashMap<String, String> attributeMap;
 
-    public LibgdxProcessor(){
-        
+    public LibgdxProcessor(Finder finder){
+        this.finder = finder;
         pathMap = new HashMap<String, String>();
         
 //        textureMap = new HashMap<String, Texture>();
@@ -33,11 +33,6 @@ public class LibgdxProcessor implements Processor {
     private JSONObject find(String id){
         return finder.find(id);
     }
-    
-    public void setFinder(Finder finder){
-        this.finder = finder;
-    }
-    
 
     @Override
     public boolean canHandle() {
@@ -65,6 +60,7 @@ public class LibgdxProcessor implements Processor {
         case DECODING:
             String type = attr.optString("type");
             String path = attr.optString("path");
+            System.out.println("path " + path);
             if("img".equals(type)){
                payload = new LibgdxResImage(path);
             }else if("snd".equals(type)){

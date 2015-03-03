@@ -57,7 +57,7 @@ public class Resource<T extends InternalResource> {
     }
 
     // accessable() == false or ready() == false 的情況下會拋出異常
-    public T getPayload() throws Exception {
+    public T getPayload() throws ResourceNotReadyException {
         if(ready() && accessable() && payload!= null){
             return payload;
         }
