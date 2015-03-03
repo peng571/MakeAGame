@@ -35,7 +35,7 @@ public class testDriverAndView {
     class MyTopView implements View {
         public int frameCount =  0;
         public ArrayList<SignalEvent> lastSignals = new ArrayList<SignalEvent>();
-        public renderEvent = null;
+        public RenderEvent renderEvent = null;
         
         public void signal(ArrayList<SignalEvent> s) {
             lastSignals = new ArrayList<SignalEvent>(s);
@@ -44,7 +44,7 @@ public class testDriverAndView {
         public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list, String s) {
             frameCount += 1;
             if (renderEvent != null) {
-                ArrayList<RenderEvent> result = new ArrayList<RenderEvent>()
+                ArrayList<RenderEvent> result = new ArrayList<RenderEvent>();
                 result.add(renderEvent);
                 return result;
             } else {
@@ -160,3 +160,4 @@ public class testDriverAndView {
         //engine.mainLoop();
         
     }
+}
