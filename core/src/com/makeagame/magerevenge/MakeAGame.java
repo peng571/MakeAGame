@@ -19,7 +19,7 @@ import com.makeagame.core.view.View;
  */
 public class MakeAGame {
     private LibgdxDriver driver;
-
+    
     public MakeAGame() { 
 
         driver = new LibgdxDriver();
@@ -43,13 +43,17 @@ public class MakeAGame {
         driver.setEngine(engine);
         
         ResourceSystem rs = ResourceSystem.get();
-        
+//        
         RegisterFinder finder = new RegisterFinder();
         registerResource(finder);
-        rs.addProcessor(finder);
-
-        rs.addProcessor(new LibgdxProcessor());
         
+        LibgdxProcessor processor = new LibgdxProcessor();
+        processor.setFinder(finder);
+//        rs.addProcessor(finder);
+
+        rs.addProcessor(processor);
+        
+//        
         
     }
 

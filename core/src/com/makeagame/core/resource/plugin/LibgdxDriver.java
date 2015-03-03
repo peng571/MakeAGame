@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Driver;
 import com.makeagame.core.Engine;
+import com.makeagame.core.resource.InternalResource;
 import com.makeagame.core.resource.ResourceManager;
 import com.makeagame.core.resource.type.Type;
 import com.makeagame.core.view.RenderEvent;
@@ -110,8 +111,8 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
             // }
             batch.setColor(e.color);
 
-//            switch (e.type) {
-//            case RenderEvent.IMAGE:
+            switch (e.type) {
+            case RenderEvent.IMAGE:
             
                 // if (e.texture != null) {
                 // batch.draw(e.texture, e.x, Bootstrap.screamHeight() - e.y - e.dstH, 0, 0, e.srcW, e.srcH, e.ratioX, e.ratioY, e.angle);
@@ -144,8 +145,6 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
                 int srcY = dim[1];
                 int srcW = dim[2];
                 int srcH = dim[3];
-//                srcW = 16;
-//                srcH = 16;
 
                 // Engine.logI("src: (" + new Integer(srcX).toString() + ","
                 // + new Integer(srcY).toString() + ","
@@ -159,14 +158,17 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
                 // batch.draw(texture, x, y);
                 // }
                 break;
-//            case RenderEvent.LABEL:
-//                gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
-//                break;
+            case RenderEvent.LABEL:
+                gameLable.draw(batch, e.s, e.x, Bootstrap.screamHeight() - e.y);
+                break;
 //            case RenderEvent.SOUND:
-//                Sound sound = ResourceManager.get().soundMap.get(e.res.path);
-//                sound.play(e.vol);
+//                InternalResource payload = e.res.getPayload();
+//                if(payload instanceof LibgdxResSound){
+//                    Sound sound = payload.get();
+//                    sound.play(e.vol);
+//                } 
 //                break;
-//            }
+            }
         }
         batch.end();
         Engine.logD("batch end time " + System.currentTimeMillis());

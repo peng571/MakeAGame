@@ -2,48 +2,84 @@ package com.makeagame.core.resource.plugin;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
+import org.json.JSONObject;
+
 import com.makeagame.core.resource.InternalResource;
-import com.makeagame.core.resource.process.Loader;
+import com.makeagame.core.resource.Resource;
+import com.makeagame.core.resource.Resource.ResourceState;
+import com.makeagame.core.resource.process.Finder;
 import com.makeagame.core.resource.process.Processor;
 
-@Processor(isLoader = true)
-public class LibgdxProcessor implements Loader {
+public class LibgdxProcessor implements Processor {
 
+    private Finder finder;
+    
     public HashMap<String, String> pathMap;
     
-    public HashMap<String, Texture> textureMap;
-    public HashMap<String, Sound> soundMap;
-    public HashMap<String, String> attributeMap;
+//    public HashMap<String, Texture> textureMap;
+//    public HashMap<String, Sound> soundMap;
+//    public HashMap<String, String> attributeMap;
 
     public LibgdxProcessor(){
         
         pathMap = new HashMap<String, String>();
         
-        textureMap = new HashMap<String, Texture>();
-        soundMap = new HashMap<String, Sound>();
-        attributeMap = new HashMap<String, String>();
-        
+//        textureMap = new HashMap<String, Texture>();
+//        soundMap = new HashMap<String, Sound>();
+//        attributeMap = new HashMap<String, String>();
+    }
+    
+    
+    private JSONObject find(String id){
+        return finder.find(id);
+    }
+    
+    public void setFinder(Finder finder){
+        this.finder = finder;
     }
     
 
-
-
     @Override
-    public InternalResource load(String path, InternalResource type) {
-        if(type instanceof LibgdxResImage){
-            return new LibgdxResImage(Gdx.files.internal(path));
-        }
-        return null;
+    public boolean canHandle() {
+        return false;
     }
 
 
 
     @Override
-    public boolean match(String path, InternalResource type) {
-        return false;
+    public Resource handleResource(Resource res) {
+        
+        String id = res.getID();
+        JSONObject attr = null;
+        switch(res.getState()){
+        case NAMED:
+            res.setState(ResourceState.FINDING);
+        case FINDING:
+            attr = find(id);
+            InternalResource payload = null;
+            if(attr == null){
+                res.setState(ResourceState.NOTFOUND);
+                break;
+            }
+            res.setState(ResourceState.DECODING);
+        case DECODING:
+            String type = attr.optString("type");
+            String path = attr.optString("path");
+            if("img".equals(type)){
+               payload = new LibgdxResImage(path);
+            }else if("snd".equals(type)){
+                payload = new LibgdxResSound(path);
+            }else if("atr".equals(type)){
+                payload = new LibgdxResText(path);
+            }else{
+                res.setState(ResourceState.DECODEERROR);
+                break;
+            }
+            res.setPayload(payload);
+            res.setState(ResourceState.USABLE);
+        }   
+                
+        return res;
     }
     
 

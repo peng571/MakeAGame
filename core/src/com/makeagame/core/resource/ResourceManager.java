@@ -3,7 +3,9 @@ package com.makeagame.core.resource;
 import java.util.HashMap;
 
 /**
- * 不公開組件
+ * 管理所有的 Resource
+ * 供系統操作用
+ * 不建議使用者自行呼叫
  */
 public class ResourceManager {
 

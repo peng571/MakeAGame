@@ -9,8 +9,8 @@ import com.makeagame.core.resource.InternalResource;
  * 根據 Path 取得實際檔案並轉換成 Resource
  * 需對應 Driver 來實作
  */
-@Processor(isLoader = true)
-public interface Loader extends LoadProcessor {
+@Deprecated
+public interface Loader extends Processor {
 
     // 根據 Path 取得實際檔案並轉換成 Resource
     public <T extends InternalResource> T load(String path, T type);
