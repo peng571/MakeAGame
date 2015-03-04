@@ -13,14 +13,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.makeagame.core.Bootstrap;
 import com.makeagame.core.Driver;
 import com.makeagame.core.Engine;
-import com.makeagame.core.resource.ImageResource;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.MouseEvent;
 import com.makeagame.tools.MathTools;
 
 
-public class LibgdxDriver extends ApplicationAdapter  implements Driver{
+public class LibgdxDriver extends ApplicationAdapter implements Driver{
 
     SpriteBatch batch;
     BitmapFont gameLable;
@@ -90,6 +89,9 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
         // batch.enableBlending();
 
         for (RenderEvent e : renderList) {
+            
+            System.out.println("enter point render list");
+            
             // if (e.useBlend) {
             // batch.enableBlending();
             // batch.setBlendFunction(e.srcFunc, e.dstFunc);
@@ -107,6 +109,8 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
             switch (e.type) {
             case RenderEvent.IMAGE:
                 
+                System.out.println("enter point image");
+                
                 Texture texture = null;
                 try {
                     texture = e.res.getPayload().get();
@@ -117,10 +121,10 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
                     return renderList;
                 }
             
-                // Engine.logI("x: " + new Float(e.x).toString());
-                // Engine.logI("y: " + new Float(e.y).toString());
+                 Engine.logI("x: " + new Float(e.x).toString());
+                 Engine.logI("y: " + new Float(e.y).toString());
 
-                int dim[] = ((ImageResource)(e.res)).getSrcDim();
+                int dim[] = e.res.getSrcDim();
                 int dim2[] = new int[] { e.srcX, e.srcY, e.srcW, e.srcH };
                 dim2[0] = dim2[0] + dim[0];
                 dim2[1] = dim2[1] + dim[1];
@@ -133,12 +137,12 @@ public class LibgdxDriver extends ApplicationAdapter  implements Driver{
                 int srcW = dim[2];
                 int srcH = dim[3];
 
-                // Engine.logI("src: (" + new Integer(srcX).toString() + ","
-                // + new Integer(srcY).toString() + ","
-                // + new Integer(srcW).toString() + ","
-                // + new Integer(srcH).toString());
+                 Engine.logI("src: (" + new Integer(srcX).toString() + ","
+                 + new Integer(srcY).toString() + ","
+                 + new Integer(srcW).toString() + ","
+                 + new Integer(srcH).toString());
 
-                // Engine.logI("srcH: " + new Integer(srcH).toString());
+                 Engine.logI("srcH: " + new Integer(srcH).toString());
                 float x = e.x;
                 float y = Bootstrap.screamHeight() - e.y - srcH;
                 batch.draw(texture, x, y, (float) srcW, (float) srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);

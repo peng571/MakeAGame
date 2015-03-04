@@ -43,7 +43,8 @@ public class BaseViewComponent {
     public BaseViewComponent() {
     }
     
-    public BaseViewComponent withSprite(Sprite sp)    {
+    
+    public BaseViewComponent withSprite(Sprite sp){
         this.sprite = sp;
         return this;
     }
@@ -135,22 +136,22 @@ public class BaseViewComponent {
     
     
     
-    // 有使用到這個的必要嗎?
-    public BaseViewComponent copy() {
-        return new BaseViewComponent().copyFrom(this);
-    }
-    
-    public BaseViewComponent copyFrom(BaseViewComponent other) {
-        this.fixedX = other.fixedX;
-        this.fixedY = other.fixedY;
-        this.animX = other.animX;
-        this.animY = other.animY;
-        this.visible = other.visible;
-        if(this.sprite == null){
-            this.sprite = new Sprite();
-            this.sprite.copyFrom(other.sprite);
-        }
-        return this;
-    }
+//    // 有使用到這個的必要嗎?
+//    public BaseViewComponent copy() {
+//        return new BaseViewComponent().copyFrom(this);
+//    }
+//    
+//    public BaseViewComponent copyFrom(BaseViewComponent other) {
+//        this.fixedX = other.fixedX;
+//        this.fixedY = other.fixedY;
+//        this.animX = other.animX;
+//        this.animY = other.animY;
+//        this.visible = other.visible;
+//        if(this.sprite == null){
+//            this.sprite = new Sprite();
+//            this.sprite.copyFrom(other.sprite);
+//        }
+//        return this;
+//    }
     
 }

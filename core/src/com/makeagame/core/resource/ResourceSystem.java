@@ -82,8 +82,8 @@ public class ResourceSystem{
     }
     
     
-    public Resource fetch(String id){
-        Resource res = ResourceManager.get().getResource(id);
+    public<T extends Resource> T fetch(String id) throws Exception{
+        T res = (T)ResourceManager.get().getResource(id);
         
         // 還未被尋找過的才重新建立Thread
         // TODO 但這樣可能還是會有重複建立的問題，要再修改
@@ -101,7 +101,6 @@ public class ResourceSystem{
                 }
             }
         }  
-        
         return res;
     }
     

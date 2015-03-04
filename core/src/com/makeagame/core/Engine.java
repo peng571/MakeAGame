@@ -14,7 +14,7 @@ import com.makeagame.core.view.SignalEvent;
  */
 public class Engine {
 
-    public static boolean LOG = false;
+    public static boolean LOG = true;
     public static boolean DEBUG = true;
     public static final String TAG = "MakeAGame";
 

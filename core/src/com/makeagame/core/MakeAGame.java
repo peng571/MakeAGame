@@ -6,13 +6,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.model.Model;
+import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceSystem;
 import com.makeagame.core.resource.plugin.LibgdxDriver;
 import com.makeagame.core.resource.plugin.LibgdxProcessor;
 import com.makeagame.core.resource.process.RegisterFinder;
+import com.makeagame.core.view.BaseViewComponent;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
+import com.makeagame.tools.Sprite;
 
 
 /**
@@ -56,7 +59,11 @@ public class MakeAGame {
   
   class GameView implements View{
 
-      
+    BaseViewComponent picture;
+    
+    public GameView(){
+        picture = new BaseViewComponent().withSprite(new Sprite().setImage("image"));
+    }
       
     @Override
     public void signal(ArrayList<SignalEvent> s) throws JSONException {
@@ -65,7 +72,11 @@ public class MakeAGame {
 
     @Override
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list, String s) {
-        list.add(new RenderEvent(ResourceSystem.get().fetch("image")));
+        try {
+            list.add(new RenderEvent(ResourceSystem.get().fetch("image")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
       
@@ -88,7 +99,6 @@ public class MakeAGame {
   }
   
   
-  
 
   /*
    * 可讓使用者自行選擇包裝資訊的方法
@@ -107,7 +117,7 @@ public class MakeAGame {
   }
   
   
-
+  
   private void registerResource(RegisterFinder finder) {
       try {
           /* IMAGE */
@@ -123,6 +133,8 @@ public class MakeAGame {
       }
   }
 
+  
+  
   // 提供跨平台用的程序，目前主要還是透過 Libgdx來實現跨平台
   public LibgdxDriver getApplication() {
       return driver;

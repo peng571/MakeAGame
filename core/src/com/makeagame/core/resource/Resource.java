@@ -1,6 +1,8 @@
 package com.makeagame.core.resource;
 
 import com.makeagame.core.exception.ResourceNotReadyException;
+import com.makeagame.core.view.RenderEvent;
+import com.makeagame.tools.Sprite;
 
 public class Resource <T extends InternalResource> {
 
@@ -10,6 +12,7 @@ public class Resource <T extends InternalResource> {
     protected ResourceState state;
 
     private T payload;
+    public int type = RenderEvent.UNKNOW;
     
     public enum ResourceState {
         INVALID, // 無效, 進入此狀態的資源將不被再引擎所管理(也就是說這是個中止狀態)
@@ -75,9 +78,32 @@ public class Resource <T extends InternalResource> {
         System.out.println("Set to " + state.name());
         this.state = state;
     }
+  
     
-    public int getType(){
-        return 0;
-    }
+    
+    // TODO 這邊怪怪的???
+    int srcX = 0, srcY = 0, srcW = -1, srcH = -1;
+
+    public Resource src(int srcX, int srcY, int srcW, int srcH) {
+        this.srcX = srcX;
+        this.srcY = srcY;
+        this.srcW = srcW;
+        this.srcH = srcH;
+        return this;
+      }
+
+      public Resource src(int srcW, int srcH) {
+        return src(0, 0, srcW, srcH);
+      }
+    
+      public int[] getWH() {
+        return new int[] {srcW, srcH};
+      }
+    
+      public int[] getSrcDim() {
+        return new int[] {srcX, srcY, srcW, srcH};
+      }
 }
+
+    
 

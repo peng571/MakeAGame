@@ -10,11 +10,9 @@ public class SoundResource extends Resource{
     
     SoundResource(String id) {
         super(id);
+        
+        this.type = RenderEvent.IMAGE;
     }
 
-    @Override
-    public int getType() {
-        return RenderEvent.SOUND;
-    }
 
 }

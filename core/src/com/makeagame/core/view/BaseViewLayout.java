@@ -111,28 +111,28 @@ public class BaseViewLayout extends BaseViewComponent {
     
     
    
-    // 有使用到這個的必要嗎?
-    public BaseViewLayout copy() {
-        return (BaseViewLayout)super.copy();
-    }
-    
-    public BaseViewLayout copyFrom(BaseViewLayout other) {
-        super.copyFrom(other);
-        
-        if (this.children.size() == other.children.size()) {
-            for(int i=0; i < other.children.size(); i++) {
-                this.children.get(i).copyFrom(other.children.get(i));
-            }
-        } else {
-            this.cleanAllChildren();
-            for(int i=0; i < other.children.size(); i++) {
-                BaseViewLayout n = new BaseViewLayout();
-                n.copyFrom(other.children.get(i));
-                this.addChild(n);
-            }
-        }
-        return this;
-    }
+//    // 有使用到這個的必要嗎?
+//    public BaseViewLayout copy() {
+//        return (BaseViewLayout)super.copy();
+//    }
+//    
+//    public BaseViewLayout copyFrom(BaseViewLayout other) {
+//        super.copyFrom(other);
+//        
+//        if (this.children.size() == other.children.size()) {
+//            for(int i=0; i < other.children.size(); i++) {
+//                this.children.get(i).copyFrom(other.children.get(i));
+//            }
+//        } else {
+//            this.cleanAllChildren();
+//            for(int i=0; i < other.children.size(); i++) {
+//                BaseViewLayout n = new BaseViewLayout();
+//                n.copyFrom(other.children.get(i));
+//                this.addChild(n);
+//            }
+//        }
+//        return this;
+//    }
     
     
     

@@ -2,28 +2,33 @@ package com.makeagame.core.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.makeagame.core.resource.ImageResource;
 import com.makeagame.core.resource.Resource;
 
 public class RenderEvent {
 
     public int type;
     public String s;
-    public float x;
-    public float y;
-    public int srcX;
-    public int srcY;
-    public int srcW;
-    public int srcH;
+    
+    public float x = 0;
+    public float y = 0;
+    
+    public int srcX = 0;
+    public int srcY = 0;
+    public int srcW = -1;
+    public int srcH = -1;
+    
     public int dstX;
     public int dstY;
     public int dstW;
     public int dstH;
+    
     public float ratioX;
     public float ratioY;
+    
     public float angle;
+    
     public int gravity;
+    
     public Color color;
     public int size;
     public boolean useBlend = false;
@@ -105,8 +110,8 @@ public class RenderEvent {
     }*/
     
     public RenderEvent Res(Resource res) {
-        this.type = res.getType();
         this.res = res;
+        this.type = res.type;
         return this;
     }
     

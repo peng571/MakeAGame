@@ -9,6 +9,7 @@ import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.Resource.ResourceState;
 import com.makeagame.core.resource.process.Finder;
 import com.makeagame.core.resource.process.Processor;
+import com.makeagame.core.view.RenderEvent;
 
 public class LibgdxProcessor implements Processor {
 
@@ -54,12 +55,14 @@ public class LibgdxProcessor implements Processor {
             String path = attr.optString("path");
             System.out.println("path " + path);
             if("img".equals(type)){
-               payload = new LibgdxResImage(path);
-            }else if("snd".equals(type)){
+                res.type = RenderEvent.IMAGE;
+                payload = new LibgdxResImage(path);
+            } else if("snd".equals(type)){
+                res.type = RenderEvent.SOUND;
                 payload = new LibgdxResSound(path);
-            }else if("atr".equals(type)){
+            } else if("atr".equals(type)){
                 payload = new LibgdxResText(path);
-            }else{
+            } else{
                 res.setState(ResourceState.DECODEERROR);
                 return;
             }

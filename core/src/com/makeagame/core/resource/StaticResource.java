@@ -19,10 +19,4 @@ public class StaticResource<T> extends Resource {
         return state;
     }
 
-    @Override
-    public int getType() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
 }

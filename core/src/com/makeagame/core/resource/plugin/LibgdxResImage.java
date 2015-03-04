@@ -26,9 +26,5 @@ public class LibgdxResImage implements InternalResource{ // extends Texture
     public Texture get(){
         return texture;
     }
-    
-    
-    
-    
 }
 
