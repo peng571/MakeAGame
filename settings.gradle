@@ -1,6 +1,7 @@
-include 'desktop', 'html', 'core'
+include 'core'
+include 'frontend:desktop', 'frontend:html'
 
 if (System.getenv()['ANDROID_HOME']) { 
-    include 'android' 
+    include 'frontend:android' 
 } 
 
