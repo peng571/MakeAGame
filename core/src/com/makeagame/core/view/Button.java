@@ -201,79 +201,79 @@ public class Button extends BaseViewComponent {
     }
     
     
-    
-    
-    // 這邊太過複雜了
-    public void apply(Sprite icon) {
-
-        State enable_state = listener.enable_state;
-        State action_state = listener.action_state;
-
-        /*
-         * if (progress >= 1.0) {
-         * enable_state.enter(Active);
-         * } else {
-         * enable_state.enter(Inactive);
-         * }
-         */
-        // 如果 invisible則不顯示
-        // TODO: 之後在做
-        // ArrayList<RenderEvent> renderlist = new ArrayList<RenderEvent>();
-
-        if (!visible) {
-            return;
-        }
-        switch (enable_state.currentStat())
-        {
-        case EventListener.Disable:
-            if (spDisable != null) {
-                icon.copyFrom(spDisable);
-            }
-            if (ktDisable != null) {
-                icon.apply(ktDisable.get(enable_state.elapsed()));
-            }
-            break;
-        case EventListener.Inactive:
-            if (spInactive != null) {
-                icon.copyFrom(spInactive);
-            }
-            if (ktInactive != null) {
-                icon.apply(ktInactive.get(enable_state.elapsed()));
-            }
-            break;
-        case EventListener.Active:
-            switch (action_state.currentStat())
-            {
-            case EventListener.Static:
-                if (spStatic != null) {
-                    icon.copyFrom(spStatic);
-                }
-                // Engine.logI("stat: " + Long.toString(action_state.elapsed()));
-                break;
-            // mobile do not have Hovered
-            case EventListener.Hovered:
-                if (spHovered != null) {
-                    icon.copyFrom(spHovered);
-                }
-                break;
-            case EventListener.Pushed:
-                if (spPushed != null) {
-                    icon.copyFrom(spPushed);
-                }
-                break;
-            }
-            if (ktStatic != null) {
-                icon.apply(ktStatic.get(action_state.elapsed(EventListener.Static)));
-            }
-            // mobile do not have Hovered
-            if (ktHovered != null) {
-                icon.apply(ktHovered.get(action_state.elapsed(EventListener.Hovered)));
-            }
-            if (ktPushed != null) {
-                icon.apply(ktPushed.get(action_state.elapsed(EventListener.Pushed)));
-            }
-            break;
-        }
-
-    }
+//    
+//    
+//    // 這邊太過複雜了
+//    public void apply(Sprite icon) {
+//
+//        State enable_state = listener.enable_state;
+//        State action_state = listener.action_state;
+//
+//        /*
+//         * if (progress >= 1.0) {
+//         * enable_state.enter(Active);
+//         * } else {
+//         * enable_state.enter(Inactive);
+//         * }
+//         */
+//        // 如果 invisible則不顯示
+//        // TODO: 之後在做
+//        // ArrayList<RenderEvent> renderlist = new ArrayList<RenderEvent>();
+//
+//        if (!visible) {
+//            return;
+//        }
+//        switch (enable_state.currentStat())
+//        {
+//        case EventListener.Disable:
+//            if (spDisable != null) {
+//                icon.copyFrom(spDisable);
+//            }
+//            if (ktDisable != null) {
+//                icon.apply(ktDisable.get(enable_state.elapsed()));
+//            }
+//            break;
+//        case EventListener.Inactive:
+//            if (spInactive != null) {
+//                icon.copyFrom(spInactive);
+//            }
+//            if (ktInactive != null) {
+//                icon.apply(ktInactive.get(enable_state.elapsed()));
+//            }
+//            break;
+//        case EventListener.Active:
+//            switch (action_state.currentStat())
+//            {
+//            case EventListener.Static:
+//                if (spStatic != null) {
+//                    icon.copyFrom(spStatic);
+//                }
+//                // Engine.logI("stat: " + Long.toString(action_state.elapsed()));
+//                break;
+//            // mobile do not have Hovered
+//            case EventListener.Hovered:
+//                if (spHovered != null) {
+//                    icon.copyFrom(spHovered);
+//                }
+//                break;
+//            case EventListener.Pushed:
+//                if (spPushed != null) {
+//                    icon.copyFrom(spPushed);
+//                }
+//                break;
+//            }
+//            if (ktStatic != null) {
+//                icon.apply(ktStatic.get(action_state.elapsed(EventListener.Static)));
+//            }
+//            // mobile do not have Hovered
+//            if (ktHovered != null) {
+//                icon.apply(ktHovered.get(action_state.elapsed(EventListener.Hovered)));
+//            }
+//            if (ktPushed != null) {
+//                icon.apply(ktPushed.get(action_state.elapsed(EventListener.Pushed)));
+//            }
+//            break;
+//        }
+//
+//    }
 }

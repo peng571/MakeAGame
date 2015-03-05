@@ -173,6 +173,8 @@ public class AnimationObject extends MovableObject {
         public void stop();
 
     }
+    
+    
 
     public String info() {
         return new Gson().toJson(this);

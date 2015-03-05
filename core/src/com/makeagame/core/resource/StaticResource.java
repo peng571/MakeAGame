@@ -6,6 +6,7 @@ package com.makeagame.core.resource;
  */
 public class StaticResource<T> extends Resource {
 
+    // TODO
     
     public StaticResource(String id) {
         super(id);

@@ -1,8 +1,9 @@
 package com.makeagame.core.resource;
 
 import com.makeagame.core.exception.ResourceNotReadyException;
+import com.makeagame.core.view.RenderEvent;
 
-public class Resource<T extends InternalResource> {
+public class Resource <T extends InternalResource> {
 
     private String ID;
     private boolean isAccessable;
@@ -10,6 +11,7 @@ public class Resource<T extends InternalResource> {
     protected ResourceState state;
 
     private T payload;
+    public int type = RenderEvent.UNKNOW;
     
     public enum ResourceState {
         INVALID, // 無效, 進入此狀態的資源將不被再引擎所管理(也就是說這是個中止狀態)
@@ -24,16 +26,11 @@ public class Resource<T extends InternalResource> {
         USABLE // 全部流程跑完. 可使用的
     };
 
-    // 不可由使用者自行建立
-    private Resource() {
-
-    }
     
-    public Resource(String id){
-        this();
+    Resource(String id){
         this.ID = id;
         this.isAccessable = true;
-        this.state = ResourceState.NAMED;
+        this.setState(ResourceState.NAMED);
     }
 
     public String getID() {
@@ -71,24 +68,20 @@ public class Resource<T extends InternalResource> {
     // 並且拋棄這個 Resource
     public void setPayload(T payload) {
         this.payload = payload;
-        if(false){ //轉型失敗
+        if(false){ // TODO 轉型失敗
             state = ResourceState.INVALID;
         }
     }
 
     public void setState(ResourceState state) {
+        System.out.println("Set to " + state.name());
         this.state = state;
     }
+  
+
     
-    
-    
-    /*
-     * 基本屬性
-     */
-    int centerX, centerY;
-    int srcX, srcY, srcW, srcH;
-    String file;
-    
+    int srcX = 0, srcY = 0, srcW = -1, srcH = -1;
+
     public Resource src(int srcX, int srcY, int srcW, int srcH) {
         this.srcX = srcX;
         this.srcY = srcY;
@@ -100,43 +93,17 @@ public class Resource<T extends InternalResource> {
     public Resource src(int srcW, int srcH) {
         return src(0, 0, srcW, srcH);
     }
-    
-    //public int[] getWH() {
-    //    return new int[] {srcW, srcH};
-    //}
-    
+
+    public int[] getWH() {
+        return new int[] {srcW, srcH};
+    }
+
     public int[] getSrcDim() {
         return new int[] {srcX, srcY, srcW, srcH};
     }
-    
-
-//        public Resource attribute(String file) {
-//            FileHandle handle = Gdx.files.internal(file);
-//            if (handle != null && handle.exists()) {
-//                this.file = handle.readString();
-//            }
-//            return this;
-//        }
-
-   
-
-//
-//        public Resource dst(int dstX, int dstY, int dstW, int dstH) {
-//            this.x = dstX;
-//            this.y = dstY;
-//            this.w = dstW;
-//            this.h = dstH;
-//            return this;
-//        }
-//
-//        public Resource center(int x, int y) {
-//            this.centerX = x;
-//            this.centerY = y;
-//            return this;
-//        }
-        
-        
-    
-
+      
+      
 }
+
+    
 

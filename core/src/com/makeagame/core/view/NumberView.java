@@ -13,8 +13,9 @@ public class NumberView extends BaseViewComponent {
     
     int number;
     String output;
-
+    
     int numberWidth = 12;
+    
     
     public NumberView(Sprite sprite, int numberWidth) {
         super();
@@ -35,10 +36,14 @@ public class NumberView extends BaseViewComponent {
         for (int i = 0; i < output.length(); i++) {
             int idx = output.codePointAt(i) - '0';
             offset += numberWidth;
-            list.add(new RenderEvent(ResourceSystem.get().fetch(this.sprite.image))
-                    .XY(realX + offset, realY)
-                    .src(idx * numberWidth, 0, numberWidth, numberWidth*2)
-                    );
+            try {
+                list.add(new RenderEvent(ResourceSystem.get().fetch(this.sprite.imageId))
+                        .XY(realX + offset, realY)
+                        .src(idx * numberWidth, 0, numberWidth, numberWidth*2)
+                        );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }

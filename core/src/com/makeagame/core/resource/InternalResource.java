@@ -7,7 +7,5 @@ package com.makeagame.core.resource;
  */
 public interface InternalResource {
 
-//    void deallocate();
-
-//    void size();
+    public<T> T get();
 }

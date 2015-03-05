@@ -1,4 +1,4 @@
-package com.makeagame.core.resource.plugin;
+package com.makeagame.core.plugin.libgdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -15,7 +15,7 @@ public class LibgdxResText implements InternalResource {
         }
     }
     
-    public String getText(){
+    public String get(){
         return text;
     }
 }

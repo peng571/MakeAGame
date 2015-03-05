@@ -1,4 +1,4 @@
-package com.makeagame.core.resource.plugin;
+package com.makeagame.core.plugin.libgdx;
 
 import java.util.HashMap;
 
@@ -9,6 +9,7 @@ import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.Resource.ResourceState;
 import com.makeagame.core.resource.process.Finder;
 import com.makeagame.core.resource.process.Processor;
+import com.makeagame.core.view.RenderEvent;
 
 public class LibgdxProcessor implements Processor {
 
@@ -16,17 +17,9 @@ public class LibgdxProcessor implements Processor {
     
     public HashMap<String, String> pathMap;
     
-//    public HashMap<String, Texture> textureMap;
-//    public HashMap<String, Sound> soundMap;
-//    public HashMap<String, String> attributeMap;
-
     public LibgdxProcessor(Finder finder){
         this.finder = finder;
         pathMap = new HashMap<String, String>();
-        
-//        textureMap = new HashMap<String, Texture>();
-//        soundMap = new HashMap<String, Sound>();
-//        attributeMap = new HashMap<String, String>();
     }
     
     
@@ -42,7 +35,7 @@ public class LibgdxProcessor implements Processor {
 
 
     @Override
-    public Resource handleResource(Resource res) {
+    public void handleResource(Resource res) {
         
         String id = res.getID();
         JSONObject attr = null;
@@ -57,28 +50,28 @@ public class LibgdxProcessor implements Processor {
                 break;
             }
             res.setState(ResourceState.DECODING);
+            res.src(attr.optInt("x"), attr.optInt("y"), attr.optInt("w", -1), attr.optInt("h", -1));
         case DECODING:
             String type = attr.optString("type");
             String path = attr.optString("path");
+            System.out.println("attr " + attr);
             System.out.println("path " + path);
             if("img".equals(type)){
-               payload = new LibgdxResImage(path);
-            }else if("snd".equals(type)){
+                res.type = RenderEvent.IMAGE;
+                payload = new LibgdxResImage(path);
+            } else if("snd".equals(type)){
+                res.type = RenderEvent.SOUND;
                 payload = new LibgdxResSound(path);
-            }else if("atr".equals(type)){
+            } else if("atr".equals(type)){
                 payload = new LibgdxResText(path);
-            }else{
+            } else{
                 res.setState(ResourceState.DECODEERROR);
-                break;
+                return;
             }
             res.setPayload(payload);
             res.setState(ResourceState.USABLE);
         }   
-                
-        return res;
     }
-    
-
 
 }
 
