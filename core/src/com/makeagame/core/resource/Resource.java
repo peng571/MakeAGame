@@ -2,7 +2,6 @@ package com.makeagame.core.resource;
 
 import com.makeagame.core.exception.ResourceNotReadyException;
 import com.makeagame.core.view.RenderEvent;
-import com.makeagame.tools.Sprite;
 
 public class Resource <T extends InternalResource> {
 
@@ -79,9 +78,8 @@ public class Resource <T extends InternalResource> {
         this.state = state;
     }
   
+
     
-    
-    // TODO 這邊怪怪的???
     int srcX = 0, srcY = 0, srcW = -1, srcH = -1;
 
     public Resource src(int srcX, int srcY, int srcW, int srcH) {
@@ -90,19 +88,21 @@ public class Resource <T extends InternalResource> {
         this.srcW = srcW;
         this.srcH = srcH;
         return this;
-      }
+    }
 
-      public Resource src(int srcW, int srcH) {
+    public Resource src(int srcW, int srcH) {
         return src(0, 0, srcW, srcH);
-      }
-    
-      public int[] getWH() {
+    }
+
+    public int[] getWH() {
         return new int[] {srcW, srcH};
-      }
-    
-      public int[] getSrcDim() {
+    }
+
+    public int[] getSrcDim() {
         return new int[] {srcX, srcY, srcW, srcH};
-      }
+    }
+      
+      
 }
 
     

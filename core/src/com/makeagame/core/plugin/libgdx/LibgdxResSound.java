@@ -1,4 +1,4 @@
-package com.makeagame.core.resource.plugin;
+package com.makeagame.core.plugin.libgdx;
 
 import com.badlogic.gdx.audio.Sound;
 import com.makeagame.core.resource.InternalResource;

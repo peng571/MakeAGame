@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
-import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.ResourceSystem;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.KeyTable.ApplyList;
@@ -76,6 +75,9 @@ public class Sprite {
     public String sound;
     public String palyedSound;
     public float soundVol = 1.0f;
+    public int playTimes; // play looping if playTimes is -1
+    public int startSec, endSec;
+    
     
 
     // 基準線
@@ -140,8 +142,20 @@ public class Sprite {
     }
     
     public void apply(JSONObject applyJson){
-        
+        this.x = applyJson.optInt("x");
+        this.y = applyJson.optInt("y");
+        this.srcX = applyJson.optInt("srcX");
+        this.srcY = applyJson.optInt("srcY");
+        this.srcW = applyJson.optInt("srcW");
+        this.srcH = applyJson.optInt("srcH");
+        this.red = (float) applyJson.optDouble("red", 0);
+        this.green = (float)applyJson.optDouble("green", 0);
+        this.blue = (float)applyJson.optDouble("blue", 0);
+        this.alpha = (float)applyJson.optDouble("alpha", 0);
+        this.srcFunc = applyJson.optInt("srcFunc");
+        this.dstFunc = applyJson.optInt("dstFunc");
     }
+    
     
     public void apply(ApplyList applylist) {
         HashMap<String, Object> map = applylist.map;

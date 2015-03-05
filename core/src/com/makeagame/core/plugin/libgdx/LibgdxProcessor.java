@@ -1,4 +1,4 @@
-package com.makeagame.core.resource.plugin;
+package com.makeagame.core.plugin.libgdx;
 
 import java.util.HashMap;
 
@@ -50,9 +50,11 @@ public class LibgdxProcessor implements Processor {
                 break;
             }
             res.setState(ResourceState.DECODING);
+            res.src(attr.optInt("x"), attr.optInt("y"), attr.optInt("w", -1), attr.optInt("h", -1));
         case DECODING:
             String type = attr.optString("type");
             String path = attr.optString("path");
+            System.out.println("attr " + attr);
             System.out.println("path " + path);
             if("img".equals(type)){
                 res.type = RenderEvent.IMAGE;

@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.makeagame.core.resource.plugin.LibgdxProcessor;
+import com.makeagame.core.plugin.libgdx.LibgdxProcessor;
 import com.makeagame.core.resource.process.RegisterFinder;
 
 public class TestLibgdxProcess {

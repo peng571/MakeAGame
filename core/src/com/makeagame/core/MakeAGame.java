@@ -6,10 +6,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.makeagame.core.model.Model;
-import com.makeagame.core.resource.Resource;
+import com.makeagame.core.plugin.libgdx.LibgdxDriver;
+import com.makeagame.core.plugin.libgdx.LibgdxProcessor;
 import com.makeagame.core.resource.ResourceSystem;
-import com.makeagame.core.resource.plugin.LibgdxDriver;
-import com.makeagame.core.resource.plugin.LibgdxProcessor;
 import com.makeagame.core.resource.process.RegisterFinder;
 import com.makeagame.core.view.BaseViewComponent;
 import com.makeagame.core.view.RenderEvent;
@@ -62,7 +61,7 @@ public class MakeAGame {
     BaseViewComponent picture;
     
     public GameView(){
-        picture = new BaseViewComponent().withSprite(new Sprite().setImage("image"));
+        picture = new BaseViewComponent().withSprite(new Sprite().setImage("image")).withXY(0, 0);
     }
       
     @Override
@@ -72,11 +71,7 @@ public class MakeAGame {
 
     @Override
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list, String s) {
-        try {
-            list.add(new RenderEvent(ResourceSystem.get().fetch("image")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        picture.render(list);
         return list;
     }
       

@@ -1,4 +1,4 @@
-package com.makeagame.core.resource.plugin;
+package com.makeagame.core.plugin.libgdx;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,8 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
         }
         batch = new SpriteBatch();
         gameLable = new BitmapFont();
-        gameLable.setColor(new Color(1, 0, 0, 1));    
+        gameLable.setColor(new Color(1, 0, 0, 1));   
+        
     }
 
 
@@ -118,11 +119,12 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
                     e1.printStackTrace();
                 }
                 if(texture == null){
+                    System.out.println("texture is null");
                     return renderList;
                 }
             
-                 Engine.logI("x: " + new Float(e.x).toString());
-                 Engine.logI("y: " + new Float(e.y).toString());
+//                 Engine.logI("x: " + e.x);
+//                 Engine.logI("y: " + e.y);
 
                 int dim[] = e.res.getSrcDim();
                 int dim2[] = new int[] { e.srcX, e.srcY, e.srcW, e.srcH };
@@ -137,16 +139,15 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
                 int srcW = dim[2];
                 int srcH = dim[3];
 
-                 Engine.logI("src: (" + new Integer(srcX).toString() + ","
-                 + new Integer(srcY).toString() + ","
-                 + new Integer(srcW).toString() + ","
-                 + new Integer(srcH).toString());
-
-                 Engine.logI("srcH: " + new Integer(srcH).toString());
+                 Engine.logI("src: (" + srcX + ","
+                 + srcY + ","
+                 + srcW + ","
+                 + srcH + ")");
+                 
                 float x = e.x;
                 float y = Bootstrap.screamHeight() - e.y - srcH;
+                System.out.println("render x " + x + ", y " + y);
                 batch.draw(texture, x, y, (float) srcW, (float) srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);
-                // batch.draw(texture, x, y);
                 // }
                 break;
             case RenderEvent.LABEL:

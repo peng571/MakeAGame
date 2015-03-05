@@ -43,12 +43,6 @@ public class RenderEvent {
     public static final int LABEL = 0x002;
     public static final int SOUND = 0x004;
     
-//    public static final int LEFT = 0x000;
-//    public static final int RIGHT = 0x010;
-//    public static final int CENTER = 0x001;
-//    public static final int TOP = 0x100;
-//    public static final int DOWN = 0x000;
-
     private RenderEvent() {
         angle = 0;
         XY(0, 0);
@@ -68,50 +62,27 @@ public class RenderEvent {
     public RenderEvent(Resource res) {
         this();
         Res(res);
-        
-/*        
-        if (res.type.equals(Resource.TYPE.IMAGE)) {
-            this.type = IMAGE;
-            this.s = res.path;
-            
-//            int[] WH = res.getWH();
-//            //Engine.logI("w: " + new Integer(WH[0]).toString());
-//            //Engine.logI("h: " + new Integer(WH[1]).toString());
-//            srcH = WH[0];
-//            dstH = srcH;
-//            srcW = WH[1];
-//            dstW = srcW;
-            
-        } else if (res.type.equals(Resource.TYPE.SOUND)) {
-            this.type = SOUND;
-            this.s = res.path;
-        }
-        */
     }
 
-    /*
-    public RenderEvent(Texture texture) {
-        this();
-        this.type = IMAGE;
-        this.texture = texture;
-        //srcH = texture.getRegionHeight();
-        srcH = texture.getHeight();
-        dstH = srcH;
-        //srcW = texture.getRegionWidth();
-        srcW = texture.getWidth();
-        dstW = srcW;
-    }
-    
-    public RenderEvent sound(String id, float vol) {
-        this.type = SOUND;
-        this.s = id;
-        this.vol = vol;
-        return this;
-    }*/
     
     public RenderEvent Res(Resource res) {
         this.res = res;
         this.type = res.type;
+        
+        switch(type){
+        case IMAGE:
+            int[] WH = res.getWH();
+            srcH = WH[0];
+            dstH = srcH;
+            srcW = WH[1];
+            dstW = srcW;
+            break;
+            
+        case SOUND:
+//            this.vol = res.vol;
+            
+        }
+        
         return this;
     }
     
@@ -214,5 +185,5 @@ public class RenderEvent {
         this.size = size;
         return this;
     }
-
+    
 }
