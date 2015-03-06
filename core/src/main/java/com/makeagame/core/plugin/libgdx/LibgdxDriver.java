@@ -25,6 +25,7 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
     BitmapFont gameLable;
     Engine engine;
     
+    myInputAdapter inputAdapter;
 
     @Override
     public void init() {
@@ -36,54 +37,23 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
         gameLable = new BitmapFont();
         gameLable.setColor(new Color(1, 0, 0, 1));   
         
-    }
-
-
-    @Override
-    public ArrayList<SignalEvent> signal(final ArrayList<SignalEvent> signalList) {
         
-        // TODO 這應該是一次性的設定，不該在此呼叫
-        Gdx.input.setInputProcessor(new InputAdapter() {
-
-            @Override
-            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_UP, new int[] { button, screenX, screenY }));
-                return super.touchUp(screenX, screenY, pointer, button);
-            }
-
-            @Override
-            public boolean touchDragged(int screenX, int screenY, int pointer) {
-                signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DRAG, new int[] { SignalEvent.MouseEvent.ANY_KEY, screenX, screenY }));
-                return super.touchDragged(screenX, screenY, pointer);
-            }
-
-            @Override
-            public boolean mouseMoved(int screenX, int screenY) {
-                signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_MOVE, new int[] { MouseEvent.ANY_KEY, screenX, screenY }));
-                return super.mouseMoved(screenX, screenY);
-            }
-
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                Engine.logD("touch " + screenX + " " + screenY);
-                signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DOWN, new int[] { button, screenX, screenY }));
-                return super.touchDown(screenX, screenY, pointer, button);
-            }
-
-            @Override
-            public boolean keyDown(int keycode) {
-                signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new int[] { keycode }));
-                return super.keyDown(keycode);
-            }
-
-            @Override
-            public boolean keyUp(int keycode) {
-                signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new int[] { keycode }));
-                return super.keyUp(keycode);
-            }
-        });
-        return signalList;
     }
 
+    
+    @Override 
+    public ArrayList<SignalEvent> signal(ArrayList<SignalEvent> signalList) {
+        if(inputAdapter == null){
+            inputAdapter = new myInputAdapter(signalList);
+            Gdx.input.setInputProcessor(inputAdapter);
+        }
+        
+        System.out.println("signalList size: " + signalList.size());
+        
+        return inputAdapter.getList();
+    }
+
+    
     @Override
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> renderList) {
         Engine.logD("batch begine time " + System.currentTimeMillis());
@@ -111,8 +81,6 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
             switch (e.type) {
             case RenderEvent.IMAGE:
                 
-                System.out.println("enter point image");
-                
                 Texture texture = null;
                 try {
                     texture = e.res.getPayload().get();
@@ -124,8 +92,7 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
                     return renderList;
                 }
             
-//                 Engine.logI("x: " + e.x);
-//                 Engine.logI("y: " + e.y);
+//                 Engine.logI("x: " + e.x + "y: " + e.y);
 
                 int dim[] = e.res.getSrcDim();
                 int dim2[] = new int[] { e.srcX, e.srcY, e.srcW, e.srcH };
@@ -140,14 +107,14 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
                 int srcW = dim[2];
                 int srcH = dim[3];
 
-                 Engine.logI("src: (" + srcX + ","
-                 + srcY + ","
-                 + srcW + ","
-                 + srcH + ")");
+//                 Engine.logI("src: (" + srcX + ","
+//                 + srcY + ","
+//                 + srcW + ","
+//                 + srcH + ")");
                  
                 float x = e.x;
                 float y = Bootstrap.screamHeight() - e.y - srcH;
-                System.out.println("render x " + x + ", y " + y);
+//                Engine.logI("render x " + x + ", y " + y);
                 batch.draw(texture, x, y, (float) srcW, (float) srcH, srcX, srcY, srcW, srcH, e.flipX, e.flipY);
                 // }
                 break;
@@ -182,7 +149,7 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
     
     @Override
     public void render() {
-        engine.mainLoop();
+        engine.tickOne();
     }
 
     @Override
@@ -193,6 +160,55 @@ public class LibgdxDriver extends ApplicationAdapter implements Driver{
     
     public LibgdxDriver getApplication(){
         return this;
+    }
+    
+    class myInputAdapter extends InputAdapter{
+        
+        private ArrayList<SignalEvent> signalList;
+        
+        myInputAdapter(ArrayList<SignalEvent> list){
+            this.signalList = list;
+        }
+        
+        ArrayList<SignalEvent> getList(){
+            return signalList;
+        }
+        
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_UP, new int[] { button, screenX, screenY }));
+            return super.touchUp(screenX, screenY, pointer, button);
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DRAG, new int[] { SignalEvent.MouseEvent.ANY_KEY, screenX, screenY }));
+            return super.touchDragged(screenX, screenY, pointer);
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_MOVE, new int[] { MouseEvent.ANY_KEY, screenX, screenY }));
+            return super.mouseMoved(screenX, screenY);
+        }
+
+        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            Engine.logD("touch " + screenX + " " + screenY);
+            signalList.add(new SignalEvent(SignalEvent.MOUSE_EVENT, SignalEvent.ACTION_DOWN, new int[] { button, screenX, screenY }));
+            return super.touchDown(screenX, screenY, pointer, button);
+        }
+
+        @Override
+        public boolean keyDown(int keycode) {
+            signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_DOWN, new int[] { keycode }));
+            return super.keyDown(keycode);
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            signalList.add(new SignalEvent(SignalEvent.KEY_EVENT, SignalEvent.ACTION_UP, new int[] { keycode }));
+            return super.keyUp(keycode);
+        }
     }
 
 }

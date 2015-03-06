@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.makeagame.core.resource.InternalResource;
 import com.makeagame.core.resource.Resource;
 import com.makeagame.core.resource.Resource.ResourceState;
@@ -29,6 +31,7 @@ public class LibgdxProcessor implements Processor {
 
     @Override
     public boolean canHandle() {
+        // TODO
         return false;
     }
 

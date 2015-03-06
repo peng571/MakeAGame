@@ -1,6 +1,13 @@
 package com.makeagame.nullBackend;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
+import com.makeagame.core.Driver;
+import com.makeagame.core.Engine;
+import com.makeagame.core.resource.process.Finder;
+import com.makeagame.core.view.RenderEvent;
+import com.makeagame.core.view.SignalEvent;
 /*
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -12,16 +19,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 */
-
 // TODO: 不要引用Bootstrap
-import com.makeagame.core.Bootstrap;
-
-import com.makeagame.core.Driver;
-import com.makeagame.core.Engine;
-
-import com.makeagame.core.view.RenderEvent;
-import com.makeagame.core.view.SignalEvent;
-import com.makeagame.core.view.SignalEvent.MouseEvent;
 
 /*
 import com.makeagame.core.resource.InternalResource;
@@ -64,6 +62,7 @@ public class NullDriver  implements Driver{
     
     @Override
     public void init() {
+        
         //System.out.println("game start");
         
         //batch = new SpriteBatch();
@@ -73,7 +72,7 @@ public class NullDriver  implements Driver{
     
 
     @Override
-    public ArrayList<SignalEvent> signal(final ArrayList<SignalEvent> signalList) {
+    public ArrayList<SignalEvent> signal(ArrayList<SignalEvent> list) {
         /*
         Gdx.input.setInputProcessor(new InputAdapter() {
 
@@ -125,14 +124,14 @@ public class NullDriver  implements Driver{
     
     
     @Override
-    public ArrayList<RenderEvent> render(ArrayList<RenderEvent> renderList) {
+    public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list) {
 
         //Engine.logD("batch begine time " + System.currentTimeMillis());
 
         // clear background
         renderResult = "";
         
-        for (RenderEvent e : renderList) {
+        for (RenderEvent e : list) {
             switch (e.type) {
             case RenderEvent.IMAGE:
                 renderResult += "IMAGE(";
@@ -199,7 +198,7 @@ public class NullDriver  implements Driver{
         //}
        
         
-        return renderList;        
+        return list;        
     }
     
     
@@ -224,6 +223,8 @@ public class NullDriver  implements Driver{
         this.engine = engine;
         return this;
     }
+
+
     
     // 注意: 這裡是給 android 專用?
     //public NullDriver getApplication(){

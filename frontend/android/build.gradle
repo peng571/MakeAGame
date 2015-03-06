@@ -1,6 +1,9 @@
 apply plugin: "android"
 
-configurations { natives }
+configurations { 
+	natives 
+	all*.exclude group: 'com.android.support', module: 'support-v4'
+}
 
 dependencies {
     compile project(":core")
@@ -15,7 +18,7 @@ dependencies {
 }
 
 android {
-    buildToolsVersion "20.0.0"
+    buildToolsVersion "21.1.2"
     compileSdkVersion 21
     sourceSets {
         main {
@@ -28,6 +31,9 @@ android {
         }
 
         instrumentTest.setRoot('tests')
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -112,3 +118,4 @@ eclipse {
         buildCommand "com.android.ide.eclipse.adt.ApkBuilder"
     }
 }
+
