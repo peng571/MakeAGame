@@ -3,13 +3,60 @@ apply plugin: "java"
 sourceCompatibility = 1.6
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
+
+
+compileJava {
+    options.listFiles = true
+    options.failOnError = false
+    options.verbose = true
+}
+
+//compileJava.dependsOn compileOne
+
+compileTestJava {
+    options.listFiles = true
+    options.failOnError = false
+    
+    sourceSets.test.allJava.visit {element ->
+        task ("compile_$element.relativePath", type: JavaCompile) {
+            include "$element.relativePath"
+            
+            source = sourceSets.test.java.srcDirs
+            classpath = sourceSets.test.compileClasspath
+            destinationDir = sourceSets.test.output.classesDir
+            
+            options.compilerArgs = ["-sourcepath", "$projectDir/src/test/java"]
+            options.failOnError = false
+            options.encoding = 'UTF-8'
+        }
+        compileTestJava.dependsOn "compile_$element.relativePath"
+    }
+}
+
+
+//compileTestJava.dependsOn compileOne
+
+
+task compileOne (type: JavaCompile) {
+    include 'com/makeagame/nullBackend/NullDriver.java'
+    
+    source = sourceSets.main.java.srcDirs
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = sourceSets.main.output.classesDir
+    
+    options.compilerArgs = ["-sourcepath", "$projectDir/src/main/java"]
+    options.encoding = 'UTF-8'
+}
+
+
+
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     //compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.json:json:20090211'
     compile 'org.codehaus.groovy:groovy-all:2.3.9'
-    compile 'junit:junit:4.+'
+    testCompile 'junit:junit:4.+'
 }
 
 eclipse.project {
