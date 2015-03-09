@@ -15,6 +15,4 @@ public interface Driver {
     
     public ArrayList<RenderEvent> render(ArrayList<RenderEvent> list);
     
-    
-    
 }

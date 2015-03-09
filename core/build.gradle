@@ -52,10 +52,8 @@ task compileOne (type: JavaCompile) {
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    //compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'org.json:json:20090211'
-    compile 'org.codehaus.groovy:groovy-all:2.3.9'
     testCompile 'junit:junit:4.+'
 }
 

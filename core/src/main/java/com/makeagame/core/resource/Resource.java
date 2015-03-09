@@ -3,6 +3,11 @@ package com.makeagame.core.resource;
 import com.makeagame.core.exception.ResourceNotReadyException;
 import com.makeagame.core.view.RenderEvent;
 
+/**
+ * 固定資源
+ *
+ * @param <T>
+ */
 public class Resource <T extends InternalResource> {
 
     private String ID;

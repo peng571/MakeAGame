@@ -7,7 +7,6 @@ import com.makeagame.core.model.EventListener;
 import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.Sprite;
-import com.makeagame.tools.State;
 
 /**
  * 包含 EventListener 的按鈕型 SimpleLayout

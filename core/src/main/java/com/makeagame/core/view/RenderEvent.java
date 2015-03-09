@@ -6,6 +6,8 @@ import com.makeagame.core.resource.Resource;
 
 public class RenderEvent {
 
+    public Resource res;
+    
     public int type;
     public String s;
     
@@ -56,8 +58,6 @@ public class RenderEvent {
         this.type = LABEL;
         this.s = s;
     }
-    
-    public Resource res;
     
     public RenderEvent(Resource res) {
         this();

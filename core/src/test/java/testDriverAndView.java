@@ -1,29 +1,24 @@
-package testunit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.makeagame.nullBackend.NullDriver;
-import com.makeagame.core.Engine;
 import com.makeagame.core.Bootstrap;
-
 // interface
 import com.makeagame.core.Driver;
-import com.makeagame.core.view.View;
+import com.makeagame.core.Engine;
 import com.makeagame.core.model.Model;
-
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.makeagame.core.view.View;
+import com.makeagame.nullBackend.NullDriver;
 
 // TODO:
 // getMainModel 之類的要可以接受 null
@@ -112,9 +107,9 @@ public class testDriverAndView {
     @Test
     public void testTickOne() {
         assertEquals(0, topView.frameCount);
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(1, topView.frameCount);
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(2, topView.frameCount);
         
     }
@@ -123,19 +118,19 @@ public class testDriverAndView {
 	@Test
     public void testSignal() {
         // 在還沒有信號輸入之前
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(0, topView.lastSignals.size());
         
         
         // 模擬一個滑鼠移動
         nullDriver.simMouse(2, 3);
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(1, topView.lastSignals.size());
         
         
         // 再模擬另一個滑鼠移動
         nullDriver.simMouse(20, 30);
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(1, topView.lastSignals.size());
         assertEquals(20, topView.lastSignals.get(0).signal.x);
         assertEquals(30, topView.lastSignals.get(0).signal.y);
@@ -143,13 +138,13 @@ public class testDriverAndView {
         // 一次兩個訊號
         nullDriver.simMouse(100, 101);
         nullDriver.simMouse(200, 201);
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(2, topView.lastSignals.size());
         assertEquals(100, topView.lastSignals.get(0).signal.x);
         assertEquals(200, topView.lastSignals.get(1).signal.x);
         
         // 訊號應該不被保留
-        engine.mainLoop();
+        engine.tickOne();
         assertEquals(0, topView.lastSignals.size());
         
 	}

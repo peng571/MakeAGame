@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import org.json.JSONObject;
 
-import com.makeagame.core.resource.Resource;
-
 /**
  * 註冊式搜尋器
  * 以程式碼批次註冊 Resource 的 ID 跟 Path
