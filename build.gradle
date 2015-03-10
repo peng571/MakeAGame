@@ -41,7 +41,7 @@ configure(subprojects.findAll {it.name.startsWith('libgdx')}) { curProject ->
     }
     
     dependencies {
-        compile project(":core")
+        //compile project(":core")
     }
 }
 
