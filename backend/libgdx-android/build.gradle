@@ -1,4 +1,4 @@
-apply plugin: "android"
+apply plugin: "com.android.application"
 
 configurations { 
 	natives 
@@ -17,21 +17,37 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
 }
 
+
+task fromTemplate(type:Exec) {
+    commandLine 'python', '../../../../../../virboot/virboot/mixins/javajinja.py', '--src', 'template', '--json', '../../gameproject.json'
+}
+project.tasks.preBuild.dependsOn fromTemplate
+
+
 android {
-    buildToolsVersion "21.1.2"
+    buildToolsVersion "20"
     compileSdkVersion 21
+    
+    defaultConfig {
+        versionName computeVersionName()
+        applicationId "com.tw"
+    }
+
+    /*
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
+            //aidl.srcDirs = ['src']
+            //renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
 
         instrumentTest.setRoot('tests')
     }
+    */
+    
     lintOptions {
         abortOnError false
     }
@@ -90,6 +106,7 @@ task run(type: Exec) {
 
 // sets up the Android Eclipse project, using the old Ant based build.
 eclipse {
+    /*
     // need to specify Java source sets explicitely, SpringSource Gradle Eclipse plugin
     // ignores any nodes added in classpath.file.withXml
     sourceSets {
@@ -97,6 +114,7 @@ eclipse {
             java.srcDirs "src", 'gen'
         }
     }
+    */
 
     jdt {
         sourceCompatibility = 1.6

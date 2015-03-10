@@ -1,7 +1,7 @@
 include 'core'
-include 'frontend:desktop', 'frontend:html'
+include 'backend:libgdx-desktop', 'backend:libgdx-html'
 
 if (System.getenv()['ANDROID_HOME']) { 
-    include 'frontend:android' 
+    include 'backend:libgdx-android' 
 } 
 
