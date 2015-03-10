@@ -2,6 +2,7 @@ package com.makeagame.tools;
 
 public class MathTools {
 
+    // 內插法
     public static int[] inner(int[] a, int[] b) {
         int ax1 = a[0];
         int ay1 = a[1];

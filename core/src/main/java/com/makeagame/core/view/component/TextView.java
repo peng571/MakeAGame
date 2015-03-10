@@ -1,7 +1,8 @@
-package com.makeagame.core.view;
+package com.makeagame.core.view.component;
 
 import java.util.ArrayList;
 
+import com.makeagame.core.view.RenderEvent;
 import com.makeagame.tools.Sprite;
 
 /** 
