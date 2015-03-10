@@ -10,10 +10,10 @@ import com.makeagame.core.plugin.libgdx.LibgdxDriver;
 import com.makeagame.core.plugin.libgdx.LibgdxProcessor;
 import com.makeagame.core.resource.ResourceSystem;
 import com.makeagame.core.resource.process.RegisterFinder;
-import com.makeagame.core.view.BaseViewComponent;
 import com.makeagame.core.view.RenderEvent;
 import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.View;
+import com.makeagame.core.view.component.BaseViewComponent;
 import com.makeagame.tools.Sprite;
 
 

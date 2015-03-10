@@ -1,9 +1,10 @@
-package com.makeagame.core.view;
+package com.makeagame.core.view.component;
 
 import java.util.ArrayList;
 
 import com.makeagame.core.model.Action;
 import com.makeagame.core.model.EventListener;
+import com.makeagame.core.view.SignalEvent;
 import com.makeagame.core.view.SignalEvent.Signal;
 import com.makeagame.tools.KeyTable;
 import com.makeagame.tools.Sprite;
