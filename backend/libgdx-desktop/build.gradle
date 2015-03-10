@@ -1,11 +1,12 @@
 apply plugin: "java"
 
+
 dependencies {
-    compile project(":core")
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 }
+
     
 sourceCompatibility = 1.6
 
@@ -34,7 +35,7 @@ dist.dependsOn classes
 
 eclipse {
     project {
-        name = appName + "-desktop"
+        //name = appName + "-desktop"
         linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/android/assets'
     }
 }
