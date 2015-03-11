@@ -19,6 +19,19 @@ dependencies {
 
 task fromTemplate(type:Exec) {
     commandLine 'python', '../../../../../../virboot/virboot/mixins/javajinja.py', '--src', 'template', '--json', '../../gameproject.json'
+    
+    
+    // 輸出列表
+    FileTree tree = fileTree(dir: 'template')
+    FileTree filtered = tree.matching {
+        include '*'
+    }
+    
+    def filepath = ""
+    filtered.visit {element ->
+        filepath = element.file.absolutePath.replace('\\template', '')
+        outputs.dir file(filepath)
+    }
 }
 project.tasks.preBuild.dependsOn fromTemplate
 
@@ -50,7 +63,10 @@ task copyAndroidNatives() {
     file("libs/armeabi/").mkdirs();
     file("libs/armeabi-v7a/").mkdirs();
     file("libs/x86/").mkdirs();
-
+    
+    // 輸出列表
+    outputs.dir file("libs")
+            
     configurations.natives.files.each { jar ->
         def outputDir = null
         if(jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
@@ -65,6 +81,8 @@ task copyAndroidNatives() {
         }
     }
 }
+
+project.tasks.clean.dependsOn cleanFromTemplate, cleanCopyAndroidNatives
 
 task run(type: Exec) {
     def path

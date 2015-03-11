@@ -15,6 +15,19 @@ sourceCompatibility = 1.6
 
 task fromTemplate(type:Exec) {
     commandLine 'python', '../../../../../../virboot/virboot/mixins/javajinja.py', '--src', 'template', '--json', '../../gameproject.json'
+    
+    // 輸出列表
+    FileTree tree = fileTree(dir: 'template')
+    FileTree filtered = tree.matching {
+        include '*'
+    }
+    
+    def filepath = ""
+    filtered.visit {element ->
+        filepath = element.file.absolutePath.replace('\\template', '')
+        outputs.dir file(filepath)
+    }
+    
 }
 compileJava.dependsOn fromTemplate
 
@@ -32,6 +45,7 @@ task dist(type: Jar) {
 dist.dependsOn classes
 
 
+project.tasks.clean.dependsOn cleanFromTemplate
 
 eclipse {
     project {
