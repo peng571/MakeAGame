@@ -1,6 +1,5 @@
 package com.makeagame.core.resource;
 
-import com.makeagame.core.exception.ResourceNotReadyException;
 import com.makeagame.core.view.RenderEvent;
 
 /**

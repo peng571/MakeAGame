@@ -1,4 +1,4 @@
-package com.makeagame.core.exception;
+package com.makeagame.core.resource;
 
 public class ResourceNotReadyException extends Exception {
 
