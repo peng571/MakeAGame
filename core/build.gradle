@@ -6,9 +6,9 @@ sourceCompatibility = 1.6
 
 
 compileJava {
-    options.listFiles = true
-    options.failOnError = false
-    options.verbose = true
+    //options.listFiles = true
+    //options.failOnError = false
+    //options.verbose = true
 }
 
 //compileJava.dependsOn compileOne
