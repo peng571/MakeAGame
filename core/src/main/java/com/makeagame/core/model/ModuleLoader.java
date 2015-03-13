@@ -78,21 +78,20 @@ public class ModuleLoader {
     //  "com.icebreaker.officegame.BattleSystem",
     //  "com.icebreaker.officegame.MoneySystem"
     // });
-    public void loadModules(String[] urls) throws 
-                ClassNotFoundException, 
-                NoSuchMethodException, 
-                InstantiationException, 
-                IllegalAccessException, 
-                InvocationTargetException {
+    public void loadModules(String[] urls) {  //throws {
+//                ClassNotFoundException, 
+//                NoSuchMethodException, 
+//                InstantiationException, 
+//                IllegalAccessException, 
+//                InvocationTargetException {
         modules = new ArrayList<Object>();
         for (String url : urls) {
-            //try {
+            try {
                 //Class<Module> klass = /*(Class<Module>)*/ Class.forName(url).asSubclass(Module.class)
                 Class klass = Class.forName(url);
                 Constructor ctor = klass.getDeclaredConstructor(/*Class<?>... parameterTypes*/);
                 Object module = ctor.newInstance();
                 modules.add(module);
-            /*
             } catch (ClassNotFoundException ex) {
                 System.out.println(ex);
             } catch (NoSuchMethodException ex) {
@@ -104,13 +103,13 @@ public class ModuleLoader {
             } catch (InvocationTargetException ex) {
                 System.out.println(ex);
             }
-            */
         }
     }
-
-
-
-
-
+    
+    
+    // 靜態載入
+    public void addModule(Object module){
+        modules.add(module);
+    }
 
 }
