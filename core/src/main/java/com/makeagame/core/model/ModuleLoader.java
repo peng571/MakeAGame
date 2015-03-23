@@ -11,7 +11,7 @@ public class ModuleLoader {
     
     
     
-    private ArrayList<Object> modules;
+    private ArrayList<Object> modules = new ArrayList<Object>();
     
     
     // 傳回第一個符合該介面的 Module
